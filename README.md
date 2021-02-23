@@ -39,7 +39,7 @@ const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, false, 5
 fs.writeFileSync(track.SNG_TITLE + '.mp3', trackWithMetadata);
 ```
 
-### [Read FAQ](https://github.com/d-fi/d-fi-core/blob/master/docs/README.md)
+### [Read FAQ](https://github.com/d-fi/d-fi-core/blob/master/docs/faq.md)
 
 ## Methods
 
