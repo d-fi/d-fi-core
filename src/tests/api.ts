@@ -120,20 +120,34 @@ test('SEARCH TRACK, ALBUM & ARTIST', async (t) => {
   t.truthy(response.ARTIST.count > 0);
 });
 
-test('DOWNLOAD TRACK & ADD METADATA', async (t) => {
-  const track = await api.getTrackInfo(SNG_ID);
-  const url = getTrackDownloadUrl(track, 1);
-  const {data} = await axios.get(url, {responseType: 'arraybuffer'});
+if (process.env.CI) {
+  test('DOWNLOAD TRACK & ADD METADATA', async (t) => {
+    const track = await api.getTrackInfo(SNG_ID);
+    const url = getTrackDownloadUrl(track, 1);
+    const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
-  t.truthy(data);
-  t.true(Buffer.isBuffer(data));
-  t.is(data.length, 3596119);
+    t.truthy(data);
+    t.true(Buffer.isBuffer(data));
+    t.is(data.length, 3596119);
 
-  const decryptedTrack = decryptDownload(data, track.SNG_ID);
-  t.true(Buffer.isBuffer(decryptedTrack));
-  t.is(data.length, 3596119);
+    const decryptedTrack = decryptDownload(data, track.SNG_ID);
+    t.true(Buffer.isBuffer(decryptedTrack));
+    t.is(data.length, 3596119);
 
-  const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, false, 500);
-  t.true(Buffer.isBuffer(trackWithMetadata));
-  t.is(trackWithMetadata.length, 3628837);
-});
+    const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, false, 500);
+    t.true(Buffer.isBuffer(trackWithMetadata));
+    t.is(trackWithMetadata.length, 3628837);
+  });
+
+  test('DOWNLOAD 320kbps & FLAC', async (t) => {
+    const track = await api.getTrackInfo(SNG_ID);
+
+    const format320 = await axios.get(getTrackDownloadUrl(track, 3), {responseType: 'arraybuffer'});
+    t.truthy(format320.data);
+    t.true(Buffer.isBuffer(format320.data));
+
+    const format9 = await axios.get(getTrackDownloadUrl(track, 9), {responseType: 'arraybuffer'});
+    t.truthy(format9.data);
+    t.true(Buffer.isBuffer(format9.data));
+  });
+}
