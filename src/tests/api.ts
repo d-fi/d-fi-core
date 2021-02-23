@@ -16,6 +16,7 @@ test.serial('GET TRACK INFO', async (t) => {
 
   t.is(response.SNG_ID, SNG_ID);
   t.is(response.ISRC, 'GBDUW0000059');
+  t.is(response.MD5_ORIGIN, '51afcde9f56a132096c0496cc95eb24b');
   t.is(response.__TYPE__, 'song');
 });
 
