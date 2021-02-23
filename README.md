@@ -33,7 +33,7 @@ const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 const decryptedTrack = api.decryptDownload(data, track.SNG_ID);
 
 // Add id3 metadata
-const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, false, 500);
+const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
 
 // Save file to disk
 fs.writeFileSync(track.SNG_TITLE + '.mp3', trackWithMetadata);
@@ -136,6 +136,14 @@ All method returns `Object` or throws `Error`. Make sure to catch error on your 
 | ---------- | :------: | -------: | ---------------------: |
 | `data`     |   Yes    | `buffer` | downloaded song buffer |
 | `song_id`  |   Yes    | `string` |               track id |
+
+### `.addTrackTags(data, track,coverSize)`
+
+| Parameters  | Required |      Type |            Description |
+| ----------- | :------: | --------: | ---------------------: |
+| `data`      |   Yes    |  `buffer` | downloaded song buffer |
+| `track`     |   Yes    |  `string` |           track object |
+| `coverSize` |    No    | `56-1800` |         cover art size |
 
 ### Donations
 

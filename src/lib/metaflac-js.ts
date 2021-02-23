@@ -69,7 +69,7 @@ class Metaflac {
   }
 
   init() {
-    let offset = 0;
+    let offset = 4;
     let blockType = 0;
     let isLastBlock = false;
     while (!isLastBlock) {
