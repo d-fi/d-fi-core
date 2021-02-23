@@ -17,20 +17,20 @@ import axios from 'axios';
 import fs from 'fs';
 import * as api from 'd-fi-core';
 
-// Init api with arl
-await api.initDeezerApi(arl_from_cookie);
+// Init api with arl from cookie
+await api.initDeezerApi(arl_cookie);
 
 // GET Track Object
-const track = await api.getTrackInfo(SNG_ID);
+const track = await api.getTrackInfo(song_id);
 
 // Parse download URL for 128kbps
-const url = getTrackDownloadUrl(track, 1);
+const url = api.getTrackDownloadUrl(track, 1);
 
 // Download encrypted track
 const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
 // Decrypt track
-const decryptedTrack = decryptDownload(data, track.SNG_ID);
+const decryptedTrack = api.decryptDownload(data, track.SNG_ID);
 
 // Add id3 metadata
 const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, false, 500);
@@ -122,6 +122,20 @@ All method returns `Object` or throws `Error`. Make sure to catch error on your 
 | `query`    |   Yes    | `string` |         - |                    search query |
 | `types`    |    No    |  `array` | ['TRACK'] |           array of search types |
 | `limit`    |    No    | `number` |        15 | maximum item to fetch per types |
+
+### `.getTrackDownloadUrl(track, quality);`
+
+| Parameters | Required |        Type |                        Description |
+| ---------- | :------: | ----------: | ---------------------------------: |
+| `track`    |   Yes    |    `string` |                       track object |
+| `quality`  |   Yes    | `1, 3 or 9` | 1 = 128kbps, 3 = 320kbps, 9 = flac |
+
+### `.decryptDownload(data, song_id);`
+
+| Parameters | Required |     Type |            Description |
+| ---------- | :------: | -------: | ---------------------: |
+| `data`     |   Yes    | `buffer` | downloaded song buffer |
+| `song_id`  |   Yes    | `string` |               track id |
 
 ### Donations
 
