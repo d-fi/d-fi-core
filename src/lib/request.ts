@@ -3,16 +3,6 @@ import delay from 'delay';
 
 const ARL =
   'a62f40421c53479e411c78cd7420f7e40e7de97ab9e6436558145bcedf4557bc79946e96c02d7fef9a3166024a11c4a501236eca892b1ef989267244153af6efc4fec75d47a776129e971a4c68cef0b33b1633baf0eb0e8c08e170224e9527fc';
-const APIPayload = {
-  version: '8.32.0',
-  api_key: 'ZAIVAHCEISOHWAICUQUEXAEPICENGUAFAEZAIPHAELEEVAHPHUCUFONGUAPASUAY',
-  output: 3,
-  input: 3,
-  buildId: 'ios12_universal',
-  screenHeight: '480',
-  screenWidth: '320',
-  lang: 'en',
-};
 
 const instance = axios.create({
   baseURL: 'https://api.deezer.com/1.0',
@@ -26,8 +16,16 @@ const instance = axios.create({
     'Content-Type': 'application/json; charset=UTF-8',
     'User-Agent': 'Deezer/8.32.0.2 (iOS; 14.4; Mobile; en; iPhone10_5)',
   },
-  params: APIPayload,
-  data: APIPayload,
+  params: {
+    version: '8.32.0',
+    api_key: 'ZAIVAHCEISOHWAICUQUEXAEPICENGUAFAEZAIPHAELEEVAHPHUCUFONGUAPASUAY',
+    output: 3,
+    input: 3,
+    buildId: 'ios12_universal',
+    screenHeight: '480',
+    screenWidth: '320',
+    lang: 'en',
+  },
 });
 
 export const initDeezerApi = async (arl: string): Promise<string> => {
