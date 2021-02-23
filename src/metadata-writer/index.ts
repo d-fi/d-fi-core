@@ -24,5 +24,7 @@ export const addTrackTags = async (
     track.LYRICS = lyrics;
   }
 
-  return isFlac ? writeMetadataFlac(trackBuffer, track, cover) : writeMetadataMp3(trackBuffer, track, cover);
+  return isFlac
+    ? writeMetadataFlac(trackBuffer, track, albumCoverSize, cover)
+    : writeMetadataMp3(trackBuffer, track, cover);
 };

@@ -1,8 +1,13 @@
 // @ts-ignore
-import Metaflac from 'metaflac-js2';
+import Metaflac from '../lib/metaflac-js';
 import type {trackType} from '../types';
 
-export const writeMetadataFlac = (buffer: Buffer, track: trackType, cover?: Buffer | null): Buffer => {
+export const writeMetadataFlac = (
+  buffer: Buffer,
+  track: trackType,
+  dimension: number,
+  cover?: Buffer | null,
+): Buffer => {
   const flac = new Metaflac(buffer);
   flac.setTag('TITLE=' + track.SNG_TITLE);
   flac.setTag('ALBUM=' + track.ALB_TITLE);
@@ -47,11 +52,11 @@ export const writeMetadataFlac = (buffer: Buffer, track: trackType, cover?: Buff
   }
 
   if (cover) {
-    flac.importPicture(cover);
+    flac.importPicture(cover, dimension, 'image/jpeg');
   }
 
   flac.setTag('SOURCE=Deezer');
   flac.setTag('SOURCEID=' + track.SNG_ID);
 
-  return Buffer.from(flac.save());
+  return flac.getBuffer();
 };
