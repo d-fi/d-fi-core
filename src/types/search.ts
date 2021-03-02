@@ -3,6 +3,7 @@ import type {artistInfoTypeMinimal, artistType} from './artist';
 import type {playlistInfo, playlistInfoMinimal} from './playlist';
 import type {trackType} from './tracks';
 import type {channelSearchType} from './channel';
+import type {radioType} from './radio';
 
 interface searchTypeCommon {
   count: number;
@@ -30,6 +31,10 @@ interface trackSearchType extends searchTypeCommon {
 
 interface liveSearchType extends searchTypeCommon {
   data: unknown[];
+}
+
+interface radioSearchType extends searchTypeCommon {
+  data: radioType[];
 }
 
 export interface discographyType {
@@ -66,7 +71,7 @@ export interface searchType {
   ARTIST: artistSearchType;
   TRACK: trackSearchType;
   PLAYLIST: playlistSearchType;
-  RADIO: trackSearchType;
+  RADIO: radioSearchType;
   SHOW: trackSearchType;
   USER: trackSearchType;
   LIVESTREAM: liveSearchType;
