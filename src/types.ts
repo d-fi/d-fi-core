@@ -186,11 +186,15 @@ export interface artistInfoType {
   __TYPE__: 'artist';
 }
 
-export interface discographyType extends albumTracksType {
+export interface discographyType {
+  data: albumType[];
+  count: number; // 109,
+  total: number; // 109,
   cache_version: number; // 2,
-  art_id: number; // 293585,
+  filtered_count: number; // 0,
+  art_id: number; // 1424821,
   start: number; // 0,
-  nb: number; // 2
+  nb: number; // 500
 }
 
 export interface profileType {
