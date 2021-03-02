@@ -80,9 +80,17 @@ export const getPlaylistInfo = (playlist_id: string): Promise<playlistInfo> =>
 /**
  * @param {String} playlist_id playlist id
  */
-export const getPlaylistTracks = (playlist_id: string): Promise<playlistTracksType> =>
-  request({playlist_id, lang: 'en', nb: -1, start: 0, tab: 0, tags: true, header: true}, 'playlist.getSongs');
-
+export const getPlaylistTracks = async (playlist_id: string): Promise<playlistTracksType> => {
+  const playlistTracks: playlistTracksType = await request(
+    {playlist_id, lang: 'en', nb: -1, start: 0, tab: 0, tags: true, header: true},
+    'playlist.getSongs',
+  );
+  playlistTracks.data = playlistTracks.data.map((track, index) => {
+    track.TRACK_POSITION = index + 1;
+    return track;
+  });
+  return playlistTracks;
+};
 /**
  * @param {String} art_id artist id
  */
