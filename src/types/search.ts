@@ -28,13 +28,16 @@ interface playlistSearchType extends searchTypeCommon {
 interface trackSearchType extends searchTypeCommon {
   data: trackType[];
 }
+interface radioSearchType extends searchTypeCommon {
+  data: radioType[];
+}
 
 interface liveSearchType extends searchTypeCommon {
   data: unknown[];
 }
 
-interface radioSearchType extends searchTypeCommon {
-  data: radioType[];
+interface showSearchType extends searchTypeCommon {
+  data: unknown[];
 }
 
 export interface discographyType {
@@ -72,7 +75,7 @@ export interface searchType {
   TRACK: trackSearchType;
   PLAYLIST: playlistSearchType;
   RADIO: radioSearchType;
-  SHOW: trackSearchType;
+  SHOW: showSearchType;
   USER: trackSearchType;
   LIVESTREAM: liveSearchType;
   CHANNEL: channelSearchType;
