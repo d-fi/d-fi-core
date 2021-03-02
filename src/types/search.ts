@@ -28,6 +28,10 @@ interface trackSearchType extends searchTypeCommon {
   data: trackType[];
 }
 
+interface liveSearchType extends searchTypeCommon {
+  data: unknown[];
+}
+
 export interface discographyType {
   data: albumType[];
   count: number; // 109,
@@ -65,6 +69,6 @@ export interface searchType {
   RADIO: trackSearchType;
   SHOW: trackSearchType;
   USER: trackSearchType;
-  LIVESTREAM: trackSearchType;
+  LIVESTREAM: liveSearchType;
   CHANNEL: channelSearchType;
 }
