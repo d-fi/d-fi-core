@@ -2,6 +2,7 @@ import type {albumType, albumTypeMinimal} from './album';
 import type {artistInfoTypeMinimal, artistType} from './artist';
 import type {playlistInfo, playlistInfoMinimal} from './playlist';
 import type {trackType} from './tracks';
+import type {channelSearchType} from './channel';
 
 interface searchTypeCommon {
   count: number;
@@ -23,7 +24,7 @@ interface playlistSearchType extends searchTypeCommon {
   data: playlistInfoMinimal[];
 }
 
-export interface trackSearchType extends searchTypeCommon {
+interface trackSearchType extends searchTypeCommon {
   data: trackType[];
 }
 
@@ -65,5 +66,5 @@ export interface searchType {
   SHOW: trackSearchType;
   USER: trackSearchType;
   LIVESTREAM: trackSearchType;
-  CHANNEL: trackSearchType;
+  CHANNEL: channelSearchType;
 }
