@@ -108,6 +108,26 @@ export interface trackType extends songType {
   TRACK_POSITION?: number;
 }
 
+interface albumTypeMinimal {
+  ALB_ID: string;
+  ALB_TITLE: string;
+  ALB_PICTURE: string;
+  ARTISTS: artistType[];
+  AVAILABLE: boolean;
+  VERSION: string; // ''
+  ART_ID: string;
+  ART_NAME: string;
+  EXPLICIT_ALBUM_CONTENT: {
+    EXPLICIT_LYRICS_STATUS: number; // 1
+    EXPLICIT_COVER_STATUS: number; //2
+  };
+  PHYSICAL_RELEASE_DATE: string;
+  TYPE: string; // '0'
+  ARTIST_IS_DUMMY: boolean;
+  NUMBER_TRACK: number; // '1';
+  __TYPE__: 'album';
+}
+
 export interface albumType {
   ALB_CONTRIBUTORS: {
     main_artist: string[]; // ['Avicii']
@@ -146,6 +166,15 @@ export interface albumTracksType {
   filtered_count: number;
   filtered_items?: number[];
   next?: number;
+}
+
+interface albumSearchType {
+  data: albumTypeMinimal[];
+  count: number;
+  total: number;
+  filtered_count: number;
+  filtered_items: number[];
+  next: number;
 }
 
 export interface playlistInfo {
@@ -237,7 +266,7 @@ export interface searchType {
     'USER',
     'LYRICS',
   ];
-  ALBUM: albumTracksType;
+  ALBUM: albumSearchType;
   ARTIST: albumTracksType;
   TRACK: albumTracksType;
   PLAYLIST: albumTracksType;
