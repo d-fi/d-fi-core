@@ -62,8 +62,14 @@ export const getAlbumInfo = (alb_id: string): Promise<albumType> => request({alb
 /**
  * @param {String} alb_id user id
  */
-export const getAlbumTracks = (alb_id: string): Promise<albumTracksType> =>
-  request({alb_id, lang: 'us', nb: -1}, 'song.getListByAlbum');
+export const getAlbumTracks = async (alb_id: string): Promise<albumTracksType> => {
+  const albumTracks: albumTracksType = await request({alb_id, lang: 'us', nb: -1}, 'song.getListByAlbum');
+  albumTracks.data = albumTracks.data.map((track, index) => {
+    track.TRACK_POSITION = index + 1;
+    return track;
+  });
+  return albumTracks;
+};
 
 /**
  * @param {String} playlist_id playlist id

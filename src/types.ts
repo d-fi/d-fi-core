@@ -105,6 +105,7 @@ interface songType {
 
 export interface trackType extends songType {
   FALLBACK?: songType;
+  TRACK_POSITION?: number;
 }
 
 export interface albumType {
@@ -139,7 +140,7 @@ export interface albumType {
 }
 
 export interface albumTracksType {
-  data: songType[];
+  data: trackType[];
   count: number;
   total: number;
   filtered_count: number;
