@@ -2,6 +2,7 @@ import type {albumType, albumTypeMinimal} from './album';
 import type {artistInfoTypeMinimal, artistType} from './artist';
 import type {playlistInfo, playlistInfoMinimal} from './playlist';
 import type {trackType} from './tracks';
+import type {profileTypeMinimal} from './profile';
 import type {channelSearchType} from './channel';
 import type {radioType} from './radio';
 
@@ -28,6 +29,11 @@ interface playlistSearchType extends searchTypeCommon {
 interface trackSearchType extends searchTypeCommon {
   data: trackType[];
 }
+
+interface profileSearchType extends searchTypeCommon {
+  data: profileTypeMinimal[];
+}
+
 interface radioSearchType extends searchTypeCommon {
   data: radioType[];
 }
@@ -76,7 +82,7 @@ export interface searchType {
   PLAYLIST: playlistSearchType;
   RADIO: radioSearchType;
   SHOW: showSearchType;
-  USER: trackSearchType;
+  USER: profileSearchType;
   LIVESTREAM: liveSearchType;
   CHANNEL: channelSearchType;
 }

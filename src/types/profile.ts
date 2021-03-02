@@ -1,5 +1,15 @@
 import type {albumTracksType} from './album';
 
+export interface profileTypeMinimal {
+  USER_ID: string;
+  FIRSTNAME: string;
+  LASTNAME: string;
+  BLOG_NAME: string;
+  USER_PICTURE?: string;
+  IS_FOLLOW: boolean;
+  __TYPE__: 'user';
+}
+
 export interface profileType {
   IS_FOLLOW: boolean;
   NB_ARTISTS: number;
