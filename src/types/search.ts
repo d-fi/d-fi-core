@@ -1,15 +1,22 @@
 import type {albumTracksType, albumType, albumTypeMinimal} from './album';
 import type {artistType} from './artist';
-import type {playlistInfo} from './playlist';
+import type {playlistInfo, playlistInfoMinimal} from './playlist';
 import type {trackType} from './tracks';
 
-interface albumSearchType {
-  data: albumTypeMinimal[];
+interface searchTypeCommon {
   count: number;
   total: number;
   filtered_count: number;
   filtered_items: number[];
   next: number;
+}
+
+interface albumSearchType extends searchTypeCommon {
+  data: albumTypeMinimal[];
+}
+
+interface playlistSearchType extends searchTypeCommon {
+  data: playlistInfoMinimal[];
 }
 
 export interface discographyType {
@@ -45,7 +52,7 @@ export interface searchType {
   ALBUM: albumSearchType;
   ARTIST: albumTracksType;
   TRACK: albumTracksType;
-  PLAYLIST: albumTracksType;
+  PLAYLIST: playlistSearchType;
   RADIO: albumTracksType;
   SHOW: albumTracksType;
   USER: albumTracksType;

@@ -1,5 +1,23 @@
 import type {trackType} from './tracks';
 
+export interface playlistInfoMinimal {
+  PLAYLIST_ID: string;
+  PARENT_PLAYLIST_ID: string;
+  TYPE: string; // '0'
+  TITLE: string;
+  PARENT_USER_ID: string;
+  PARENT_USERNAME: string;
+  PARENT_USER_PICTURE?: string;
+  STATUS: string; // 0
+  PLAYLIST_PICTURE: string;
+  PICTURE_TYPE: string; // 'playlist'
+  NB_SONG: number; // 180
+  HAS_ARTIST_LINKED: boolean;
+  DATE_ADD: string; // '2021-01-29 20:54:13'
+  DATE_MOD: string; // '2021-02-01 05:52:40'
+  __TYPE__: 'playlist';
+}
+
 export interface playlistInfo {
   PLAYLIST_ID: string; // '4523119944'
   DESCRIPTION?: string; // ''
