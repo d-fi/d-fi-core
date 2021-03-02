@@ -1,5 +1,5 @@
 import type {albumTracksType, albumType, albumTypeMinimal} from './album';
-import type {artistType} from './artist';
+import type {artistInfoTypeMinimal, artistType} from './artist';
 import type {playlistInfo, playlistInfoMinimal} from './playlist';
 import type {trackType} from './tracks';
 
@@ -13,6 +13,10 @@ interface searchTypeCommon {
 
 interface albumSearchType extends searchTypeCommon {
   data: albumTypeMinimal[];
+}
+
+interface artistSearchType extends searchTypeCommon {
+  data: artistInfoTypeMinimal[];
 }
 
 interface playlistSearchType extends searchTypeCommon {
@@ -50,7 +54,7 @@ export interface searchType {
     'LYRICS',
   ];
   ALBUM: albumSearchType;
-  ARTIST: albumTracksType;
+  ARTIST: artistSearchType;
   TRACK: albumTracksType;
   PLAYLIST: playlistSearchType;
   RADIO: albumTracksType;

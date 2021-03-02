@@ -16,6 +16,16 @@ export interface artistType {
   __TYPE__: 'artist';
 }
 
+export interface artistInfoTypeMinimal {
+  ART_ID: string;
+  ART_NAME: string;
+  ART_PICTURE: string;
+  NB_FAN: number;
+  LOCALES: [];
+  ARTIST_IS_DUMMY: boolean;
+  __TYPE__: 'artist';
+}
+
 export interface artistInfoType {
   ART_ID: string; // "293585",
   ART_NAME: string; // "Avicii",
