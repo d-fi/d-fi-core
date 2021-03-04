@@ -17,7 +17,7 @@
     "axios": "^0.21.1",
     "browser-id3-writer": "^4.4.0",
     "delay": "^5.0.0",
-    "node-html-parser": "^3.0.3"
+    "node-html-parser": "^3.0.4"
   },
   "devDependencies": {
     "@types/node": "^14.14.31",
