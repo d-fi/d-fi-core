@@ -29,26 +29,28 @@ export const writeMetadataFlac = (
     flac.setTag('LYRICS=' + track.LYRICS.LYRICS_TEXT);
   }
 
-  if (track.SNG_CONTRIBUTORS.composer) {
-    flac.setTag('COMPOSER=' + track.SNG_CONTRIBUTORS.composer.join(', '));
-  }
-  if (track.SNG_CONTRIBUTORS.publisher) {
-    flac.setTag('ORGANIZATION=' + track.SNG_CONTRIBUTORS.publisher.join(', '));
-  }
-  if (track.SNG_CONTRIBUTORS.producer) {
-    flac.setTag('PRODUCER=' + track.SNG_CONTRIBUTORS.producer.join(', '));
-  }
-  if (track.SNG_CONTRIBUTORS.engineer) {
-    flac.setTag('ENGINEER=' + track.SNG_CONTRIBUTORS.engineer.join(', '));
-  }
-  if (track.SNG_CONTRIBUTORS.writer) {
-    flac.setTag('WRITER=' + track.SNG_CONTRIBUTORS.writer.join(', '));
-  }
-  if (track.SNG_CONTRIBUTORS.author) {
-    flac.setTag('AUTHOR=' + track.SNG_CONTRIBUTORS.author.join(', '));
-  }
-  if (track.SNG_CONTRIBUTORS.mixer) {
-    flac.setTag('MIXER=' + track.SNG_CONTRIBUTORS.mixer.join(', '));
+  if (track.SNG_CONTRIBUTORS) {
+    if (track.SNG_CONTRIBUTORS.composer) {
+      flac.setTag('COMPOSER=' + track.SNG_CONTRIBUTORS.composer.join(', '));
+    }
+    if (track.SNG_CONTRIBUTORS.publisher) {
+      flac.setTag('ORGANIZATION=' + track.SNG_CONTRIBUTORS.publisher.join(', '));
+    }
+    if (track.SNG_CONTRIBUTORS.producer) {
+      flac.setTag('PRODUCER=' + track.SNG_CONTRIBUTORS.producer.join(', '));
+    }
+    if (track.SNG_CONTRIBUTORS.engineer) {
+      flac.setTag('ENGINEER=' + track.SNG_CONTRIBUTORS.engineer.join(', '));
+    }
+    if (track.SNG_CONTRIBUTORS.writer) {
+      flac.setTag('WRITER=' + track.SNG_CONTRIBUTORS.writer.join(', '));
+    }
+    if (track.SNG_CONTRIBUTORS.author) {
+      flac.setTag('AUTHOR=' + track.SNG_CONTRIBUTORS.author.join(', '));
+    }
+    if (track.SNG_CONTRIBUTORS.mixer) {
+      flac.setTag('MIXER=' + track.SNG_CONTRIBUTORS.mixer.join(', '));
+    }
   }
 
   if (cover) {

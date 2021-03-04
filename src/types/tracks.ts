@@ -44,7 +44,7 @@ interface songType {
   SMARTRADIO: string; // 0
   SNG_ID: string; // '3135556'
   SNG_TITLE: string; // 'Harder, Better, Faster, Stronger'
-  SNG_CONTRIBUTORS: {
+  SNG_CONTRIBUTORS?: {
     main_artist: string[]; //['Daft Punk']
     author?: string[]; // ['Edwin Birdsong', 'Guy-Manuel de Homem-Christo', 'Thomas Bangalter']
     composer?: string[];

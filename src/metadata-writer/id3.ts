@@ -42,30 +42,31 @@ export const writeMetadataMp3 = (buffer: Buffer, track: trackType, cover?: Buffe
     value: track.DURATION,
   });
 
-  if (track.SNG_CONTRIBUTORS.composer) {
-    writer.setFrame('TXXX', {
-      description: 'COMPOSER',
-      value: track.SNG_CONTRIBUTORS.composer.join(', '),
-    });
-  }
-
-  if (track.SNG_CONTRIBUTORS.writer) {
-    writer.setFrame('TXXX', {
-      description: 'LYRICIST',
-      value: track.SNG_CONTRIBUTORS.writer.join(', '),
-    });
-  }
-  if (track.SNG_CONTRIBUTORS.mixer) {
-    writer.setFrame('TXXX', {
-      description: 'MIXARTIST',
-      value: track.SNG_CONTRIBUTORS.mixer.join(', '),
-    });
-  }
-  if (track.SNG_CONTRIBUTORS.producer && track.SNG_CONTRIBUTORS.engineer) {
-    writer.setFrame('TXXX', {
-      description: 'INVOLVEDPEOPLE',
-      value: track.SNG_CONTRIBUTORS.producer.concat(track.SNG_CONTRIBUTORS.engineer).join(', '),
-    });
+  if (track.SNG_CONTRIBUTORS) {
+    if (track.SNG_CONTRIBUTORS.composer) {
+      writer.setFrame('TXXX', {
+        description: 'COMPOSER',
+        value: track.SNG_CONTRIBUTORS.composer.join(', '),
+      });
+    }
+    if (track.SNG_CONTRIBUTORS.writer) {
+      writer.setFrame('TXXX', {
+        description: 'LYRICIST',
+        value: track.SNG_CONTRIBUTORS.writer.join(', '),
+      });
+    }
+    if (track.SNG_CONTRIBUTORS.mixer) {
+      writer.setFrame('TXXX', {
+        description: 'MIXARTIST',
+        value: track.SNG_CONTRIBUTORS.mixer.join(', '),
+      });
+    }
+    if (track.SNG_CONTRIBUTORS.producer && track.SNG_CONTRIBUTORS.engineer) {
+      writer.setFrame('TXXX', {
+        description: 'INVOLVEDPEOPLE',
+        value: track.SNG_CONTRIBUTORS.producer.concat(track.SNG_CONTRIBUTORS.engineer).join(', '),
+      });
+    }
   }
 
   if (track.LYRICS) {
