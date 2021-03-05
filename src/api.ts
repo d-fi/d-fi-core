@@ -11,6 +11,7 @@ import type {
   discographyType,
   profileType,
   searchType,
+  trackTypePublicApi,
 } from './types';
 
 // expire cache in 60 minutes
@@ -43,6 +44,34 @@ export const request = async (body: object, method: string) => {
   const errorMessage = Object.entries(error).join(', ');
   throw new Error(errorMessage);
 };
+
+/**
+ * Make post requests to deezer public api
+ * @param {Object} body post body
+ * @param {String} method request method
+ */
+export const requestPublicApi = async (slug: string) => {
+  const cache = lru.get(slug);
+  if (cache) {
+    return cache;
+  }
+
+  const {data} = await axios.get('https://api.deezer.com' + slug);
+
+  if (data.error) {
+    const errorMessage = Object.entries(data.error).join(', ');
+    throw new Error(errorMessage);
+  }
+
+  lru.set(slug, data);
+  return data;
+};
+
+/**
+ * @param {String} sng_id song id
+ */
+export const getTrackInfoPublicApi = (sng_id: string): Promise<trackTypePublicApi> =>
+  requestPublicApi('/track/' + sng_id);
 
 /**
  * @param {String} sng_id song id
@@ -85,6 +114,7 @@ export const getPlaylistTracks = async (playlist_id: string): Promise<playlistTr
   });
   return playlistTracks;
 };
+
 /**
  * @param {String} art_id artist id
  */
