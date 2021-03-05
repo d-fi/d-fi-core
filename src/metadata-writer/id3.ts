@@ -65,8 +65,10 @@ export const writeMetadataMp3 = (
     writer.setFrame('TPOS', track.DISK_NUMBER).setFrame('TRCK', track.TRACK_NUMBER + '/' + album.nb_tracks);
   }
 
-  if (track.SNG_CONTRIBUTORS) {
-    writer.setFrame('TCOP', `${RELEASE_YEAR} ${track.SNG_CONTRIBUTORS.main_artist[0]}`);
+  if (track.SNG_CONTRIBUTORS && !Array.isArray(track.SNG_CONTRIBUTORS)) {
+    if (track.SNG_CONTRIBUTORS.main_artist) {
+      writer.setFrame('TCOP', `${RELEASE_YEAR} ${track.SNG_CONTRIBUTORS.main_artist[0]}`);
+    }
     if (track.SNG_CONTRIBUTORS.publisher) {
       writer.setFrame('TPUB', track.SNG_CONTRIBUTORS.publisher.join(', '));
     }

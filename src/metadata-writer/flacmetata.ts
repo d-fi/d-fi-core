@@ -44,8 +44,10 @@ export const writeMetadataFlac = (
     flac.setTag('EXPLICIT=' + track.EXPLICIT_LYRICS);
   }
 
-  if (track.SNG_CONTRIBUTORS) {
-    flac.setTag(`COPYRIGHT=${RELEASE_YEAR} ${track.SNG_CONTRIBUTORS.main_artist[0]}`);
+  if (track.SNG_CONTRIBUTORS && !Array.isArray(track.SNG_CONTRIBUTORS)) {
+    if (track.SNG_CONTRIBUTORS.main_artist) {
+      flac.setTag(`COPYRIGHT=${RELEASE_YEAR} ${track.SNG_CONTRIBUTORS.main_artist[0]}`);
+    }
     if (track.SNG_CONTRIBUTORS.publisher) {
       flac.setTag('ORGANIZATION=' + track.SNG_CONTRIBUTORS.publisher.join(', '));
     }
