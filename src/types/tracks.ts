@@ -117,10 +117,10 @@ export interface trackTypePublicApi {
   isrc: string; // 'GBDUW0000059'
   link: string; // 'https://www.deezer.com/track/3135556'
   share: string; // 'https://www.deezer.com/track/3135556?utm_source=deezer&utm_content=track-3135556&utm_term=0_1614937516&utm_medium=web'
-  duration: number; // '224'
+  duration: number; // 224
   track_position: number; // 4
   disk_number: number; // 1
-  rank: string; // '956167'
+  rank: number; // 956167
   release_date: string; // '2001-03-07'
   explicit_lyrics: boolean;
   explicit_content_lyrics: number; // 0
@@ -133,8 +133,8 @@ export interface trackTypePublicApi {
   md5_image: string; // '2e018122cb56986277102d2041a592c8'
   artist: contributorsPublicApi;
   album: {
-    id: string; // '302127'
-    title: string; // 'Discovery';
+    id: number; // 302127
+    title: string; // 'Discovery'
     link: string; // 'https://www.deezer.com/album/302127'
     cover: string; // 'https://api.deezer.com/album/302127/image'
     cover_small: string; // 'https://e-cdns-images.dzcdn.net/images/cover/2e018122cb56986277102d2041a592c8/56x56-000000-80-0-0.jpg'
