@@ -25,8 +25,8 @@ interface songType {
   ALB_TITLE: string; // 'Discovery'
   ALB_PICTURE: string; // '2e018122cb56986277102d2041a592c8'
   ARTISTS: artistType[];
-  ART_ID: '27';
-  ART_NAME: 'Daft Punk';
+  ART_ID: string; // '27'
+  ART_NAME: string; // 'Daft Punk'
   ARTIST_IS_DUMMY: boolean; // false
   ART_PICTURE: string; //'f2bc007e9133c946ac3c3907ddc5d2ea'
   DATE_START: string; // '0000-00-00'
