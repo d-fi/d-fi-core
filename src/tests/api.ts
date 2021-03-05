@@ -44,15 +44,6 @@ test('GET TRACK LYRICS', async (t) => {
   t.is(response.LYRICS_TEXT.length, 1719);
 });
 
-test('GET MUSIXMATCH LYRICS', async (t) => {
-  const track = await api.getTrackInfo(SNG_ID);
-  const lyrics = await getLyricsMusixmatch(`${track.ART_NAME} - ${track.SNG_TITLE}`);
-
-  t.truthy(lyrics);
-  t.true(lyrics.length > 7000);
-  t.true(lyrics.length < 8000);
-});
-
 test('GET ALBUM INFO', async (t) => {
   const response = await api.getAlbumInfo(ALB_ID);
 
@@ -189,5 +180,14 @@ if (process.env.CI) {
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
     t.true(Buffer.isBuffer(trackWithMetadata));
     t.is(trackWithMetadata.length, 25453375);
+  });
+} else {
+  test('GET MUSIXMATCH LYRICS', async (t) => {
+    const track = await api.getTrackInfo(SNG_ID);
+    const lyrics = await getLyricsMusixmatch(`${track.ART_NAME} - ${track.SNG_TITLE}`);
+
+    t.truthy(lyrics);
+    t.true(lyrics.length > 7000);
+    t.true(lyrics.length < 8000);
   });
 }
