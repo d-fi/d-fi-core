@@ -20,6 +20,14 @@ test.serial('GET TRACK INFO', async (t) => {
   t.is(response.__TYPE__, 'song');
 });
 
+test('GET TRACK INFO - PUBLIC API', async (t) => {
+  const response = await api.getTrackInfoPublicApi(SNG_ID);
+
+  t.is(response.id, Number(SNG_ID));
+  t.is(response.isrc, 'GBDUW0000059');
+  t.is(response.type, 'track');
+});
+
 test('GET TRACK COVER', async (t) => {
   const track = await api.getTrackInfo(SNG_ID);
   const cover = await downloadAlbumCover(track, 500);

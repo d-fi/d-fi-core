@@ -109,7 +109,7 @@ interface contributorsPublicApi {
 }
 
 export interface trackTypePublicApi {
-  id: string; // '3135556';
+  id: number; // 3135556;
   readable: boolean;
   title: string; // 'Harder, Better, Faster, Stronger'
   title_short: string; // 'Harder, Better, Faster, Stronger'
