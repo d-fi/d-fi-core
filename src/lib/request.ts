@@ -7,7 +7,7 @@ const ARL =
 const instance = axios.create({
   baseURL: 'https://api.deezer.com/1.0',
   withCredentials: true,
-  timeout: 10000,
+  timeout: 15000,
   headers: {
     Accept: '*/*',
     'Accept-Encoding': 'gzip, deflate',
@@ -51,8 +51,8 @@ instance.interceptors.response.use(async (response) => {
     if (response.data.error.NEED_API_AUTH_REQUIRED) {
       await initDeezerApi(ARL);
       return await instance(response.config);
-    } else if (response.data.error.code == 4) {
-      await delay(1000);
+    } else if (response.data.error.code === 4) {
+      await delay.range(1000, 1500);
       return await instance(response.config);
     }
   }
