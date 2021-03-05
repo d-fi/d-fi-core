@@ -1,5 +1,5 @@
 import type {artistType} from './artist';
-import type {trackType} from './tracks';
+import type {trackType, contributorsPublicApi} from './tracks';
 
 export interface albumTypeMinimal {
   ALB_ID: string;
@@ -59,4 +59,70 @@ export interface albumTracksType {
   filtered_count: number;
   filtered_items?: number[];
   next?: number;
+}
+
+interface trackDataPublicApi {
+  id: number; // 3135556
+  readable: boolean;
+  title: string; // 'Harder, Better, Faster, Stronger'
+  title_short: string; // 'Harder, Better, Faster, Stronger'
+  title_version?: string; // ''
+  link: 'https://www.deezer.com/track/3135556';
+  duration: number; // 224
+  rank: number; // 956167
+  explicit_lyrics: boolean;
+  explicit_content_lyrics: number; // 0
+  explicit_content_cover: number; // 0
+  preview: string; // 'https://cdns-preview-d.dzcdn.net/stream/c-deda7fa9316d9e9e880d2c6207e92260-8.mp3'
+  md5_image: string; // '2e018122cb56986277102d2041a592c8'
+  artist: {
+    id: number; // 27
+    name: number; // 'Daft Punk'
+    tracklist: string; // 'https://api.deezer.com/artist/27/top?limit=50'
+    type: 'artist';
+  };
+  type: 'track';
+}
+
+interface genreTypePublicApi {
+  id: number; // 113
+  name: string; // 'Dance'
+  picture: string; // 'https://api.deezer.com/genre/113/image'
+  type: 'genre';
+}
+
+export interface albumTypePublicApi {
+  id: number; // 302127'
+  title: 'Discovery';
+  upc: string; // '724384960650'
+  link: string; // 'https://www.deezer.com/album/302127'
+  share: string; // 'https://www.deezer.com/album/302127?utm_source=deezer&utm_content=album-302127&utm_term=0_1614940071&utm_medium=web'
+  cover: string; // 'https://api.deezer.com/album/302127/image'
+  cover_small: string; // 'https://e-cdns-images.dzcdn.net/images/cover/2e018122cb56986277102d2041a592c8/56x56-000000-80-0-0.jpg'
+  cover_medium: string; // 'https://e-cdns-images.dzcdn.net/images/cover/2e018122cb56986277102d2041a592c8/250x250-000000-80-0-0.jpg'
+  cover_big: string; // 'https://e-cdns-images.dzcdn.net/images/cover/2e018122cb56986277102d2041a592c8/500x500-000000-80-0-0.jpg'
+  cover_xl: string; // 'https://e-cdns-images.dzcdn.net/images/cover/2e018122cb56986277102d2041a592c8/1000x1000-000000-80-0-0.jpg'
+  md5_image: string; // '2e018122cb56986277102d2041a592c8'
+  genre_id: number; // 113;
+  genres: {
+    data: genreTypePublicApi[];
+  };
+  label: string; // 'Parlophone (France)'
+  nb_tracks: number; // 14;
+  duration: number; // 3660;
+  fans: number; // 229369
+  rating: number; // 0
+  release_date: string; // '2001-03-07'
+  record_type: string; // 'album'
+  available: boolean;
+  tracklist: string; // 'https://api.deezer.com/album/302127/tracks'
+  explicit_lyrics: boolean;
+  explicit_content_lyrics: number; // 7
+  explicit_content_cover: number; // 0
+  contributors: contributorsPublicApi[];
+  artist: contributorsPublicApi;
+  type: 'album';
+  tracks: {
+    data: trackDataPublicApi[];
+  };
 }

@@ -92,7 +92,7 @@ export interface trackType extends songType {
   TRACK_POSITION?: number;
 }
 
-interface contributorsPublicApi {
+export interface contributorsPublicApi {
   id: number; // 27
   name: string; // 'Daft Punk'
   link: string; // 'https://www.deezer.com/artist/27'

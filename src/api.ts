@@ -12,6 +12,7 @@ import type {
   profileType,
   searchType,
   trackTypePublicApi,
+  albumTypePublicApi,
 } from './types';
 
 // expire cache in 60 minutes
@@ -72,6 +73,12 @@ export const requestPublicApi = async (slug: string) => {
  */
 export const getTrackInfoPublicApi = (sng_id: string): Promise<trackTypePublicApi> =>
   requestPublicApi('/track/' + sng_id);
+
+/**
+ * @param {String} alb_id album id
+ */
+export const getAlbumInfoPublicApi = (alb_id: string): Promise<albumTypePublicApi> =>
+  requestPublicApi('/album/' + alb_id);
 
 /**
  * @param {String} sng_id song id

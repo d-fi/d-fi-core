@@ -61,6 +61,14 @@ test('GET ALBUM INFO', async (t) => {
   t.is(response.__TYPE__, 'album');
 });
 
+test('GET ALBUM INFO - PUBLIC API', async (t) => {
+  const response = await api.getAlbumInfoPublicApi(ALB_ID);
+
+  t.is(response.id, Number(ALB_ID));
+  t.is(response.upc, '724384960650');
+  t.is(response.type, 'album');
+});
+
 test('GET ALBUM TRACKS', async (t) => {
   const response = await api.getAlbumTracks(ALB_ID);
 
