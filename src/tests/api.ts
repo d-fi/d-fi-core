@@ -11,7 +11,16 @@ const SNG_ID = '3135556';
 // Discovery by Daft Punk
 const ALB_ID = '302127';
 
-test.serial('GET TRACK INFO', async (t) => {
+test.serial('GET USER INFO', async (t) => {
+  const response = await api.getUser();
+
+  t.truthy(response.BLOG_NAME);
+  t.truthy(response.EMAIL);
+  t.truthy(response.USER_ID);
+  t.is(response.__TYPE__, 'user');
+});
+
+test('GET TRACK INFO', async (t) => {
   const response = await api.getTrackInfo(SNG_ID);
 
   t.is(response.SNG_ID, SNG_ID);
