@@ -1,7 +1,7 @@
-import axios, {AxiosRequestConfig} from 'axios';
+import axios from 'axios';
 import delay from 'delay';
 
-const ARL =
+let user_arl =
   'a62f40421c53479e411c78cd7420f7e40e7de97ab9e6436558145bcedf4557bc79946e96c02d7fef9a3166024a11c4a501236eca892b1ef989267244153af6efc4fec75d47a776129e971a4c68cef0b33b1633baf0eb0e8c08e170224e9527fc';
 
 const instance = axios.create({
@@ -29,18 +29,14 @@ const instance = axios.create({
 });
 
 export const initDeezerApi = async (arl: string): Promise<string> => {
-  const options: AxiosRequestConfig = {
-    params: {
-      method: 'deezer.ping',
-      api_version: '1.0',
-      api_token: '',
-    },
-  };
-  if (arl) {
-    options.headers = {cookie: 'arl=' + arl};
+  if (arl.length !== 192) {
+    throw new Error(`Invalid arl. Length should be 192 characters. You have provided ${arl.length} characters.`);
   }
-
-  const {data} = await instance.get('https://www.deezer.com/ajax/gw-light.php', options);
+  user_arl = arl;
+  const {data} = await instance.get('https://www.deezer.com/ajax/gw-light.php', {
+    params: {method: 'deezer.ping', api_version: '1.0', api_token: ''},
+    headers: {cookie: 'arl=' + arl},
+  });
   instance.defaults.params.sid = data.results.SESSION;
   return data.results.SESSION;
 };
@@ -49,7 +45,7 @@ export const initDeezerApi = async (arl: string): Promise<string> => {
 instance.interceptors.response.use(async (response) => {
   if (response.data.error && Object.keys(response.data.error).length > 0) {
     if (response.data.error.NEED_API_AUTH_REQUIRED) {
-      await initDeezerApi(ARL);
+      await initDeezerApi(user_arl);
       return await instance(response.config);
     } else if (response.data.error.code === 4) {
       await delay.range(1000, 1500);
