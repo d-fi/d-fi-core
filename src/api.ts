@@ -13,6 +13,7 @@ import type {
   searchType,
   trackTypePublicApi,
   albumTypePublicApi,
+  userType,
 } from './types';
 
 // expire cache in 60 minutes
@@ -163,3 +164,19 @@ type searchTypesProp = 'ALBUM' | 'ARTIST' | 'TRACK' | 'PLAYLIST' | 'RADIO' | 'SH
  */
 export const searchMusic = (query: string, types: searchTypesProp[] = ['TRACK'], nb = 15): Promise<searchType> =>
   request({query, nb, types}, 'mobile_suggest');
+
+/**
+ * Get details about current user
+ */
+export const getUser = async (): Promise<userType> => {
+  const {
+    data: {error, results},
+  } = await axios.get('/gateway.php', {params: {method: 'user_getInfo'}});
+
+  if (Object.keys(results).length > 0) {
+    return results;
+  }
+
+  const errorMessage = Object.entries(error).join(', ');
+  throw new Error(errorMessage);
+};

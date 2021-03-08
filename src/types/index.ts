@@ -4,3 +4,4 @@ export * from './playlist';
 export * from './profile';
 export * from './search';
 export * from './tracks';
+export * from './user';

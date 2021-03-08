@@ -20,6 +20,16 @@ import * as api from 'd-fi-core';
 // Init api with arl from cookie
 await api.initDeezerApi(arl_cookie);
 
+// Verify user
+try {
+  const user = await api.getUser();
+  // Successfully logged in
+  console.log('Logged in as ' + user.BLOG_NAME);
+} catch (err) {
+  // Invalid arl cookie set
+  console.error(err.message);
+}
+
 // GET Track Object
 const track = await api.getTrackInfo(song_id);
 
