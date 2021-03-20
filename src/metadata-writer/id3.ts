@@ -5,11 +5,11 @@ import type {albumTypePublicApi, trackType} from '../types';
 export const writeMetadataMp3 = (
   buffer: Buffer,
   track: trackType,
-  album: albumTypePublicApi,
+  album: albumTypePublicApi | null,
   cover?: Buffer | null,
 ): Buffer => {
   const writer = new id3Writer(buffer);
-  const RELEASE_YEAR = album.release_date.split('-')[0];
+  const RELEASE_YEAR = album ? album.release_date.split('-')[0] : null;
 
   const artists = track.ART_NAME.split(
     new RegExp(' featuring | feat. | Ft. | ft. | vs | vs. | x | - |, ', 'g'),
@@ -18,35 +18,41 @@ export const writeMetadataMp3 = (
   writer
     .setFrame('TIT2', track.SNG_TITLE)
     .setFrame('TALB', track.ALB_TITLE)
-    .setFrame(
-      'TCON',
-      album.genres.data.map((g) => g.name),
-    )
     .setFrame('TPE1', [artists])
-    .setFrame('TPE2', album.artist.name)
-    .setFrame('TLEN', Number(track.DURATION) * 1000)
-    .setFrame('TYER', RELEASE_YEAR)
-    .setFrame('TDAT', album.release_date)
+    .setFrame('TLEN', Number(track.DURATION) * 1000);
+
+  if (album) {
+    writer
+      .setFrame(
+        'TCON',
+        album.genres.data.map((g) => g.name),
+      )
+      .setFrame('TPE2', album.artist.name)
+      .setFrame('TYER', RELEASE_YEAR)
+      .setFrame('TDAT', album.release_date)
+      .setFrame('TXXX', {
+        description: 'RELEASETYPE',
+        value: album.record_type,
+      })
+      .setFrame('TXXX', {
+        description: 'BARCODE',
+        value: album.upc,
+      })
+      .setFrame('TXXX', {
+        description: 'LABEL',
+        value: album.label,
+      });
+  }
+
+  writer
     .setFrame('TMED', 'Digital Media')
     .setFrame('TXXX', {
       description: 'Artists',
       value: artists.join(', '),
     })
     .setFrame('TXXX', {
-      description: 'RELEASETYPE',
-      value: album.record_type,
-    })
-    .setFrame('TXXX', {
       description: 'ISRC',
       value: track.ISRC,
-    })
-    .setFrame('TXXX', {
-      description: 'BARCODE',
-      value: album.upc,
-    })
-    .setFrame('TXXX', {
-      description: 'LABEL',
-      value: album.label,
     })
     .setFrame('TXXX', {
       description: 'COMPILATION',
@@ -62,12 +68,14 @@ export const writeMetadataMp3 = (
     });
 
   if (track.DISK_NUMBER) {
-    writer.setFrame('TPOS', track.DISK_NUMBER).setFrame('TRCK', track.TRACK_NUMBER + '/' + album.nb_tracks);
+    writer
+      .setFrame('TPOS', track.DISK_NUMBER)
+      .setFrame('TRCK', `${track.TRACK_NUMBER}${album ? '/' + album.nb_tracks : ''}`);
   }
 
   if (track.SNG_CONTRIBUTORS && !Array.isArray(track.SNG_CONTRIBUTORS)) {
     if (track.SNG_CONTRIBUTORS.main_artist) {
-      writer.setFrame('TCOP', `${RELEASE_YEAR} ${track.SNG_CONTRIBUTORS.main_artist[0]}`);
+      writer.setFrame('TCOP', `${RELEASE_YEAR ? RELEASE_YEAR + ' ' : ''}${track.SNG_CONTRIBUTORS.main_artist[0]}`);
     }
     if (track.SNG_CONTRIBUTORS.publisher) {
       writer.setFrame('TPUB', track.SNG_CONTRIBUTORS.publisher.join(', '));

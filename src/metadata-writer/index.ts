@@ -2,15 +2,14 @@ import {downloadAlbumCover} from './abumCover';
 import {getTrackLyrics} from './getTrackLyrics';
 import {writeMetadataMp3} from './id3';
 import {writeMetadataFlac} from './flacmetata';
-import {getAlbumInfoPublicApi, getTrackInfoPublicApi} from '../api';
+import {getAlbumInfoPublicApi} from '../api';
 import type {trackType} from '../types';
 
 const albumInfo = async (track: trackType) => {
   try {
     return getAlbumInfoPublicApi(track.ALB_ID);
   } catch (err) {
-    const {album} = await getTrackInfoPublicApi(track.SNG_ID);
-    return getAlbumInfoPublicApi(album.id.toString());
+    return null;
   }
 };
 
@@ -34,8 +33,10 @@ export const addTrackTags = async (trackBuffer: Buffer, track: trackType, albumC
   if (track.ART_NAME.toLowerCase() === 'various') {
     track.ART_NAME = 'Various Artists';
   }
-  album.record_type =
-    album.record_type === 'ep' ? 'EP' : album.record_type.charAt(0).toUpperCase() + album.record_type.slice(1);
+  if (album && album.record_type) {
+    album.record_type =
+      album.record_type === 'ep' ? 'EP' : album.record_type.charAt(0).toUpperCase() + album.record_type.slice(1);
+  }
 
   const isFlac = trackBuffer.slice(0, 4).toString('ascii') === 'fLaC';
   return isFlac
