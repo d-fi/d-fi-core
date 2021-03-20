@@ -155,6 +155,24 @@ if (process.env.CI) {
     t.is(trackWithMetadata.length, 3629256);
   });
 
+  test('TRACK128 WITHOUT ALBUM INFO', async (t) => {
+    const track = await api.getTrackInfo('912254892');
+    const url = getTrackDownloadUrl(track, 1);
+    const {data} = await axios.get(url, {responseType: 'arraybuffer'});
+
+    t.truthy(data);
+    t.true(Buffer.isBuffer(data));
+    t.is(data.length, 3262170);
+
+    const decryptedTrack = decryptDownload(data, track.SNG_ID);
+    t.true(Buffer.isBuffer(decryptedTrack));
+    t.is(decryptedTrack.length, 3262170);
+
+    const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
+    t.true(Buffer.isBuffer(trackWithMetadata));
+    t.is(trackWithMetadata.length, 3309066);
+  });
+
   test('DOWNLOAD TRACK320 & ADD METADATA', async (t) => {
     const track = await api.getTrackInfo(SNG_ID);
     const url = getTrackDownloadUrl(track, 3);
