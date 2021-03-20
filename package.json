@@ -17,12 +17,12 @@
     "axios": "^0.21.1",
     "browser-id3-writer": "^4.4.0",
     "delay": "^5.0.0",
-    "node-html-parser": "^3.0.4"
+    "node-html-parser": "^3.1.0"
   },
   "devDependencies": {
-    "@types/node": "^14.14.32",
+    "@types/node": "^14.14.35",
     "ava": "^3.15.0",
-    "eslint": "^7.21.0",
+    "eslint": "^7.22.0",
     "eslint-plugin-prettier": "^3.3.1",
     "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
