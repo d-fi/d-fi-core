@@ -7,7 +7,7 @@ import type {trackType} from '../types';
 
 const albumInfo = async (track: trackType) => {
   try {
-    return getAlbumInfoPublicApi(track.ALB_ID);
+    return await getAlbumInfoPublicApi(track.ALB_ID);
   } catch (err) {
     return null;
   }
