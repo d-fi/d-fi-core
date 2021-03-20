@@ -2,8 +2,17 @@ import {downloadAlbumCover} from './abumCover';
 import {getTrackLyrics} from './getTrackLyrics';
 import {writeMetadataMp3} from './id3';
 import {writeMetadataFlac} from './flacmetata';
-import {getAlbumInfoPublicApi} from '../api';
+import {getAlbumInfoPublicApi, getTrackInfoPublicApi} from '../api';
 import type {trackType} from '../types';
+
+const albumInfo = async (track: trackType) => {
+  try {
+    return getAlbumInfoPublicApi(track.ALB_ID);
+  } catch (err) {
+    const {album} = await getTrackInfoPublicApi(track.SNG_ID);
+    return getAlbumInfoPublicApi(album.id.toString());
+  }
+};
 
 /**
  * Add metdata to the mp3
@@ -15,7 +24,7 @@ export const addTrackTags = async (trackBuffer: Buffer, track: trackType, albumC
   const [cover, lyrics, album] = await Promise.all([
     downloadAlbumCover(track, albumCoverSize),
     getTrackLyrics(track),
-    getAlbumInfoPublicApi(track.ALB_ID),
+    albumInfo(track),
   ]);
 
   if (lyrics) {
