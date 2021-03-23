@@ -42,7 +42,7 @@
     "require": [
       "ts-node/register"
     ],
-    "timeout": "30s",
+    "timeout": "2m",
     "verbose": true
   }
 }
