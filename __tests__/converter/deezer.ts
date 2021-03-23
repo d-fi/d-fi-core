@@ -1,5 +1,5 @@
 import test from 'ava';
-import * as api from '../';
+import * as api from '../../src';
 
 // Harder, Better, Faster, Stronger by Daft Punk
 const SNG_TITLE = 'Harder, Better, Faster, Stronger';

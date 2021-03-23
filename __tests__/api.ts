@@ -1,9 +1,9 @@
 import test from 'ava';
 import axios from 'axios';
-import * as api from '../';
-import {decryptDownload, getTrackDownloadUrl} from '../lib/decrypt';
-import {downloadAlbumCover} from '../metadata-writer/abumCover';
-import {getLyricsMusixmatch} from '../metadata-writer/musixmatchLyrics';
+import * as api from '../src';
+import {decryptDownload, getTrackDownloadUrl} from '../src/lib/decrypt';
+import {downloadAlbumCover} from '../src/metadata-writer/abumCover';
+import {getLyricsMusixmatch} from '../src/metadata-writer/musixmatchLyrics';
 
 // Harder, Better, Faster, Stronger by Daft Punk
 const SNG_ID = '3135556';
