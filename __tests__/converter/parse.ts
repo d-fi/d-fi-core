@@ -95,3 +95,24 @@ if (process.env.CI) {
     t.true(response.tracks.length > 150);
   });
 }
+
+// Fail Tests
+test('SHOULD FAIL STRING', async (t) => {
+  const str = 'hello there';
+  try {
+    await parseInfo(str);
+    t.fail();
+  } catch (err) {
+    t.is(err.message, 'Unknown URL: ' + str);
+  }
+});
+
+test('SHOULD FAIL URL', async (t) => {
+  const url = 'https://example.com/browse/track/56681099';
+  try {
+    await parseInfo(url);
+    t.fail();
+  } catch (err) {
+    t.is(err.message, 'Unknown URL: ' + url);
+  }
+});
