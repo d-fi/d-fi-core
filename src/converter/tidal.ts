@@ -138,9 +138,9 @@ export const getArtistAlbums = async (id: string): Promise<tidalAlbumsTracksType
  * @example tidal.getArtistTopTracks('3575680')
  */
 export const getArtistTopTracks = async (id: string): Promise<tidalArtistTopTracksType> => {
-  const {body}: any = await client(`artists/${id}/toptracks`);
-  body.items = (body as tidalArtistTopTracksType).items.filter((item) => item.artist.id.toString() === id);
-  return body;
+  const {data} = await client(`artists/${id}/toptracks`);
+  data.items = data.items.filter((item: any) => item.artist.id.toString() === id);
+  return data;
 };
 
 /**
