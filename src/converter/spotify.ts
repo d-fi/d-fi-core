@@ -24,9 +24,17 @@ const getOffset = (next: null | string): number => {
 
 const queue = new PQueue({concurrency: 25});
 
-export const spotifyApi = new SpotifyWebApi();
+const spotifyApi = new SpotifyWebApi();
 
-export const spotifyPlaylist2Deezer = async (
+export const setSpotifyAnonymousToken = async () => {
+  const {data}: {data: tokensType} = await axios.get(
+    'https://open.spotify.com/get_access_token?reason=transport&productType=embed',
+  );
+  spotifyApi.setAccessToken(data.accessToken);
+  return data;
+};
+
+export const playlist2Deezer = async (
   id: string,
   onError?: (item: SpotifyApi.PlaylistTrackObject, index: number, err: Error) => void,
 ): Promise<[playlistInfo, trackType[]]> => {
@@ -86,7 +94,7 @@ export const spotifyPlaylist2Deezer = async (
   return [playlistInfoData, tracks];
 };
 
-export const spotifyArtist2Deezer = async (
+export const artist2Deezer = async (
   id: string,
   onError?: (item: SpotifyApi.TrackObjectFull, index: number, err: Error) => void,
 ): Promise<trackType[]> => {
@@ -111,11 +119,4 @@ export const spotifyArtist2Deezer = async (
   );
 
   return tracks;
-};
-
-export const setSpotifyAnonymousToken = async () => {
-  const {data}: {data: tokensType} = await axios.get(
-    'https://open.spotify.com/get_access_token?reason=transport&productType=embed',
-  );
-  spotifyApi.setAccessToken(data.accessToken);
 };
