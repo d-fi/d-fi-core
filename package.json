@@ -18,10 +18,12 @@
     "browser-id3-writer": "^4.4.0",
     "delay": "^5.0.0",
     "node-html-parser": "^3.1.0",
-    "p-queue": "^6.6.2"
+    "p-queue": "^6.6.2",
+    "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
     "@types/node": "^14.14.35",
+    "@types/spotify-web-api-node": "^5.0.2",
     "ava": "^3.15.0",
     "eslint": "^7.22.0",
     "eslint-plugin-prettier": "^3.3.1",
