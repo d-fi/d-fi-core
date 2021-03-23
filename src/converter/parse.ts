@@ -12,7 +12,7 @@ import * as spotify from './spotify';
 import * as tidal from './tidal';
 import {isrc2deezer, upc2deezer} from './deezer';
 import PQueue from 'p-queue';
-import type {albumType, trackType} from '../types';
+import type {albumType, artistInfoType, playlistInfo, trackType} from '../types';
 
 type linkType = 'track' | 'album' | 'artist' | 'playlist';
 
@@ -36,7 +36,7 @@ type urlPartsType = {
 
 const queue = new PQueue({concurrency: 10});
 
-const getUrlParts = async (url: string): Promise<urlPartsType | null> => {
+const getUrlParts = async (url: string): Promise<urlPartsType> => {
   if (url.startsWith('spotify:')) {
     const spotify = url.split(':');
     url = 'https://open.spotify.com/' + spotify[1] + '/' + spotify[2];
@@ -59,7 +59,7 @@ const getUrlParts = async (url: string): Promise<urlPartsType | null> => {
       const tidalUrlParts = url.split(/\/(\w+)\/(\d+|\w+-\w+-\w+-\w+-\w+)/);
       return {type: ('tidal-' + tidalUrlParts[1]) as any, id: tidalUrlParts[2]};
     default:
-      return null;
+      throw new Error('Unable to parse URL: ' + url);
   }
 };
 
@@ -69,14 +69,12 @@ const getUrlParts = async (url: string): Promise<urlPartsType | null> => {
  */
 export const parseInfo = async (url: string) => {
   let info = await getUrlParts(url);
-  if (!info) {
-    return null;
-  } else if (!info.id) {
+  if (!info.id) {
     throw new Error('Unable to parse id');
   }
 
   let linktype: linkType = 'track';
-  let linkinfo: trackType | albumType | {} = {};
+  let linkinfo: trackType | albumType | playlistInfo | artistInfoType | {} = {};
   let tracks: trackType[] = [];
 
   switch (info.type) {
