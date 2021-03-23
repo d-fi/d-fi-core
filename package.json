@@ -19,6 +19,7 @@
     "delay": "^5.0.0",
     "node-html-parser": "^3.1.0",
     "p-queue": "^6.6.2",
+    "spotify-uri": "^2.1.0",
     "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
