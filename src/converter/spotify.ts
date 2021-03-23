@@ -1,7 +1,7 @@
 import axios from 'axios';
 import SpotifyWebApi from 'spotify-web-api-node';
 import PQueue from 'p-queue';
-import {isrc2deezer} from './deezer';
+import {isrc2deezer, upc2deezer} from './deezer';
 import type {playlistInfo, trackType} from '../types';
 
 // type spotifyTypes = 'track' | 'episode' | 'album' | 'artist' | 'playlist' | 'show';
@@ -13,6 +13,11 @@ type tokensType = {
   isAnonymous: true;
 };
 
+/**
+ * Parse offset number
+ * @param {String} next next page url
+ * @returns {Number}
+ */
 const getOffset = (next: null | string): number => {
   if (next) {
     const o = next.split('&').find((p) => p.includes('offset='));
@@ -22,10 +27,20 @@ const getOffset = (next: null | string): number => {
   return 0;
 };
 
+/**
+ * Limit process concurrency
+ */
 const queue = new PQueue({concurrency: 25});
 
-const spotifyApi = new SpotifyWebApi();
+/**
+ * Export core spotify module
+ */
+export const spotifyApi = new SpotifyWebApi();
 
+/**
+ * Set spotify tokens anonymously. This is required to bypass api limits.
+ * @returns {tokensType}
+ */
 export const setSpotifyAnonymousToken = async () => {
   const {data}: {data: tokensType} = await axios.get(
     'https://open.spotify.com/get_access_token?reason=transport&productType=embed',
@@ -34,6 +49,29 @@ export const setSpotifyAnonymousToken = async () => {
   return data;
 };
 
+/**
+ * Convert spotify songs to deezer
+ * @param {String} id Spotify track id
+ * @returns {trackType}
+ */
+export const track2deezer = async (id: string) => {
+  const {body} = await spotifyApi.getTrack(id);
+  return await isrc2deezer(body.name, body.external_ids.isrc);
+};
+
+/**
+ * Convert spotify albums to deezer
+ * @param {String} id Spotify track id
+ */
+export const album2deezer = async (id: string) => {
+  const {body} = await spotifyApi.getAlbum(id);
+  return await upc2deezer(body.name, body.external_ids.upc);
+};
+
+/**
+ * Convert playlist to deezer
+ * @param {String} id Spotify track id
+ */
 export const playlist2Deezer = async (
   id: string,
   onError?: (item: SpotifyApi.PlaylistTrackObject, index: number, err: Error) => void,
@@ -55,7 +93,6 @@ export const playlist2Deezer = async (
         try {
           if (item.track) {
             const track = await isrc2deezer(item.track.name, item.track.external_ids.isrc);
-            // console.log(signale.success(`Track #${index}: ${item.track.name}`));
             track.TRACK_POSITION = index + 1;
             tracks.push(track);
           }
@@ -94,6 +131,10 @@ export const playlist2Deezer = async (
   return [playlistInfoData, tracks];
 };
 
+/**
+ * Convert artist songs to deezer. Maxium of 10 tracks.
+ * @param {String} id Spotify track id
+ */
 export const artist2Deezer = async (
   id: string,
   onError?: (item: SpotifyApi.TrackObjectFull, index: number, err: Error) => void,
@@ -107,7 +148,6 @@ export const artist2Deezer = async (
       return async () => {
         try {
           const track = await isrc2deezer(item.name, item.external_ids.isrc);
-          // console.log(signale.success(`Track #${index}: ${item.name}`));
           tracks.push(track);
         } catch (err) {
           if (onError) {
