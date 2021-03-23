@@ -1,2 +1,2 @@
-export * as deezerConverter from './deezer';
-export * as tidalConverter from './tidal';
+export * from './deezer';
+export * as tidal from './tidal';

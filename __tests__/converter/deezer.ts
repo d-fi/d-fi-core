@@ -10,7 +10,7 @@ const ALB_TITLE = 'Discovery';
 const UPC = '724384960650';
 
 test.serial('GET TRACK ISRC', async (t) => {
-  const response = await api.deezerConverter.isrc2deezer(SNG_TITLE, ISRC);
+  const response = await api.isrc2deezer(SNG_TITLE, ISRC);
 
   t.is(response.SNG_TITLE, SNG_TITLE);
   t.is(response.ISRC, ISRC);
@@ -19,7 +19,7 @@ test.serial('GET TRACK ISRC', async (t) => {
 });
 
 test.serial('GET ALBUM UPC', async (t) => {
-  const [album, tracks] = await api.deezerConverter.upc2deezer(ALB_TITLE, UPC);
+  const [album, tracks] = await api.upc2deezer(ALB_TITLE, UPC);
 
   t.is(album.ALB_TITLE, ALB_TITLE);
   t.is(album.UPC, UPC);
