@@ -103,8 +103,10 @@ export const parseInfo = async (url: string) => {
       await queue.addAll(
         artistAlbums.data.map((album) => {
           return async () => {
-            const albumTracks = await getAlbumTracks(album.ALB_ID);
-            tracks = [...tracks, ...albumTracks.data];
+            if (album.ARTISTS.find((a) => a.ART_ID === info.id)) {
+              const albumTracks = await getAlbumTracks(album.ALB_ID);
+              tracks = [...tracks, ...albumTracks.data.filter((t) => t.ART_ID === info.id)];
+            }
           };
         }),
       );
