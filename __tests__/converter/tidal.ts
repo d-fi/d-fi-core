@@ -26,12 +26,30 @@ test('GET TRACK INFO', async (t) => {
   t.is(response.isrc, ISRC);
 });
 
+test('GET TRACK --> DEEZER', async (t) => {
+  const track = await tidal.track2deezer(SNG_ID);
+
+  t.is(track.SNG_ID, '118190298');
+  t.is(track.ISRC, ISRC);
+  t.is(track.MD5_ORIGIN, '28045ff090360486d41c4a1cc5929a96');
+  t.is(track.__TYPE__, 'song');
+});
+
 test('GET ALBUM INFO', async (t) => {
   const response = await tidal.getAlbum(ALB_ID);
 
   t.is(response.id.toString(), ALB_ID);
   t.is(response.title, ALB_TITLE);
   t.is(response.upc, UPC);
+});
+
+test('GET ALBUM --> DEEZER', async (t) => {
+  const [album, tracks] = await tidal.album2deezer(ALB_ID);
+
+  t.is(album.ALB_ID, '12279688');
+  t.is(album.UPC, UPC.slice(2));
+  t.is(album.__TYPE__, 'album');
+  t.is(tracks.length, 16);
 });
 
 test('GET ALBUM TRACKS', async (t) => {
