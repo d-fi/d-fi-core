@@ -108,6 +108,7 @@ export const parseInfo = async (url: string) => {
           };
         }),
       );
+      break;
 
     case 'spotify-track':
       tracks.push(await spotify.track2deezer(info.id));
