@@ -1,6 +1,6 @@
 import axios from 'axios';
 import PQueue from 'p-queue';
-import {isrc2deezer} from './deezer';
+import {isrc2deezer, upc2deezer} from './deezer';
 import type {playlistInfo, trackType} from '../types';
 
 interface commonType {
@@ -93,12 +93,21 @@ const queue = new PQueue({concurrency: 25});
 
 /**
  * Get a track by its id
- * @param {string} id - track id
+ * @param string} id - track id
  * @example tidal.getTrack('64975224')
  */
 export const getTrack = async (id: string): Promise<tidalTrackType> => {
   const {data} = await client(`tracks/${id}`);
   return data;
+};
+
+/**
+ * Convert a tidal track to deezer
+ * @param {string} id - track id
+ */
+export const track2deezer = async (id: string) => {
+  const track = await getTrack(id);
+  return await isrc2deezer(track.title, track.isrc);
 };
 
 /**
@@ -109,6 +118,15 @@ export const getTrack = async (id: string): Promise<tidalTrackType> => {
 export const getAlbum = async (id: string): Promise<tidalAlbumType> => {
   const {data} = await client(`albums/${id}`);
   return data;
+};
+
+/**
+ * Convert a tidal albums to deezer
+ * @param {string} id - album id
+ */
+export const album2deezer = async (id: string) => {
+  const album = await getAlbum(id);
+  return await upc2deezer(album.title, album.upc);
 };
 
 /**

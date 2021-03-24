@@ -10,7 +10,6 @@ import {
 import spotifyUri from 'spotify-uri';
 import * as spotify from './spotify';
 import * as tidal from './tidal';
-import {isrc2deezer, upc2deezer} from './deezer';
 import PQueue from 'p-queue';
 import type {albumType, artistInfoType, playlistInfo, trackType} from '../types';
 
@@ -134,13 +133,11 @@ export const parseInfo = async (url: string) => {
       break;
 
     case 'tidal-track':
-      const tidalTrack = await tidal.getTrack(info.id);
-      tracks.push(await isrc2deezer(tidalTrack.title, tidalTrack.isrc));
+      tracks.push(await tidal.track2deezer(info.id));
       break;
 
     case 'tidal-album':
-      const tidalAlbum = await tidal.getAlbum(info.id);
-      const [tidalAlbumInfo, tidalAlbumTracks] = await upc2deezer(tidalAlbum.title, tidalAlbum.upc);
+      const [tidalAlbumInfo, tidalAlbumTracks] = await tidal.album2deezer(info.id);
       tracks = tidalAlbumTracks;
       linkinfo = tidalAlbumInfo;
       linktype = 'album';
