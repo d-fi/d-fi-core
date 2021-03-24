@@ -96,6 +96,34 @@ if (process.env.CI) {
   });
 }
 
+// Artists
+test('PARSE DEEZER ARTIST', async (t) => {
+  const url = 'https://www.deezer.com/us/artist/13';
+  const response = await parseInfo(url);
+
+  t.deepEqual(response.info, {id: '13', type: 'artist'});
+  t.is(response.linktype, 'artist');
+  t.true(response.tracks.length > 3500);
+});
+
+test('PARSE SPOTIFY ARTIST', async (t) => {
+  const url = 'https://open.spotify.com/artist/5WUlDfRSoLAfcVSX1WnrxN?si=6c99fb147fe848ee';
+  const response = await parseInfo(url);
+
+  t.deepEqual(response.info, {id: '5WUlDfRSoLAfcVSX1WnrxN', type: 'spotify-artist'});
+  t.is(response.linktype, 'artist');
+  t.true(response.tracks.length > 5);
+});
+
+test('PARSE TIDAL ARTIST', async (t) => {
+  const url = 'https://tidal.com/browse/artist/10665';
+  const response = await parseInfo(url);
+
+  t.deepEqual(response.info, {id: '10665', type: 'tidal-artist'});
+  t.is(response.linktype, 'artist');
+  t.true(response.tracks.length > 5);
+});
+
 // Fail Tests
 test('SHOULD FAIL STRING', async (t) => {
   const str = 'hello there';
