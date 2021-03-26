@@ -15,7 +15,7 @@ import type {albumType, artistInfoType, playlistInfo, trackType} from '../types'
 
 type linkType = 'track' | 'album' | 'artist' | 'playlist';
 
-type urlPartsType = {
+export type urlPartsType = {
   id: string;
   type:
     | 'track'
@@ -35,7 +35,7 @@ type urlPartsType = {
 
 const queue = new PQueue({concurrency: 10});
 
-const getUrlParts = async (url: string): Promise<urlPartsType> => {
+export const getUrlParts = async (url: string, setToken = false): Promise<urlPartsType> => {
   if (url.startsWith('spotify:')) {
     const spotify = url.split(':');
     url = 'https://open.spotify.com/' + spotify[1] + '/' + spotify[2];
@@ -53,7 +53,9 @@ const getUrlParts = async (url: string): Promise<urlPartsType> => {
 
     case 'spotify':
       const spotifyUrlParts = spotifyUri.parse(url);
-      await spotify.setSpotifyAnonymousToken();
+      if (setToken) {
+        await spotify.setSpotifyAnonymousToken();
+      }
       return {type: ('spotify-' + spotifyUrlParts.type) as any, id: (spotifyUrlParts as any).id};
 
     case 'tidal':
@@ -70,7 +72,7 @@ const getUrlParts = async (url: string): Promise<urlPartsType> => {
  * @param {String} url
  */
 export const parseInfo = async (url: string) => {
-  let info = await getUrlParts(url);
+  let info = await getUrlParts(url, true);
   if (!info.id) {
     throw new Error('Unable to parse id');
   }
