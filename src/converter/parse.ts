@@ -50,13 +50,16 @@ const getUrlParts = async (url: string): Promise<urlPartsType> => {
     case 'deezer':
       const deezerUrlParts = url.split(/\/(\w+)\/(\d+)/);
       return {type: deezerUrlParts[1] as any, id: deezerUrlParts[2]};
+
     case 'spotify':
       const spotifyUrlParts = spotifyUri.parse(url);
       await spotify.setSpotifyAnonymousToken();
       return {type: ('spotify-' + spotifyUrlParts.type) as any, id: (spotifyUrlParts as any).id};
+
     case 'tidal':
       const tidalUrlParts = url.split(/\/(\w+)\/(\d+|\w+-\w+-\w+-\w+-\w+)/);
       return {type: ('tidal-' + tidalUrlParts[1]) as any, id: tidalUrlParts[2]};
+
     default:
       throw new Error('Unable to parse URL: ' + url);
   }
@@ -162,5 +165,15 @@ export const parseInfo = async (url: string) => {
       throw new Error('Unknown type: ' + info.type);
   }
 
-  return {info, linktype, linkinfo, tracks};
+  return {
+    info,
+    linktype,
+    linkinfo,
+    tracks: tracks.map((t) => {
+      if (t.VERSION) {
+        t.SNG_TITLE += ' ' + t.VERSION;
+      }
+      return t;
+    }),
+  };
 };

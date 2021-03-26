@@ -62,7 +62,7 @@ interface songType {
   S_PREMIUM: number; // 0
   TRACK_NUMBER: number; // '4'
   URL_REWRITING: string; // 'daft-punk'
-  VERSION: string; // ''
+  VERSION?: string; // '(Extended Club Mix Edit)'
   MD5_ORIGIN: string; // '51afcde9f56a132096c0496cc95eb24b'
   FILESIZE_AAC_64: '0';
   FILESIZE_MP3_64: string; // '1798059'
