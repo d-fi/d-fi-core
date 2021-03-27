@@ -10,7 +10,7 @@ import {
 import spotifyUri from 'spotify-uri';
 import * as spotify from './spotify';
 import * as tidal from './tidal';
-import * as youtube from './tidal';
+import * as youtube from './youtube';
 import PQueue from 'p-queue';
 import type {albumType, artistInfoType, playlistInfo, trackType} from '../types';
 

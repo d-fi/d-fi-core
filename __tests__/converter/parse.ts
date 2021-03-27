@@ -124,6 +124,18 @@ test('PARSE TIDAL ARTIST', async (t) => {
   t.true(response.tracks.length > 5);
 });
 
+if (!process.env.CI) {
+  test('PARSE YOUTUBE TRACK', async (t) => {
+    const url = 'https://www.youtube.com/watch?v=4NRXx6U8ABQ';
+    const response = await parseInfo(url);
+
+    t.deepEqual(response.info, {id: '4NRXx6U8ABQ', type: 'youtube-track'});
+    t.deepEqual(response.linkinfo, {});
+    t.is(response.linktype, 'track');
+    t.is(response.tracks.length, 1);
+  });
+}
+
 // Fail Tests
 test('SHOULD FAIL STRING', async (t) => {
   const str = 'hello there';
