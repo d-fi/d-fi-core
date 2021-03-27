@@ -10,6 +10,7 @@ import {
 import spotifyUri from 'spotify-uri';
 import * as spotify from './spotify';
 import * as tidal from './tidal';
+import * as youtube from './tidal';
 import PQueue from 'p-queue';
 import type {albumType, artistInfoType, playlistInfo, trackType} from '../types';
 
@@ -30,7 +31,8 @@ export type urlPartsType = {
     | 'tidal-track'
     | 'tidal-album'
     | 'tidal-playlist'
-    | 'tidal-artist';
+    | 'tidal-artist'
+    | 'youtube-track';
 };
 
 const queue = new PQueue({concurrency: 10});
@@ -41,7 +43,7 @@ export const getUrlParts = async (url: string, setToken = false): Promise<urlPar
     url = 'https://open.spotify.com/' + spotify[1] + '/' + spotify[2];
   }
 
-  const site = url.match(/deezer|spotify|tidal/);
+  const site = url.match(/deezer|spotify|tidal|youtube/);
   if (!site) {
     throw new Error('Unknown URL: ' + url);
   }
@@ -61,6 +63,13 @@ export const getUrlParts = async (url: string, setToken = false): Promise<urlPar
     case 'tidal':
       const tidalUrlParts = url.split(/\/(\w+)\/(\d+|\w+-\w+-\w+-\w+-\w+)/);
       return {type: ('tidal-' + tidalUrlParts[1]) as any, id: tidalUrlParts[2]};
+
+    case 'youtube':
+      let yotubeId = url.split('v=')[1];
+      if (yotubeId.includes('&')) {
+        yotubeId = yotubeId.split('&')[0];
+      }
+      return {type: 'youtube-track', id: yotubeId};
 
     default:
       throw new Error('Unable to parse URL: ' + url);
@@ -161,6 +170,10 @@ export const parseInfo = async (url: string) => {
     case 'tidal-artist':
       tracks = await tidal.artist2Deezer(info.id);
       linktype = 'artist';
+      break;
+
+    case 'youtube-track':
+      tracks.push(await youtube.track2deezer(info.id));
       break;
 
     default:

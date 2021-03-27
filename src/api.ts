@@ -145,13 +145,14 @@ export const getProfile = (user_id: string): Promise<profileType> =>
 /**
  * @param {String} artist artist name
  * @param {String} song song name
+ * @param {String} nb number of items to fetch
  */
-export const searchAlternative = (artist: string, song: string): Promise<searchType> =>
+export const searchAlternative = (artist: string, song: string, nb = 10): Promise<searchType> =>
   request(
     {
       query: `artist:'${artist}' track:'${song}'`,
       types: ['TRACK'],
-      nb: 10,
+      nb,
     },
     'mobile_suggest',
   );
