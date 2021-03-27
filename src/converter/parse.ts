@@ -43,7 +43,7 @@ export const getUrlParts = async (url: string, setToken = false): Promise<urlPar
     url = 'https://open.spotify.com/' + spotify[1] + '/' + spotify[2];
   }
 
-  const site = url.match(/deezer|spotify|tidal|youtube/);
+  const site = url.match(/deezer|spotify|tidal|youtu\.?be/);
   if (!site) {
     throw new Error('Unknown URL: ' + url);
   }
@@ -70,6 +70,9 @@ export const getUrlParts = async (url: string, setToken = false): Promise<urlPar
         yotubeId = yotubeId.split('&')[0];
       }
       return {type: 'youtube-track', id: yotubeId};
+
+    case 'youtu.be':
+      return {type: 'youtube-track', id: url.split('/').pop() as string};
 
     default:
       throw new Error('Unable to parse URL: ' + url);
