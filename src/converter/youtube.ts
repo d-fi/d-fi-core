@@ -19,21 +19,23 @@ const getTrack = async (id: string) => {
 
       const data = JSON.parse(json).contents.twoColumnWatchNextResults.results.results.contents[1]
         .videoSecondaryInfoRenderer.metadataRowContainer.metadataRowContainerRenderer;
-      const song = data.rows?.find(
-        (row: any) => row.metadataRowRenderer && row.metadataRowRenderer.title.simpleText === 'Song',
-      );
-      const artist = data.rows?.find(
-        (row: any) => row.metadataRowRenderer && row.metadataRowRenderer.title.simpleText === 'Artist',
-      );
-
-      if (song && artist) {
-        const {TRACK} = await searchAlternative(
-          artist.metadataRowRenderer.contents[0].runs[0].text,
-          song.metadataRowRenderer.contents[0].simpleText,
-          1,
+      if (data.rows && data.rows.length > 0) {
+        const song = data.rows.find(
+          (row: any) => row.metadataRowRenderer && row.metadataRowRenderer.title.simpleText === 'Song',
         );
-        if (TRACK.data[0]) {
-          return TRACK.data[0];
+        const artist = data.rows.find(
+          (row: any) => row.metadataRowRenderer && row.metadataRowRenderer.title.simpleText === 'Artist',
+        );
+
+        if (song && artist) {
+          const {TRACK} = await searchAlternative(
+            artist.metadataRowRenderer.contents[0].runs[0].text,
+            song.metadataRowRenderer.contents[0].simpleText,
+            1,
+          );
+          if (TRACK.data[0]) {
+            return TRACK.data[0];
+          }
         }
       }
     }
