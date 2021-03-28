@@ -191,12 +191,6 @@ export const parseInfo = async (url: string) => {
       if (t.VERSION) {
         t.SNG_TITLE += ' ' + t.VERSION;
       }
-      if (t.DISK_NUMBER) {
-        t.ALB_TITLE += ` (Disc ${Number(t.DISK_NUMBER).toLocaleString('en-US', {
-          minimumIntegerDigits: 2,
-          useGrouping: false,
-        })})`;
-      }
       return t;
     }),
   };
