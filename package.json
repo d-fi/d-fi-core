@@ -19,14 +19,14 @@
     "delay": "^5.0.0",
     "node-html-parser": "^3.1.2",
     "p-queue": "^6.6.2",
-    "spotify-uri": "^2.1.0",
+    "spotify-uri": "^2.2.0",
     "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
-    "@types/node": "^14.14.35",
+    "@types/node": "^14.14.37",
     "@types/spotify-web-api-node": "^5.0.2",
     "ava": "^3.15.0",
-    "eslint": "^7.22.0",
+    "eslint": "^7.23.0",
     "eslint-plugin-prettier": "^3.3.1",
     "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
