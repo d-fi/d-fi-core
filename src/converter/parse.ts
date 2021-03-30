@@ -188,7 +188,7 @@ export const parseInfo = async (url: string) => {
     linktype,
     linkinfo,
     tracks: tracks.map((t) => {
-      if (t.VERSION) {
+      if (t.VERSION && !t.SNG_TITLE.includes(t.VERSION)) {
         t.SNG_TITLE += ' ' + t.VERSION;
       }
       return t;
