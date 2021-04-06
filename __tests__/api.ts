@@ -220,3 +220,8 @@ if (process.env.CI) {
     t.true(lyrics.length < 8000);
   });
 }
+
+test('GET PLAYLIST CHANNEL', async (t) => {
+  const channel = await api.getPlaylistChannel('dance');
+  t.deepEqual(Object.keys(channel), ['version', 'page_id', 'ga', 'title', 'persistent', 'sections', 'expire']);
+});
