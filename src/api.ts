@@ -7,6 +7,7 @@ import type {
   albumTracksType,
   playlistInfo,
   playlistTracksType,
+  playlistChannelType,
   artistInfoType,
   discographyType,
   profileType,
@@ -173,6 +174,115 @@ export const getUser = async (): Promise<userType> => {
   const {
     data: {error, results},
   } = await axios.get('/gateway.php', {params: {method: 'user_getInfo'}});
+
+  if (Object.keys(results).length > 0) {
+    return results;
+  }
+
+  const errorMessage = Object.entries(error).join(', ');
+  throw new Error(errorMessage);
+};
+
+/**
+ * Get details about a playlist channel
+ */
+export const getPlaylistChannel = async (name: string): Promise<playlistChannelType> => {
+  const gateway_input = {
+    page: 'channels/' + name,
+    version: '2.3',
+    support: {
+      'long-card-horizontal-grid': ['album', 'playlist', 'radio', 'show', 'livestream'],
+      ads: ['native'],
+      message: ['conversion', 'informative', 'call_onboarding'],
+      highlight: ['generic', 'album', 'artist', 'playlist', 'radio', 'livestream', 'app'],
+      'deeplink-list': ['generic', 'deeplink'],
+      grid: [
+        'generic',
+        'album',
+        'artist',
+        'playlist',
+        'radio',
+        'channel',
+        'show',
+        'livestream',
+        'page',
+        'smarttracklist',
+        'flow',
+        'video-link',
+      ],
+      slideshow: [
+        'album',
+        'artist',
+        'playlist',
+        'radio',
+        'show',
+        'livestream',
+        'channel',
+        'video-link',
+        'external-link',
+      ],
+      'large-card': [
+        'generic',
+        'album',
+        'artist',
+        'playlist',
+        'radio',
+        'show',
+        'livestream',
+        'external-link',
+        'video-link',
+      ],
+      'item-highlight': ['radio', 'app'],
+      'small-horizontal-grid': ['album', 'artist', 'playlist', 'radio', 'channel', 'show', 'livestream'],
+      'grid-preview-two': [
+        'generic',
+        'album',
+        'artist',
+        'playlist',
+        'radio',
+        'channel',
+        'show',
+        'livestream',
+        'page',
+        'smarttracklist',
+        'flow',
+        'video-link',
+      ],
+      list: ['generic', 'album', 'artist', 'playlist', 'radio', 'show', 'video-link', 'channel', 'episode'],
+      'grid-preview-one': [
+        'generic',
+        'album',
+        'artist',
+        'playlist',
+        'radio',
+        'channel',
+        'show',
+        'livestream',
+        'page',
+        'smarttracklist',
+        'flow',
+        'video-link',
+      ],
+      'horizontal-grid': [
+        'generic',
+        'album',
+        'artist',
+        'playlist',
+        'radio',
+        'channel',
+        'show',
+        'livestream',
+        'video-link',
+        'smarttracklist',
+        'flow',
+      ],
+    },
+    lang: 'en',
+    timezone_offset: '6',
+  };
+  const {
+    data: {error, results},
+  } = await axios.get('/gateway.php', {params: {method: 'app_page_get', gateway_input}});
 
   if (Object.keys(results).length > 0) {
     return results;
