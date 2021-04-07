@@ -192,7 +192,7 @@ export const getPlaylistChannel = async (name: string): Promise<playlistChannelT
     version: '2.3',
     support: {
       'long-card-horizontal-grid': ['album', 'playlist', 'radio', 'show', 'livestream'],
-      ads: ['native'],
+      ads: [],
       message: ['conversion', 'informative', 'call_onboarding'],
       highlight: ['generic', 'album', 'artist', 'playlist', 'radio', 'livestream', 'app'],
       'deeplink-list': ['generic', 'deeplink'],

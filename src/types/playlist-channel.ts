@@ -1,3 +1,19 @@
+// Just for references
+interface nativeAdsType {
+  advertising_data: {
+    page_id_android: string; // '663470'
+    page_id_android_tablet: string; // '663474'
+    page_id_ipad: string; // '663478'
+    page_id_iphone: string; // '663481'
+    page_id_web: string; // '631827'
+  };
+  data: null;
+  id: string; // '606d7288988f0'
+  item_id: string; // 'page_id=channels/country,render_id=3e3de0f8ce6ce9ade953a64d0359fb45,version=channel-cms.1.0,section_id=ads,section_position=4,module_id=e9eedefd-d570-4e0d-97aa-453bd59fec98,module_type=ad,section_content=native%3A606d7288988f0,item_type=native,item_id=606d7288988f0,item_position=0'
+  type: 'native';
+  weight: number; // 1
+}
+
 interface itemsType {
   item_id: string; // 'page_id=channels/dance,render_id=608a93738223d615200e6390ea48f8f3,version=channel-cms.1.0,section_id=long-card-horizontal-grid,section_position=0,module_id=be55d60e-e3c3-421a-9ea9-aef6f0c63c6c,module_type=playlists,layout=playlists_layout_long-card-horizontal-grid,content_source=playlists_content-source_custom,content_source_count=0,content_programming_count=8,section_content=playlist%3A1291471565%3Bplaylist%3A2249258602%3Bplaylist%3A2113355604%3Bplaylist%3A1950512362%3Bplaylist%3A1495242491%3Bplaylist%3A6090195324%3Bplaylist%3A706093725%3Bplaylist%3A7837492422,item_type=playlist,item_id=1291471565,item_position=0'
   id: string; // '1291471565'
