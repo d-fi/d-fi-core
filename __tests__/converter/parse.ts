@@ -103,7 +103,7 @@ test('PARSE DEEZER ARTIST', async (t) => {
 
   t.deepEqual(response.info, {id: '13', type: 'artist'});
   t.is(response.linktype, 'artist');
-  t.true(response.tracks.length > 450);
+  t.true(response.tracks.length > 400);
 });
 
 test('PARSE SPOTIFY ARTIST', async (t) => {
