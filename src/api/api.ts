@@ -8,6 +8,7 @@ import type {
   playlistInfo,
   playlistTracksType,
   playlistChannelType,
+  channelSearchType,
   artistInfoType,
   discographyType,
   profileType,
@@ -129,6 +130,11 @@ export const getUser = async (): Promise<userType> => {
   const errorMessage = Object.entries(error).join(', ');
   throw new Error(errorMessage);
 };
+
+/**
+ * Get list of channles
+ */
+export const getChannelList = async (): Promise<channelSearchType> => request({}, 'search_getChannels');
 
 /**
  * Get details about a playlist channel

@@ -221,7 +221,15 @@ if (process.env.CI) {
   });
 }
 
+test('GET CHANNEL LIST', async (t) => {
+  const channel = await api.getChannelList();
+  t.is(channel.count, channel.data.length);
+  t.true(Array.isArray(channel.data));
+});
+
 test('GET PLAYLIST CHANNEL', async (t) => {
   const channel = await api.getPlaylistChannel('dance');
   t.deepEqual(Object.keys(channel), ['version', 'page_id', 'ga', 'title', 'persistent', 'sections', 'expire']);
+  t.truthy(channel.title);
+  t.true(Array.isArray(channel.sections));
 });
