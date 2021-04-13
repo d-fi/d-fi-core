@@ -1,4 +1,3 @@
-// @ts-ignore
 import Metaflac from '../lib/metaflac-js';
 import type {albumTypePublicApi, trackType} from '../types';
 
@@ -29,7 +28,7 @@ export const writeMetadataFlac = (
     flac.setTag('LABEL=' + album.label);
     flac.setTag('DATE=' + album.release_date);
     flac.setTag('YEAR=' + RELEASE_YEAR);
-    flac.setTag('COMPILATION=' + album.artist.name.match(/various/i) ? '1' : '0');
+    flac.setTag(`COMPILATION=${album.artist.name.match(/various/i) ? '1' : '0'}`);
   }
 
   if (track.DISK_NUMBER) {
