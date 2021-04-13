@@ -1,4 +1,3 @@
-import axios from '../lib/request';
 import {request, requestGet, requestPublicApi} from './request';
 import type {
   albumType,
@@ -127,11 +126,10 @@ export const getChannelList = async (): Promise<channelSearchType> => request({}
 
 /**
  * Get details about a playlist channel
- * Return homepage if name is undefined
  */
-export const getPlaylistChannel = async (name?: string): Promise<playlistChannelType> => {
+export const getPlaylistChannel = async (page: string): Promise<playlistChannelType> => {
   const gateway_input = {
-    page: name ? 'channels/' + name : 'home',
+    page,
     version: '2.3',
     support: {
       'long-card-horizontal-grid': ['album', 'playlist', 'radio', 'show', 'livestream'],
@@ -224,5 +222,5 @@ export const getPlaylistChannel = async (name?: string): Promise<playlistChannel
     timezone_offset: '6',
   };
 
-  return await requestGet('app_page_get', {gateway_input});
+  return await requestGet('app_page_get', {gateway_input}, page);
 };

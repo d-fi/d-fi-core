@@ -31,8 +31,8 @@ export const request = async (body: object, method: string) => {
  * @param {String} method request method
  * @param {Object} params request parameters
  */
-export const requestGet = async (method: string, params?: object) => {
-  const cacheKey = `${method}:${params ? Object.entries(params).join(':') : 'get_request'}`;
+export const requestGet = async (method: string, params: object = {}, key: string = 'get_request') => {
+  const cacheKey = method + key;
   const cache = lru.get(cacheKey);
   if (cache) {
     return cache;

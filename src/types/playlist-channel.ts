@@ -32,7 +32,7 @@ export interface playlistChannelItemsType {
     DATE_ADD: string; // '2020-12-15 19:31:07'
     DESCRIPTION: string; // 'The biggest dance hits to keep the party going!'
     __TYPE__: 'playlist';
-  };
+  } | null;
   target: string; // '/playlist/1291471565'
   title: string; // 'Dance Party'
   subtitle: string; // '50 tracks'
@@ -40,7 +40,7 @@ export interface playlistChannelItemsType {
   pictures: [
     {
       md5: string; // 'c5eb1bf10a83734c032e983ef190105e'
-      type: 'playlist';
+      type: string; // 'playlist';
     },
   ];
   weight: number; // 1
