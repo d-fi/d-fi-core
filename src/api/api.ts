@@ -138,10 +138,11 @@ export const getChannelList = async (): Promise<channelSearchType> => request({}
 
 /**
  * Get details about a playlist channel
+ * Return homepage if name is undefined
  */
-export const getPlaylistChannel = async (name: string): Promise<playlistChannelType> => {
+export const getPlaylistChannel = async (name?: string): Promise<playlistChannelType> => {
   const gateway_input = {
-    page: 'channels/' + name,
+    page: name ? 'channels/' + name : 'home',
     version: '2.3',
     support: {
       'long-card-horizontal-grid': ['album', 'playlist', 'radio', 'show', 'livestream'],
