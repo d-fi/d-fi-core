@@ -41,6 +41,10 @@ export const writeMetadataMp3 = (
       .setFrame('TXXX', {
         description: 'LABEL',
         value: album.label,
+      })
+      .setFrame('TXXX', {
+        description: 'COMPILATION',
+        value: album.artist.name.match(/various/i) ? '1' : '0',
       });
   }
 
@@ -53,10 +57,6 @@ export const writeMetadataMp3 = (
     .setFrame('TXXX', {
       description: 'ISRC',
       value: track.ISRC,
-    })
-    .setFrame('TXXX', {
-      description: 'COMPILATION',
-      value: track.ART_PICTURE === 'Various Artists' ? '1' : '0',
     })
     .setFrame('TXXX', {
       description: 'SOURCE',
