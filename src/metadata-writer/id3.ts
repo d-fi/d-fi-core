@@ -68,9 +68,17 @@ export const writeMetadataMp3 = (
     });
 
   if (track.DISK_NUMBER) {
-    writer
-      .setFrame('TPOS', track.DISK_NUMBER)
-      .setFrame('TRCK', `${track.TRACK_NUMBER}${album ? '/' + album.nb_tracks : ''}`);
+    writer.setFrame('TPOS', track.DISK_NUMBER).setFrame(
+      'TRCK',
+      `${track.TRACK_NUMBER.toLocaleString('en-US', {minimumIntegerDigits: 2})}${
+        album
+          ? '/' +
+            album.nb_tracks.toLocaleString('en-US', {
+              minimumIntegerDigits: 2,
+            })
+          : ''
+      }`,
+    );
   }
 
   if (track.SNG_CONTRIBUTORS && !Array.isArray(track.SNG_CONTRIBUTORS)) {
