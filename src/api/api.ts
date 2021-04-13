@@ -1,5 +1,5 @@
 import axios from '../lib/request';
-import {request, requestPublicApi} from './request';
+import {request, requestGet, requestPublicApi} from './request';
 import type {
   albumType,
   trackType,
@@ -118,18 +118,7 @@ export const searchMusic = (query: string, types: searchTypesProp[] = ['TRACK'],
 /**
  * Get details about current user
  */
-export const getUser = async (): Promise<userType> => {
-  const {
-    data: {error, results},
-  } = await axios.get('/gateway.php', {params: {method: 'user_getInfo'}});
-
-  if (Object.keys(results).length > 0) {
-    return results;
-  }
-
-  const errorMessage = Object.entries(error).join(', ');
-  throw new Error(errorMessage);
-};
+export const getUser = async (): Promise<userType> => requestGet('user_getInfo');
 
 /**
  * Get list of channles
@@ -234,14 +223,6 @@ export const getPlaylistChannel = async (name?: string): Promise<playlistChannel
     lang: 'en',
     timezone_offset: '6',
   };
-  const {
-    data: {error, results},
-  } = await axios.get('/gateway.php', {params: {method: 'app_page_get', gateway_input}});
 
-  if (Object.keys(results).length > 0) {
-    return results;
-  }
-
-  const errorMessage = Object.entries(error).join(', ');
-  throw new Error(errorMessage);
+  return await requestGet('app_page_get', {gateway_input});
 };
