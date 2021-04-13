@@ -1,11 +1,11 @@
 {
   "name": "d-fi-core",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "Core module for d-fi",
   "main": "dist/index.js",
   "scripts": {
     "lint": "eslint .",
-    "prepublish": "eslint . && tsc",
+    "prepare": "eslint . && tsc",
     "prebuild": "eslint .",
     "build": "tsc",
     "test": "ava"
