@@ -136,7 +136,7 @@ export const getPlaylistChannel = async (name?: string): Promise<playlistChannel
     support: {
       'long-card-horizontal-grid': ['album', 'playlist', 'radio', 'show', 'livestream'],
       ads: [],
-      message: ['conversion', 'informative', 'call_onboarding'],
+      message: [],
       highlight: ['generic', 'album', 'artist', 'playlist', 'radio', 'livestream', 'app'],
       'deeplink-list': ['generic', 'deeplink'],
       grid: [
