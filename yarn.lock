@@ -85,10 +85,10 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@types/node@^14.14.37":
-  version "14.14.37"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.37.tgz#a3dd8da4eb84a996c36e331df98d82abd76b516e"
-  integrity sha512-XYmBiy+ohOR4Lh5jE379fV2IU+6Jn4g5qASinhitfyO71b/sCo6MKsMLF5tc7Zf2CE8hViVQyYSobJNke8OvUw==
+"@types/node@^14.14.41":
+  version "14.14.41"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.41.tgz#d0b939d94c1d7bd53d04824af45f1139b8c45615"
+  integrity sha512-dueRKfaJL4RTtSa7bWeTK1M+VH+Gns73oCgzvYfHZywRCoPSd8EkXBL0mZ9unPTveBn+D9phZBaxuzpwjWkW0g==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -872,10 +872,10 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz#14ba83a5d373e3d311e5afca29cf5bfad965bf34"
   integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
 
-eslint-plugin-prettier@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-3.3.1.tgz#7079cfa2497078905011e6f82e8dd8453d1371b7"
-  integrity sha512-Rq3jkcFY8RYeQLgk2cCwuc0P7SEFwDravPhsJZOQ5N4YI4DSg50NyqJ/9gdZHzQlHf8MvafSesbNJCcP/FF6pQ==
+eslint-plugin-prettier@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-3.4.0.tgz#cdbad3bf1dbd2b177e9825737fe63b476a08f0c7"
+  integrity sha512-UDK6rJT6INSfcOo545jiaOwB701uAIt2/dR7WnFQoGCVl1/EMqdANBmwUaqqQ45aXprsTGzSa39LI1PyuRBxxw==
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
@@ -1714,10 +1714,10 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-node-html-parser@^3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/node-html-parser/-/node-html-parser-3.1.4.tgz#6c0e21005bbee1186c2fd917a3fa4ddbf2533bc4"
-  integrity sha512-IzCm3eDPcUXESZqui+GRsOl93KUaz9Pp1WN0x5wd9GBaTQXHCGof093+V36vg8dIOoIMkgGAKbVSZPikgL+NOQ==
+node-html-parser@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/node-html-parser/-/node-html-parser-3.1.5.tgz#ffb62f2a336b6b634f41f3315487fe446fb9d7b5"
+  integrity sha512-/XKKdWbSUymlXTjtNBcDlmM7Jp8S/BqGMzLx7r2bd2NMjTXz+ofuLcz0Bl3VT0vTvVzF+N511FNLrZt4HVitXA==
   dependencies:
     css-select "^3.1.2"
     he "1.2.0"
