@@ -22,11 +22,13 @@ export const writeMetadataMp3 = (
     .setFrame('TLEN', Number(track.DURATION) * 1000);
 
   if (album) {
-    writer
-      .setFrame(
+    if (album.genres.data.length > 0) {
+      writer.setFrame(
         'TCON',
         album.genres.data.map((g) => g.name),
-      )
+      );
+    }
+    writer
       .setFrame('TPE2', album.artist.name)
       .setFrame('TYER', RELEASE_YEAR)
       .setFrame('TDAT', album.release_date)

@@ -21,7 +21,9 @@ export const writeMetadataFlac = (
   flac.setTag('TRACKNUMBER=' + track.TRACK_NUMBER);
 
   if (album) {
-    flac.setTag('GENRE=' + album.genres.data[0].name);
+    if (album.genres.data.length > 0) {
+      flac.setTag('GENRE=' + album.genres.data[0].name);
+    }
     flac.setTag('RELEASETYPE=' + album.record_type);
     flac.setTag('ALBUMARTIST=' + album.artist.name);
     flac.setTag('BARCODE=' + album.upc);
