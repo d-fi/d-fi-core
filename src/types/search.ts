@@ -5,6 +5,7 @@ import type {trackType} from './tracks';
 import type {profileTypeMinimal} from './profile';
 import type {channelSearchType} from './channel';
 import type {radioType} from './radio';
+import type {showEpisodeType} from './show';
 
 interface searchTypeCommon {
   count: number;
@@ -43,7 +44,7 @@ interface liveSearchType extends searchTypeCommon {
 }
 
 interface showSearchType extends searchTypeCommon {
-  data: unknown[];
+  data: showEpisodeType[];
 }
 
 export interface discographyType {

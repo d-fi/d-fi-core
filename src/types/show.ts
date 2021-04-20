@@ -3,7 +3,7 @@ interface generesType {
   GENRE_NAME: string; // 'Technology';
 }
 
-interface episodeType {
+export interface showEpisodeType {
   EPISODE_ID: string; // '294961882';
   EPISODE_STATUS: string; // '1';
   AVAILABLE: boolean;
@@ -54,7 +54,7 @@ export interface showType {
   };
   FAVORITE_STATUS: boolean; // false;
   EPISODES: {
-    data: episodeType[];
+    data: showEpisodeType[];
     count: number; // 1;
     total: number; // 174;
     filtered_count: number; // 0;
