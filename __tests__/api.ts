@@ -221,6 +221,13 @@ if (process.env.CI) {
   });
 }
 
+test('GET SHOW LIST', async (t) => {
+  const show = await api.getShowInfo('338532', 10);
+  t.is(show.DATA.LABEL_ID, '201952');
+  t.is(show.EPISODES.count, 10);
+  t.true(Array.isArray(show.EPISODES.data));
+});
+
 test('GET CHANNEL LIST', async (t) => {
   const channel = await api.getChannelList();
   t.is(channel.count, channel.data.length);
