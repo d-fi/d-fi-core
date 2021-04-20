@@ -4,6 +4,7 @@ import type {
   trackType,
   lyricsType,
   albumTracksType,
+  showType,
   playlistInfo,
   playlistTracksType,
   playlistChannelType,
@@ -109,7 +110,7 @@ type searchTypesProp = 'ALBUM' | 'ARTIST' | 'TRACK' | 'PLAYLIST' | 'RADIO' | 'SH
 /**
  * @param {String} query search query
  * @param {Array} types search types
- * @param {String} nb number of items to fetch
+ * @param {Number} nb number of items to fetch
  */
 export const searchMusic = (query: string, types: searchTypesProp[] = ['TRACK'], nb = 15): Promise<searchType> =>
   request({query, nb, types}, 'mobile_suggest');
@@ -123,6 +124,21 @@ export const getUser = async (): Promise<userType> => requestGet('user_getInfo')
  * Get list of channles
  */
 export const getChannelList = async (): Promise<channelSearchType> => request({}, 'search_getChannels');
+
+/**
+ * @param {String} SHOW_ID show id
+ * @param {Number} NB number of items to fetch
+ * @param {Number} START start index
+ */
+export const getShowInfo = (SHOW_ID: string, NB = 100, START = 0): Promise<showType> =>
+  request(
+    {
+      SHOW_ID,
+      NB,
+      START,
+    },
+    'mobile.pageShow',
+  );
 
 /**
  * Get details about a playlist channel
