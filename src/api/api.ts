@@ -130,7 +130,7 @@ export const getChannelList = async (): Promise<channelSearchType> => request({}
  * @param {Number} NB number of items to fetch
  * @param {Number} START start index
  */
-export const getShowInfo = (SHOW_ID: string, NB = 100, START = 0): Promise<showType> =>
+export const getShowInfo = (SHOW_ID: string, NB = 1000, START = 0): Promise<showType> =>
   request(
     {
       SHOW_ID,
@@ -148,10 +148,10 @@ export const getPlaylistChannel = async (page: string): Promise<playlistChannelT
     page,
     version: '2.3',
     support: {
-      'long-card-horizontal-grid': ['album', 'playlist', 'radio', 'show', 'livestream'],
+      'long-card-horizontal-grid': ['album', 'playlist', 'radio', 'show'],
       ads: [],
       message: [],
-      highlight: ['generic', 'album', 'artist', 'playlist', 'radio', 'livestream', 'app'],
+      highlight: ['generic', 'album', 'artist', 'playlist', 'radio', 'app'],
       'deeplink-list': ['generic', 'deeplink'],
       grid: [
         'generic',
@@ -161,36 +161,15 @@ export const getPlaylistChannel = async (page: string): Promise<playlistChannelT
         'radio',
         'channel',
         'show',
-        'livestream',
         'page',
         'smarttracklist',
         'flow',
         'video-link',
       ],
-      slideshow: [
-        'album',
-        'artist',
-        'playlist',
-        'radio',
-        'show',
-        'livestream',
-        'channel',
-        'video-link',
-        'external-link',
-      ],
-      'large-card': [
-        'generic',
-        'album',
-        'artist',
-        'playlist',
-        'radio',
-        'show',
-        'livestream',
-        'external-link',
-        'video-link',
-      ],
+      slideshow: ['album', 'artist', 'playlist', 'radio', 'show', 'channel', 'video-link', 'external-link'],
+      'large-card': ['generic', 'album', 'artist', 'playlist', 'radio', 'show', 'external-link', 'video-link'],
       'item-highlight': ['radio', 'app'],
-      'small-horizontal-grid': ['album', 'artist', 'playlist', 'radio', 'channel', 'show', 'livestream'],
+      'small-horizontal-grid': ['album', 'artist', 'playlist', 'radio', 'channel', 'show'],
       'grid-preview-two': [
         'generic',
         'album',
@@ -199,7 +178,6 @@ export const getPlaylistChannel = async (page: string): Promise<playlistChannelT
         'radio',
         'channel',
         'show',
-        'livestream',
         'page',
         'smarttracklist',
         'flow',
@@ -214,7 +192,6 @@ export const getPlaylistChannel = async (page: string): Promise<playlistChannelT
         'radio',
         'channel',
         'show',
-        'livestream',
         'page',
         'smarttracklist',
         'flow',
@@ -228,7 +205,6 @@ export const getPlaylistChannel = async (page: string): Promise<playlistChannelT
         'radio',
         'channel',
         'show',
-        'livestream',
         'video-link',
         'smarttracklist',
         'flow',
