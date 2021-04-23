@@ -152,7 +152,7 @@ if (process.env.CI) {
 
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
     t.true(Buffer.isBuffer(trackWithMetadata));
-    t.is(trackWithMetadata.length, 3629256);
+    t.is(trackWithMetadata.length, 3629195);
   });
 
   test('TRACK128 WITHOUT ALBUM INFO', async (t) => {
@@ -190,7 +190,7 @@ if (process.env.CI) {
 
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
     t.true(Buffer.isBuffer(trackWithMetadata));
-    t.is(trackWithMetadata.length, 9023438);
+    t.is(trackWithMetadata.length, 9023377);
   });
 
   test('DOWNLOAD TRACK1411 & ADD METADATA', async (t) => {
@@ -216,8 +216,8 @@ if (process.env.CI) {
     const lyrics = await getLyricsMusixmatch(`${track.ART_NAME} - ${track.SNG_TITLE}`);
 
     t.truthy(lyrics);
-    t.true(lyrics.length > 7000);
-    t.true(lyrics.length < 8000);
+    t.true(lyrics.length > 1600);
+    t.true(lyrics.length < 1700);
   });
 }
 
