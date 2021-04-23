@@ -19,7 +19,8 @@ export const writeMetadataMp3 = (
     .setFrame('TIT2', track.SNG_TITLE)
     .setFrame('TALB', track.ALB_TITLE)
     .setFrame('TPE1', [artists])
-    .setFrame('TLEN', Number(track.DURATION) * 1000);
+    .setFrame('TLEN', Number(track.DURATION) * 1000)
+    .setFrame('TSRC', track.ISRC);
 
   if (album) {
     if (album.genres.data.length > 0) {
@@ -55,10 +56,6 @@ export const writeMetadataMp3 = (
     .setFrame('TXXX', {
       description: 'Artists',
       value: artists,
-    })
-    .setFrame('TXXX', {
-      description: 'ISRC',
-      value: track.ISRC,
     })
     .setFrame('TXXX', {
       description: 'SOURCE',
