@@ -11,14 +11,13 @@ export const writeMetadataMp3 = (
   const writer = new id3Writer(buffer);
   const RELEASE_YEAR = album ? album.release_date.split('-')[0] : null;
 
-  const artists = track.ART_NAME.split(
-    new RegExp(' featuring | feat. | Ft. | ft. | vs | vs. | x | - |, ', 'g'),
-  ).map((a) => a.trim());
-
   writer
     .setFrame('TIT2', track.SNG_TITLE)
     .setFrame('TALB', track.ALB_TITLE)
-    .setFrame('TPE1', artists)
+    .setFrame(
+      'TPE1',
+      track.ARTISTS.map((a) => a.ART_NAME),
+    )
     .setFrame('TLEN', Number(track.DURATION) * 1000)
     .setFrame('TSRC', track.ISRC);
 

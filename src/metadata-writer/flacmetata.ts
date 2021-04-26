@@ -11,13 +11,9 @@ export const writeMetadataFlac = (
   const flac = new Metaflac(buffer);
   const RELEASE_YEAR = album ? album.release_date.split('-')[0] : null;
 
-  const artists = track.ART_NAME.split(
-    new RegExp(' featuring | feat. | Ft. | ft. | vs | vs. | x | - |, ', 'g'),
-  ).map((a) => a.trim());
-
   flac.setTag('TITLE=' + track.SNG_TITLE);
   flac.setTag('ALBUM=' + track.ALB_TITLE);
-  flac.setTag('ARTIST=' + artists.join(', '));
+  flac.setTag('ARTIST=' + track.ARTISTS.map((a) => a.ART_NAME).join(', '));
   flac.setTag('TRACKNUMBER=' + track.TRACK_NUMBER.toLocaleString('en-US', {minimumIntegerDigits: 2}));
 
   if (album) {
