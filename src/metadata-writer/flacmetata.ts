@@ -18,12 +18,17 @@ export const writeMetadataFlac = (
   flac.setTag('TITLE=' + track.SNG_TITLE);
   flac.setTag('ALBUM=' + track.ALB_TITLE);
   flac.setTag('ARTIST=' + artists.join(', '));
-  flac.setTag('TRACKNUMBER=' + track.TRACK_NUMBER);
+  flac.setTag('TRACKNUMBER=' + track.TRACK_NUMBER.toLocaleString('en-US', {minimumIntegerDigits: 2}));
 
   if (album) {
+    const TOTALTRACKS = album.nb_tracks.toLocaleString('en-US', {minimumIntegerDigits: 2});
     if (album.genres.data.length > 0) {
-      flac.setTag('GENRE=' + album.genres.data[0].name);
+      for (const genre of album.genres.data) {
+        flac.setTag('GENRE=' + genre.name);
+      }
     }
+    flac.setTag('TRACKTOTAL=' + TOTALTRACKS);
+    flac.setTag('TOTALTRACKS=' + TOTALTRACKS);
     flac.setTag('RELEASETYPE=' + album.record_type);
     flac.setTag('ALBUMARTIST=' + album.artist.name);
     flac.setTag('BARCODE=' + album.upc);
@@ -40,7 +45,6 @@ export const writeMetadataFlac = (
   flac.setTag('ISRC=' + track.ISRC);
   flac.setTag('LENGTH=' + track.DURATION);
   flac.setTag('MEDIA=Digital Media');
-  flac.setTag('TRACKNUMBER=' + track.TRACK_NUMBER);
 
   if (track.LYRICS) {
     flac.setTag('LYRICS=' + track.LYRICS.LYRICS_TEXT);
