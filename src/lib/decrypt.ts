@@ -3,7 +3,7 @@ import type {trackType} from '../types';
 
 const md5 = (data: string, type: crypto.Encoding = 'ascii') => {
   const md5sum = crypto.createHash('md5');
-  md5sum.update(data, type);
+  md5sum.update(data.toString(), type);
   return md5sum.digest('hex');
 };
 
