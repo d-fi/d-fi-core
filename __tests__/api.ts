@@ -171,7 +171,7 @@ if (process.env.CI) {
     if (!process.env.CI) {
       const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
       t.true(Buffer.isBuffer(trackWithMetadata));
-      t.true(trackWithMetadata.length === 3309066);
+      t.true(trackWithMetadata.length === 3326050);
     }
   });
 
