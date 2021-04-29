@@ -152,7 +152,7 @@ if (process.env.CI) {
 
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
     t.true(Buffer.isBuffer(trackWithMetadata));
-    t.is(trackWithMetadata.length, 3629195);
+    t.is(trackWithMetadata.length, 3629194);
   });
 
   test('TRACK128 WITHOUT ALBUM INFO', async (t) => {
@@ -190,7 +190,7 @@ if (process.env.CI) {
 
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
     t.true(Buffer.isBuffer(trackWithMetadata));
-    t.is(trackWithMetadata.length, 9023377);
+    t.is(trackWithMetadata.length, 9023376);
   });
 
   test('DOWNLOAD TRACK1411 & ADD METADATA', async (t) => {
