@@ -9,7 +9,7 @@ export const writeMetadataMp3 = (
   cover?: Buffer | null,
 ): Buffer => {
   const writer = new id3Writer(buffer);
-  const RELEASE_YEAR = album ? album.release_date.split('-')[0] : null;
+  const RELEASE_DATES = album && album.release_date.split('-');
 
   writer
     .setFrame('TIT2', track.SNG_TITLE)
@@ -28,10 +28,11 @@ export const writeMetadataMp3 = (
         album.genres.data.map((g) => g.name),
       );
     }
+    if (RELEASE_DATES) {
+      writer.setFrame('TYER', RELEASE_DATES[0]).setFrame('TDAT', RELEASE_DATES[2] + RELEASE_DATES[1]);
+    }
     writer
       .setFrame('TPE2', album.artist.name)
-      .setFrame('TYER', RELEASE_YEAR)
-      .setFrame('TDAT', album.release_date)
       .setFrame('TXXX', {
         description: 'RELEASETYPE',
         value: album.record_type,
@@ -75,7 +76,7 @@ export const writeMetadataMp3 = (
 
   if (track.SNG_CONTRIBUTORS && !Array.isArray(track.SNG_CONTRIBUTORS)) {
     if (track.SNG_CONTRIBUTORS.main_artist) {
-      writer.setFrame('TCOP', `${RELEASE_YEAR ? RELEASE_YEAR + ' ' : ''}${track.SNG_CONTRIBUTORS.main_artist[0]}`);
+      writer.setFrame('TCOP', `${RELEASE_DATES ? RELEASE_DATES[0] + ' ' : ''}${track.SNG_CONTRIBUTORS.main_artist[0]}`);
     }
     if (track.SNG_CONTRIBUTORS.publisher) {
       writer.setFrame('TPUB', track.SNG_CONTRIBUTORS.publisher.join(', '));
