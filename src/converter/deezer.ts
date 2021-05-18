@@ -21,7 +21,7 @@ export const isrc2deezer = async (name: string, isrc?: string) => {
 export const upc2deezer = async (name: string, upc?: string): Promise<[albumType, trackType[]]> => {
   if (!upc) {
     throw new Error('UPC code not found for ' + name);
-  } else if (upc.length > 12) {
+  } else if (upc.length > 12 && upc.startsWith('0')) {
     upc = upc.slice(-12);
   }
 
