@@ -8,6 +8,7 @@ import {
   getTrackInfo,
 } from '../';
 import spotifyUri from 'spotify-uri';
+import axios from 'axios';
 import * as spotify from './spotify';
 import * as tidal from './tidal';
 import * as youtube from './youtube';
@@ -50,6 +51,10 @@ export const getUrlParts = async (url: string, setToken = false): Promise<urlPar
 
   switch (site[0]) {
     case 'deezer':
+      if (url.includes('page.link')) {
+        const {request} = await axios.head(url);
+        url = request.res.responseUrl;
+      }
       const deezerUrlParts = url.split(/\/(\w+)\/(\d+)/);
       return {type: deezerUrlParts[1] as any, id: deezerUrlParts[2]};
 
