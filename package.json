@@ -1,6 +1,6 @@
 {
   "name": "d-fi-core",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "Core module for d-fi",
   "main": "dist/index.js",
   "scripts": {
