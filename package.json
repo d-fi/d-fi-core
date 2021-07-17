@@ -17,20 +17,20 @@
     "axios": "^0.21.1",
     "browser-id3-writer": "^4.4.0",
     "delay": "^5.0.0",
-    "node-html-parser": "^3.3.0",
+    "node-html-parser": "^4.1.0",
     "p-queue": "^6.6.2",
     "spotify-uri": "^2.2.0",
     "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
     "@types/node": "^14.14.41",
-    "@types/spotify-web-api-node": "^5.0.2",
+    "@types/spotify-web-api-node": "^5.0.3",
     "ava": "^3.15.0",
-    "eslint": "^7.26.0",
+    "eslint": "^7.30.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "prettier": "^2.3.0",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.4"
+    "prettier": "^2.3.2",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
   },
   "ava": {
     "extensions": [
