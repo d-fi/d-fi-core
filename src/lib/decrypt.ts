@@ -75,5 +75,5 @@ export const decryptDownload = (source: Buffer, trackId: string) => {
 export const getTrackDownloadUrl = (track: trackType, quality: number) => {
   const cdn = track.MD5_ORIGIN[0]; // cdn destination
   const filename = getSongFileName(track, quality); // encrypted file name
-  return `http://e-cdn-proxy-${cdn}.deezer.com/mobile/1/${filename}`;
+  return `http://e-cdn-proxy-${cdn}.deezer.com/api/1/${filename}`;
 };
