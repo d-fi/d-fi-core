@@ -7,7 +7,7 @@ const md5 = (data: string, type: crypto.Encoding = 'ascii') => {
   return md5sum.digest('hex');
 };
 
-const getSongFileName = ({MD5_ORIGIN, SNG_ID, MEDIA_VERSION}: trackType, quality: number) => {
+export const getSongFileName = ({MD5_ORIGIN, SNG_ID, MEDIA_VERSION}: trackType, quality: number) => {
   const step1 = [MD5_ORIGIN, quality, SNG_ID, MEDIA_VERSION].join('¤');
 
   let step2 = md5(step1) + '¤' + step1 + '¤';
@@ -68,12 +68,6 @@ export const decryptDownload = (source: Buffer, trackId: string) => {
   return destBuffer;
 };
 
-/**
- * @param track Track info json returned from `getTrackInfo`
- * @param quality 1 = 128kbps, 3 = 320kbps and 9 = flac (around 1411kbps)
- */
-export const getTrackDownloadUrl = (track: trackType, quality: number) => {
-  const cdn = track.MD5_ORIGIN[0]; // cdn destination
-  const filename = getSongFileName(track, quality); // encrypted file name
-  return `http://e-cdn-proxy-${cdn}.deezer.com/api/1/${filename}`;
-};
+export const trackIsEncrypted = (url: string) => {
+  return url.includes("/mobile/") || url.includes("/media/");
+}
