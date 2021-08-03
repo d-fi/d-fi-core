@@ -213,7 +213,7 @@ if (process.env.CI) {
 
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
     t.true(Buffer.isBuffer(trackWithMetadata));
-    t.is(trackWithMetadata.length, 25453410);
+    t.is(trackWithMetadata.length, 25453416);
   });
 } else {
   test('GET MUSIXMATCH LYRICS', async (t) => {

@@ -73,10 +73,12 @@ export const getTrackDownloadUrl = async (track: trackType, quality: number): Pr
       break;
     case 3:
       formatName = 'MP3_320';
+      break;
     case 1:
       formatName = 'MP3_128';
+      break;
     default:
-      throw new Error(`Unknow quality ${quality}`);
+      throw new Error(`Unknown quality ${quality}`);
   }
 
   // Get URL with the official API
