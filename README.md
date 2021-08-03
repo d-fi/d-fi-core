@@ -34,13 +34,16 @@ try {
 const track = await api.getTrackInfo(song_id);
 
 // Parse download URL for 128kbps
-const url = api.getTrackDownloadUrl(track, 1);
+const url = await api.getTrackDownloadUrl(track, 1);
 
-// Download encrypted track
+// Download track
 const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
-// Decrypt track
-const decryptedTrack = api.decryptDownload(data, track.SNG_ID);
+// Decrypt track if needed
+let decryptedTrack = data;
+if (api.isTrackEncrypted(url)) {
+  decryptedTrack = api.decryptDownload(data, track.SNG_ID);
+}
 
 // Add id3 metadata
 const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
