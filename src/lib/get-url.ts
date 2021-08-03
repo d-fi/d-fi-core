@@ -65,7 +65,7 @@ const getTrackUrlFromServer = async (track_token: string, format: string): Promi
  * @param track Track info json returned from `getTrackInfo`
  * @param quality 1 = 128kbps, 3 = 320kbps and 9 = flac (around 1411kbps)
  */
-export const getTrackDownloadUrl = async (track: trackType, quality: number): Promise<string> => {
+export const getTrackDownloadUrl = async (track: trackType, quality: number): Promise<{trackUrl: string, isEncrypted: boolean, fileSize: number}> => {
   let formatName: string;
   switch (quality) {
     case 9:
@@ -84,8 +84,15 @@ export const getTrackDownloadUrl = async (track: trackType, quality: number): Pr
   // Get URL with the official API
   try {
     const url = await getTrackUrlFromServer(track.TRACK_TOKEN, formatName);
-    if (url && (await testUrl(url))) {
-      return url;
+    if (url) {
+      const fileSize = await testUrl(url);
+      if (fileSize > 0) {
+        return {
+          trackUrl: url,
+          isEncrypted: url.includes('/mobile/') || url.includes('/media/'),
+          fileSize: fileSize,
+        };
+      }
     }
   } catch (err) {
     if (err instanceof WrongLicense) {
@@ -98,17 +105,22 @@ export const getTrackDownloadUrl = async (track: trackType, quality: number): Pr
   // Fallback to the old method
   const filename = getSongFileName(track, quality); // encrypted file name
   const url = `https://e-cdns-proxy-${track.MD5_ORIGIN[0]}.dzcdn.net/mobile/1/${filename}`;
-  if (await testUrl(url)) {
-    return url;
+  const fileSize = await testUrl(url);
+  if (fileSize > 0) {
+    return {
+      trackUrl: url,
+      isEncrypted: url.includes('/mobile/') || url.includes('/media/'),
+      fileSize: fileSize,
+    };
   }
   throw new Error(`Forbidden to access ${url}`);
 };
 
-const testUrl = async (url: string): Promise<boolean> => {
+const testUrl = async (url: string): Promise<number> => {
   try {
     let response = await axios.head(url);
-    return Number(response.headers['content-length']) > 0 ? true : false;
+    return Number(response.headers['content-length']);
   } catch (err) {
-    return false;
+    return 0;
   }
 };
