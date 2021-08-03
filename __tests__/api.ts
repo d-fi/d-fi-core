@@ -147,6 +147,7 @@ if (process.env.CI) {
   test('DOWNLOAD TRACK128 & ADD METADATA', async (t) => {
     const track = await api.getTrackInfo(SNG_ID);
     const trackData = await getTrackDownloadUrl(track, 1);
+    if (!trackData) throw new Error("Selected track+quality are unavailable");
     const {data} = await axios.get(trackData.trackUrl, {responseType: 'arraybuffer'});
 
     t.truthy(data);
@@ -165,6 +166,7 @@ if (process.env.CI) {
   // test('TRACK128 WITHOUT ALBUM INFO', async (t) => {
   //   const track = await api.getTrackInfo('912254892');
   //   const trackData = await getTrackDownloadUrl(track, 1);
+  //   if (!trackData) throw new Error("Selected track+quality are unavailable");
   //   const {data} = await axios.get(trackData.trackUrl, {responseType: 'arraybuffer'});
 
   //   t.truthy(data);
@@ -185,6 +187,7 @@ if (process.env.CI) {
   test('DOWNLOAD TRACK320 & ADD METADATA', async (t) => {
     const track = await api.getTrackInfo(SNG_ID);
     const trackData = await getTrackDownloadUrl(track, 3);
+    if (!trackData) throw new Error("Selected track+quality are unavailable");
     const {data} = await axios.get(trackData.trackUrl, {responseType: 'arraybuffer'});
 
     t.truthy(data);
@@ -203,6 +206,7 @@ if (process.env.CI) {
   test('DOWNLOAD TRACK1411 & ADD METADATA', async (t) => {
     const track = await api.getTrackInfo(SNG_ID);
     const trackData = await getTrackDownloadUrl(track, 9);
+    if (!trackData) throw new Error("Selected track+quality are unavailable");
     const {data} = await axios.get(trackData.trackUrl, {responseType: 'arraybuffer'});
 
     t.truthy(data);
