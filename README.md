@@ -40,10 +40,7 @@ const url = await api.getTrackDownloadUrl(track, 1);
 const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
 // Decrypt track if needed
-let decryptedTrack = data;
-if (api.isTrackEncrypted(url)) {
-  decryptedTrack = api.decryptDownload(data, track.SNG_ID);
-}
+const decryptedTrack = api.trackIsEncrypted(url) ? api.decryptDownload(data, track.SNG_ID) : data;
 
 // Add id3 metadata
 const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
