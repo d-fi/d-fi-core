@@ -65,7 +65,7 @@ const getTrackUrlFromServer = async (track_token: string, format: string): Promi
  * @param track Track info json returned from `getTrackInfo`
  * @param quality 1 = 128kbps, 3 = 320kbps and 9 = flac (around 1411kbps)
  */
-export const getTrackDownloadUrl = async (track: trackType, quality: number): Promise<string | null> => {
+export const getTrackDownloadUrl = async (track: trackType, quality: number): Promise<string> => {
   let formatName: string;
   switch (quality) {
     case 9:
@@ -99,7 +99,7 @@ export const getTrackDownloadUrl = async (track: trackType, quality: number): Pr
   if (await testUrl(url)) {
     return url;
   }
-  return null;
+  throw new Error(`Forbidden to access ${url}`);
 };
 
 const testUrl = async (url: string): Promise<boolean> => {

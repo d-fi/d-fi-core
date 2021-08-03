@@ -13,6 +13,10 @@ const SNG_ID = '3135556';
 const ALB_ID = '302127';
 
 test.serial('GET USER INFO', async (t) => {
+  // Init api with hifi account
+  await api.initDeezerApi(process.env.HIFI_ARL);
+
+  // Now get user info
   const response = await api.getUser();
 
   t.truthy(response.BLOG_NAME);
@@ -140,8 +144,7 @@ test('SEARCH TRACK, ALBUM & ARTIST', async (t) => {
 if (process.env.CI) {
   test('DOWNLOAD TRACK128 & ADD METADATA', async (t) => {
     const track = await api.getTrackInfo(SNG_ID);
-    const urlGen = await getTrackDownloadUrl(track, 1);
-    const url = urlGen ? urlGen : '';
+    const url = await getTrackDownloadUrl(track, 1);
     const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
     t.truthy(data);
@@ -159,8 +162,7 @@ if (process.env.CI) {
 
   test('TRACK128 WITHOUT ALBUM INFO', async (t) => {
     const track = await api.getTrackInfo('912254892');
-    const urlGen = await getTrackDownloadUrl(track, 1);
-    const url = urlGen ? urlGen : '';
+    const url = await getTrackDownloadUrl(track, 1);
     const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
     t.truthy(data);
@@ -180,8 +182,7 @@ if (process.env.CI) {
 
   test('DOWNLOAD TRACK320 & ADD METADATA', async (t) => {
     const track = await api.getTrackInfo(SNG_ID);
-    const urlGen = await getTrackDownloadUrl(track, 3);
-    const url = urlGen ? urlGen : '';
+    const url = await getTrackDownloadUrl(track, 3);
     const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
     t.truthy(data);
@@ -199,8 +200,7 @@ if (process.env.CI) {
 
   test('DOWNLOAD TRACK1411 & ADD METADATA', async (t) => {
     const track = await api.getTrackInfo(SNG_ID);
-    const urlGen = await getTrackDownloadUrl(track, 9);
-    const url = urlGen ? urlGen : '';
+    const url = await getTrackDownloadUrl(track, 9);
     const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
     t.truthy(data);
