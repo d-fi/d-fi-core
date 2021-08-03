@@ -1,7 +1,7 @@
 import test from 'ava';
 import axios from 'axios';
 import * as api from '../src';
-import {decryptDownload, trackIsEncrypted} from '../src/lib/decrypt';
+import {trackIsEncrypted, decryptDownload} from '../src/lib/decrypt';
 import {downloadAlbumCover} from '../src/metadata-writer/abumCover';
 import {getLyricsMusixmatch} from '../src/metadata-writer/musixmatchLyrics';
 import {getTrackDownloadUrl} from '../src/lib/get-url';
@@ -148,18 +148,13 @@ if (process.env.CI) {
     t.true(Buffer.isBuffer(data));
     t.is(data.length, 3596119);
 
-    let decryptedTrack: Buffer;
-    if (trackIsEncrypted(url)) {
-      decryptedTrack = decryptDownload(data, track.SNG_ID);
-    } else {
-      decryptedTrack = data;
-    }
+    const decryptedTrack: Buffer = trackIsEncrypted(url) ? decryptDownload(data, track.SNG_ID) : data;
     t.true(Buffer.isBuffer(decryptedTrack));
     t.is(decryptedTrack.length, 3596119);
 
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
     t.true(Buffer.isBuffer(trackWithMetadata));
-    t.is(trackWithMetadata.length, 3629206);
+    t.is(trackWithMetadata.length, 3629194);
   });
 
   test('TRACK128 WITHOUT ALBUM INFO', async (t) => {
@@ -172,12 +167,7 @@ if (process.env.CI) {
     t.true(Buffer.isBuffer(data));
     t.is(data.length, 3262170);
 
-    let decryptedTrack: Buffer;
-    if (trackIsEncrypted(url)) {
-      decryptedTrack = decryptDownload(data, track.SNG_ID);
-    } else {
-      decryptedTrack = data;
-    }
+    const decryptedTrack: Buffer = trackIsEncrypted(url) ? decryptDownload(data, track.SNG_ID) : data;
     t.true(Buffer.isBuffer(decryptedTrack));
     t.is(decryptedTrack.length, 3262170);
 
@@ -198,18 +188,13 @@ if (process.env.CI) {
     t.true(Buffer.isBuffer(data));
     t.is(data.length, 8990301);
 
-    let decryptedTrack: Buffer;
-    if (trackIsEncrypted(url)) {
-      decryptedTrack = decryptDownload(data, track.SNG_ID);
-    } else {
-      decryptedTrack = data;
-    }
+    const decryptedTrack: Buffer = trackIsEncrypted(url) ? decryptDownload(data, track.SNG_ID) : data;
     t.true(Buffer.isBuffer(decryptedTrack));
     t.is(decryptedTrack.length, 8990301);
 
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
     t.true(Buffer.isBuffer(trackWithMetadata));
-    t.is(trackWithMetadata.length, 9023388);
+    t.is(trackWithMetadata.length, 9023376);
   });
 
   test('DOWNLOAD TRACK1411 & ADD METADATA', async (t) => {
@@ -222,18 +207,13 @@ if (process.env.CI) {
     t.true(Buffer.isBuffer(data));
     t.is(data.length, 25418289);
 
-    let decryptedTrack: Buffer;
-    if (trackIsEncrypted(url)) {
-      decryptedTrack = decryptDownload(data, track.SNG_ID);
-    } else {
-      decryptedTrack = data;
-    }
+    const decryptedTrack: Buffer = trackIsEncrypted(url) ? decryptDownload(data, track.SNG_ID) : data;
     t.true(Buffer.isBuffer(decryptedTrack));
     t.is(data.length, 25418289);
 
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
     t.true(Buffer.isBuffer(trackWithMetadata));
-    t.is(trackWithMetadata.length, 25451376);
+    t.is(trackWithMetadata.length, 25453410);
   });
 } else {
   test('GET MUSIXMATCH LYRICS', async (t) => {
