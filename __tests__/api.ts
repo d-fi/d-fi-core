@@ -14,7 +14,7 @@ const ALB_ID = '302127';
 
 test.serial('GET USER INFO', async (t) => {
   // Init api with hifi account
-  await api.initDeezerApi(process.env.HIFI_ARL);
+  await api.initDeezerApi(process.env.HIFI_ARL as string);
 
   // Now get user info
   const response = await api.getUser();
