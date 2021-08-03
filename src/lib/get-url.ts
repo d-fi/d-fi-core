@@ -54,7 +54,7 @@ const getTrackUrlFromServer = async (track_token: string, format: string): Promi
 
   if (data.data.length > 0) {
     if (data.data[0].errors) {
-      throw new Error(Object.entries(data.data[0].errors).join(', '));
+      throw new Error(Object.entries(data.data[0].errors[0]).join(', '));
     }
     return data.data[0].media.length > 0 ? data.data[0].media[0].sources[0].url : null;
   }
