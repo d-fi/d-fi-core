@@ -69,5 +69,5 @@ export const decryptDownload = (source: Buffer, trackId: string) => {
 };
 
 export const trackIsEncrypted = (url: string) => {
-  return url.includes("/mobile/") || url.includes("/media/");
-}
+  return url.includes('/mobile/') || url.includes('/media/');
+};
