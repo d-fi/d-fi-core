@@ -66,6 +66,7 @@ const getTrackUrlFromServer = async (track_token: string, format: string): Promi
  * @param quality 1 = 128kbps, 3 = 320kbps and 9 = flac (around 1411kbps)
  */
 export const getTrackDownloadUrl = async (track: trackType, quality: number): Promise<{trackUrl: string, isEncrypted: boolean, fileSize: number} | null> => {
+  let wrongLicense = false;
   let formatName: string;
   switch (quality) {
     case 9:
@@ -96,7 +97,7 @@ export const getTrackDownloadUrl = async (track: trackType, quality: number): Pr
     }
   } catch (err) {
     if (err instanceof WrongLicense) {
-      throw new Error(`Your account can't stream ${formatName} tracks`);
+      wrongLicense = true;
     } else {
       throw err;
     }
@@ -113,6 +114,7 @@ export const getTrackDownloadUrl = async (track: trackType, quality: number): Pr
       fileSize: fileSize,
     };
   }
+  if (wrongLicense) throw new Error(`Your account can't stream ${formatName} tracks`);
   return null;
 };
 
