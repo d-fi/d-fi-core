@@ -1,9 +1,10 @@
 import test from 'ava';
 import axios from 'axios';
 import * as api from '../src';
-import {decryptDownload, getTrackDownloadUrl} from '../src/lib/decrypt';
+import {decryptDownload, trackIsEncrypted} from '../src/lib/decrypt';
 import {downloadAlbumCover} from '../src/metadata-writer/abumCover';
 import {getLyricsMusixmatch} from '../src/metadata-writer/musixmatchLyrics';
+import {getTrackDownloadUrl} from '../src/lib/get-url';
 
 // Harder, Better, Faster, Stronger by Daft Punk
 const SNG_ID = '3135556';
@@ -139,14 +140,20 @@ test('SEARCH TRACK, ALBUM & ARTIST', async (t) => {
 if (process.env.CI) {
   test('DOWNLOAD TRACK128 & ADD METADATA', async (t) => {
     const track = await api.getTrackInfo(SNG_ID);
-    const url = getTrackDownloadUrl(track, 1);
+    const urlGen = await getTrackDownloadUrl(track, 1);
+    const url = urlGen ? urlGen : '';
     const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
     t.truthy(data);
     t.true(Buffer.isBuffer(data));
     t.is(data.length, 3596119);
 
-    const decryptedTrack = decryptDownload(data, track.SNG_ID);
+    let decryptedTrack: Buffer;
+    if (trackIsEncrypted(url)) {
+      decryptedTrack = decryptDownload(data, track.SNG_ID);
+    } else {
+      decryptedTrack = data;
+    }
     t.true(Buffer.isBuffer(decryptedTrack));
     t.is(decryptedTrack.length, 3596119);
 
@@ -157,14 +164,20 @@ if (process.env.CI) {
 
   test('TRACK128 WITHOUT ALBUM INFO', async (t) => {
     const track = await api.getTrackInfo('912254892');
-    const url = getTrackDownloadUrl(track, 1);
+    const urlGen = await getTrackDownloadUrl(track, 1);
+    const url = urlGen ? urlGen : '';
     const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
     t.truthy(data);
     t.true(Buffer.isBuffer(data));
     t.is(data.length, 3262170);
 
-    const decryptedTrack = decryptDownload(data, track.SNG_ID);
+    let decryptedTrack: Buffer;
+    if (trackIsEncrypted(url)) {
+      decryptedTrack = decryptDownload(data, track.SNG_ID);
+    } else {
+      decryptedTrack = data;
+    }
     t.true(Buffer.isBuffer(decryptedTrack));
     t.is(decryptedTrack.length, 3262170);
 
@@ -177,14 +190,20 @@ if (process.env.CI) {
 
   test('DOWNLOAD TRACK320 & ADD METADATA', async (t) => {
     const track = await api.getTrackInfo(SNG_ID);
-    const url = getTrackDownloadUrl(track, 3);
+    const urlGen = await getTrackDownloadUrl(track, 3);
+    const url = urlGen ? urlGen : '';
     const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
     t.truthy(data);
     t.true(Buffer.isBuffer(data));
     t.is(data.length, 8990301);
 
-    const decryptedTrack = decryptDownload(data, track.SNG_ID);
+    let decryptedTrack: Buffer;
+    if (trackIsEncrypted(url)) {
+      decryptedTrack = decryptDownload(data, track.SNG_ID);
+    } else {
+      decryptedTrack = data;
+    }
     t.true(Buffer.isBuffer(decryptedTrack));
     t.is(decryptedTrack.length, 8990301);
 
@@ -195,14 +214,20 @@ if (process.env.CI) {
 
   test('DOWNLOAD TRACK1411 & ADD METADATA', async (t) => {
     const track = await api.getTrackInfo(SNG_ID);
-    const url = getTrackDownloadUrl(track, 9);
+    const urlGen = await getTrackDownloadUrl(track, 9);
+    const url = urlGen ? urlGen : '';
     const {data} = await axios.get(url, {responseType: 'arraybuffer'});
 
     t.truthy(data);
     t.true(Buffer.isBuffer(data));
     t.is(data.length, 25418289);
 
-    const decryptedTrack = decryptDownload(data, track.SNG_ID);
+    let decryptedTrack: Buffer;
+    if (trackIsEncrypted(url)) {
+      decryptedTrack = decryptDownload(data, track.SNG_ID);
+    } else {
+      decryptedTrack = data;
+    }
     t.true(Buffer.isBuffer(decryptedTrack));
     t.is(data.length, 25418289);
 
