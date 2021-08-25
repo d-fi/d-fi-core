@@ -64,7 +64,9 @@ const getTrackUrlFromServer = async (track_token: string, format: string): Promi
 
   if (data.data.length > 0) {
     if (data.data[0].errors) {
-      if (data.data[0].errors[0].code === 2002) throw new GeoBlocked(user.country);
+      if (data.data[0].errors[0].code === 2002) {
+        throw new GeoBlocked(user.country);
+      }
       throw new Error(Object.entries(data.data[0].errors[0]).join(', '));
     }
     return data.data[0].media.length > 0 ? data.data[0].media[0].sources[0].url : null;
@@ -77,8 +79,8 @@ const getTrackUrlFromServer = async (track_token: string, format: string): Promi
  * @param quality 1 = 128kbps, 3 = 320kbps and 9 = flac (around 1411kbps)
  */
 export const getTrackDownloadUrl = async (track: trackType, quality: number): Promise<{trackUrl: string, isEncrypted: boolean, fileSize: number} | null> => {
-  let wrongLicense = false;
-  let geoBlocked: string | null = null;
+  let wrongLicense: WrongLicense | null = null;
+  let geoBlocked: GeoBlocked | null = null;
   let formatName: string;
   switch (quality) {
     case 9:
@@ -109,9 +111,9 @@ export const getTrackDownloadUrl = async (track: trackType, quality: number): Pr
     }
   } catch (err) {
     if (err instanceof WrongLicense) {
-      wrongLicense = true;
+      wrongLicense = err;
     } else if (err instanceof GeoBlocked) {
-      geoBlocked = err.message;
+      geoBlocked = err;
     } else {
       throw err;
     }
@@ -128,8 +130,12 @@ export const getTrackDownloadUrl = async (track: trackType, quality: number): Pr
       fileSize: fileSize,
     };
   }
-  if (wrongLicense) throw new Error(`Your account can't stream ${formatName} tracks`);
-  if (geoBlocked) throw new Error(geoBlocked);
+  if (wrongLicense) {
+    throw wrongLicense;
+  }
+  if (geoBlocked) {
+    throw geoBlocked;
+  }
   return null;
 };
 
