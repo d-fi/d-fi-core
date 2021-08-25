@@ -7,6 +7,7 @@ interface userData {
   license_token: string;
   can_stream_lossless: boolean;
   can_stream_hq: boolean;
+  country: string;
 }
 
 class WrongLicense extends Error {
@@ -14,6 +15,14 @@ class WrongLicense extends Error {
     super();
     this.name = 'WrongLicense';
     this.message = `Your account can't stream ${format} tracks`;
+  }
+}
+
+class GeoBlocked extends Error {
+  constructor(country: string) {
+    super();
+    this.name = 'GeoBlocked';
+    this.message = `This track is not available in your country (${country})`;
   }
 }
 
@@ -31,6 +40,7 @@ const dzAuthenticate = async (): Promise<userData> => {
     license_token: data.results.USER.OPTIONS.license_token,
     can_stream_lossless: data.results.USER.OPTIONS.web_lossless || data.results.USER.OPTIONS.mobile_loseless,
     can_stream_hq: data.results.USER.OPTIONS.web_hq || data.results.USER.OPTIONS.mobile_hq,
+    country: data.results.COUNTRY,
   };
   return user_data;
 };
@@ -54,6 +64,7 @@ const getTrackUrlFromServer = async (track_token: string, format: string): Promi
 
   if (data.data.length > 0) {
     if (data.data[0].errors) {
+      if (data.data[0].errors[0].code === 2002) throw new GeoBlocked(user.country);
       throw new Error(Object.entries(data.data[0].errors[0]).join(', '));
     }
     return data.data[0].media.length > 0 ? data.data[0].media[0].sources[0].url : null;
@@ -67,6 +78,7 @@ const getTrackUrlFromServer = async (track_token: string, format: string): Promi
  */
 export const getTrackDownloadUrl = async (track: trackType, quality: number): Promise<{trackUrl: string, isEncrypted: boolean, fileSize: number} | null> => {
   let wrongLicense = false;
+  let geoBlocked: string | null = null;
   let formatName: string;
   switch (quality) {
     case 9:
@@ -98,6 +110,8 @@ export const getTrackDownloadUrl = async (track: trackType, quality: number): Pr
   } catch (err) {
     if (err instanceof WrongLicense) {
       wrongLicense = true;
+    } else if (err instanceof GeoBlocked) {
+      geoBlocked = err.message;
     } else {
       throw err;
     }
@@ -115,6 +129,7 @@ export const getTrackDownloadUrl = async (track: trackType, quality: number): Pr
     };
   }
   if (wrongLicense) throw new Error(`Your account can't stream ${formatName} tracks`);
+  if (geoBlocked) throw new Error(geoBlocked);
   return null;
 };
 
