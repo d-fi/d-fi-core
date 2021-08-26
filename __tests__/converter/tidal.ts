@@ -62,14 +62,14 @@ test('GET ALBUM TRACKS', async (t) => {
 test('GET ARTIST ALBUMS', async (t) => {
   const response = await tidal.getArtistAlbums(ART_ID);
 
-  t.is(response.items.length, response.totalNumberOfItems);
+  t.true(response.totalNumberOfItems >= response.items.length);
   t.true(response.totalNumberOfItems > 30);
 });
 
 test('GET ARTIST TOP TRACKS', async (t) => {
   const response = await tidal.getArtistAlbums(ART_ID);
 
-  t.is(response.items.length, response.totalNumberOfItems);
+  t.true(response.totalNumberOfItems >= response.items.length);
   t.true(response.totalNumberOfItems > 30);
 });
 
