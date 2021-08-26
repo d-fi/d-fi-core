@@ -10,7 +10,7 @@ interface userData {
   country: string;
 }
 
-class WrongLicense extends Error {
+export class WrongLicense extends Error {
   constructor(format: string) {
     super();
     this.name = 'WrongLicense';
@@ -18,7 +18,7 @@ class WrongLicense extends Error {
   }
 }
 
-class GeoBlocked extends Error {
+export class GeoBlocked extends Error {
   constructor(country: string) {
     super();
     this.name = 'GeoBlocked';
