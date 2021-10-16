@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "target": "esnext",
     "module": "commonjs",
+    "target": "es2019", // Node.js 12
     "moduleResolution": "node",
     "strict": true,
     "declaration": true,
