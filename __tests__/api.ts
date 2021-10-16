@@ -46,11 +46,11 @@ test('GET TRACK INFO - PUBLIC API', async (t) => {
 
 test('GET TRACK COVER', async (t) => {
   const track = await api.getTrackInfo(SNG_ID);
-  const cover = await downloadAlbumCover(track, 500);
+  const cover = (await downloadAlbumCover(track, 500)) as Buffer;
 
   t.truthy(cover);
   t.true(Buffer.isBuffer(cover));
-  t.is(cover ? cover.length : 0, 24646);
+  t.is(cover.length, 24573);
 });
 
 test('GET TRACK LYRICS', async (t) => {
