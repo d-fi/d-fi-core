@@ -15,7 +15,7 @@ export const request = async (body: object, method: string) => {
 
   const {
     data: {error, results},
-  } = await axios.post('/gateway.php', body, {params: {method}});
+  } = await axios.post<any>('/gateway.php', body, {params: {method}});
 
   if (Object.keys(results).length > 0) {
     lru.set(cacheKey, results);
@@ -31,7 +31,7 @@ export const request = async (body: object, method: string) => {
  * @param {String} method request method
  * @param {Object} params request parameters
  */
-export const requestGet = async (method: string, params: object = {}, key: string = 'get_request') => {
+export const requestGet = async (method: string, params: Record<string, any> = {}, key = 'get_request') => {
   const cacheKey = method + key;
   const cache = lru.get(cacheKey);
   if (cache) {
@@ -40,7 +40,7 @@ export const requestGet = async (method: string, params: object = {}, key: strin
 
   const {
     data: {error, results},
-  } = await axios.get('/gateway.php', {params: {method, ...params}});
+  } = await axios.get<any>('/gateway.php', {params: {method, ...params}});
 
   if (Object.keys(results).length > 0) {
     lru.set(cacheKey, results);
@@ -61,7 +61,7 @@ export const requestPublicApi = async (slug: string) => {
     return cache;
   }
 
-  const {data} = await axios.get('https://api.deezer.com' + slug);
+  const {data} = await axios.get<any>('https://api.deezer.com' + slug);
 
   if (data.error) {
     const errorMessage = Object.entries(data.error).join(', ');

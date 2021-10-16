@@ -33,7 +33,7 @@ export const initDeezerApi = async (arl: string): Promise<string> => {
     throw new Error(`Invalid arl. Length should be 192 characters. You have provided ${arl.length} characters.`);
   }
   user_arl = arl;
-  const {data} = await instance.get('https://www.deezer.com/ajax/gw-light.php', {
+  const {data} = await instance.get<any>('https://www.deezer.com/ajax/gw-light.php', {
     params: {method: 'deezer.ping', api_version: '1.0', api_token: ''},
     headers: {cookie: 'arl=' + arl},
   });
@@ -42,7 +42,7 @@ export const initDeezerApi = async (arl: string): Promise<string> => {
 };
 
 // Add a request interceptor
-instance.interceptors.response.use(async (response) => {
+instance.interceptors.response.use(async (response: Record<string, any>) => {
   if (response.data.error && Object.keys(response.data.error).length > 0) {
     if (response.data.error.NEED_API_AUTH_REQUIRED) {
       await initDeezerApi(user_arl);

@@ -10,7 +10,7 @@ export const isrc2deezer = async (name: string, isrc?: string) => {
     throw new Error('ISRC code not found for ' + name);
   }
 
-  const {data} = await instance('track/isrc:' + isrc);
+  const {data} = await instance.get<any>('track/isrc:' + isrc);
   if (data.error) {
     throw new Error(`No match on deezer for ${name} (ISRC: ${isrc})`);
   }
@@ -25,7 +25,7 @@ export const upc2deezer = async (name: string, upc?: string): Promise<[albumType
     upc = upc.slice(-12);
   }
 
-  const {data} = await instance('album/upc:' + upc);
+  const {data} = await instance.get<any>('album/upc:' + upc);
   if (data.error) {
     throw new Error(`No match on deezer for ${name} (UPC: ${upc})`);
   }
@@ -36,7 +36,7 @@ export const upc2deezer = async (name: string, upc?: string): Promise<[albumType
 };
 
 // Retry on rate limit error
-instance.interceptors.response.use(async (response) => {
+instance.interceptors.response.use(async (response: Record<string, any>) => {
   if (response.data.error && Object.keys(response.data.error).length > 0) {
     if (response.data.error.code === 4) {
       await delay.range(1000, 1500);

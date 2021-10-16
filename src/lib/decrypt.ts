@@ -17,8 +17,8 @@ export const getSongFileName = ({MD5_ORIGIN, SNG_ID, MEDIA_VERSION}: trackType, 
 };
 
 const getBlowfishKey = (trackId: string) => {
-  let SECRET = 'g4el58wc' + '0zvf9na1';
-  let idMd5 = md5(trackId);
+  const SECRET = 'g4el58wc' + '0zvf9na1';
+  const idMd5 = md5(trackId);
   let bfKey = '';
   for (let i = 0; i < 16; i++) {
     bfKey += String.fromCharCode(idMd5.charCodeAt(i) ^ idMd5.charCodeAt(i + 16) ^ SECRET.charCodeAt(i));
@@ -27,10 +27,9 @@ const getBlowfishKey = (trackId: string) => {
 };
 
 const decryptChunk = (chunk: Buffer, blowFishKey: string) => {
-  let cipher = crypto.createDecipheriv('bf-cbc', blowFishKey, Buffer.from([0, 1, 2, 3, 4, 5, 6, 7]));
+  const cipher = crypto.createDecipheriv('bf-cbc', blowFishKey, Buffer.from([0, 1, 2, 3, 4, 5, 6, 7]));
   cipher.setAutoPadding(false);
-  // @ts-ignore
-  return cipher.update(chunk, 'binary', 'binary') + cipher.final();
+  return cipher.update(chunk as any, 'binary', 'binary') + cipher.final();
 };
 
 /**
@@ -41,18 +40,17 @@ const decryptChunk = (chunk: Buffer, blowFishKey: string) => {
 export const decryptDownload = (source: Buffer, trackId: string) => {
   // let part_size = 0x1800;
   let chunk_size = 2048;
-  let blowFishKey = getBlowfishKey(trackId);
+  const blowFishKey = getBlowfishKey(trackId);
   let i = 0;
   let position = 0;
 
-  let destBuffer = Buffer.alloc(source.length);
+  const destBuffer = Buffer.alloc(source.length);
   destBuffer.fill(0);
 
   while (position < source.length) {
-    let chunk;
-    if (source.length - position >= 2048) chunk_size = 2048;
-    else chunk_size = source.length - position;
-    chunk = Buffer.alloc(chunk_size);
+    const chunk = Buffer.alloc(chunk_size);
+    const size = source.length - position;
+    chunk_size = size >= 2048 ? 2048 : size;
 
     let chunkString;
     chunk.fill(0);

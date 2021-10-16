@@ -89,19 +89,20 @@ export const getUrlParts = async (url: string, setToken = false): Promise<urlPar
  * @param {String} url
  */
 export const parseInfo = async (url: string) => {
-  let info = await getUrlParts(url, true);
+  const info = await getUrlParts(url, true);
   if (!info.id) {
     throw new Error('Unable to parse id');
   }
 
   let linktype: linkType = 'track';
-  let linkinfo: trackType | albumType | playlistInfo | artistInfoType | {} = {};
+  let linkinfo: trackType | albumType | playlistInfo | artistInfoType | Record<string, any> = {};
   let tracks: trackType[] = [];
 
   switch (info.type) {
-    case 'track':
+    case 'track': {
       tracks.push(await getTrackInfo(info.id));
       break;
+    }
 
     case 'album':
     case 'audiobook':

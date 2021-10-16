@@ -21,7 +21,7 @@ if (!process.env.CI) {
     try {
       await youtube.track2deezer(INVALID_VIDEO);
       t.fail();
-    } catch (err) {
+    } catch (err: any) {
       t.true(err.message.includes('No track found for youtube video ' + INVALID_VIDEO));
     }
   });

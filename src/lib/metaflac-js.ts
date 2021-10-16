@@ -74,7 +74,7 @@ class Metaflac {
     let isLastBlock = false;
     while (!isLastBlock) {
       blockType = this.buffer.readUInt8(offset++);
-      isLastBlock = blockType > 128;
+      isLastBlock = blockType >= 128;
       blockType = blockType % 128;
 
       const blockLength = this.buffer.readUIntBE(offset, 3);
@@ -354,7 +354,7 @@ class Metaflac {
     ]);
   }
 
-  buildMetadataBlock(type: number, block: Buffer, isLast: boolean = false) {
+  buildMetadataBlock(type: number, block: Buffer, isLast = false) {
     const header = Buffer.alloc(4);
     if (isLast) {
       type += 128;
@@ -375,7 +375,9 @@ class Metaflac {
     this.pictures.forEach((block: Buffer) => {
       bufferArray.push(this.buildMetadataBlock(PICTURE, block));
     });
-    if (this.padding == null) this.padding = Buffer.alloc(16384);
+    if (this.padding == null) {
+      this.padding = Buffer.alloc(16384);
+    }
     bufferArray.push(this.buildMetadataBlock(PADDING, this.padding, true));
     return bufferArray;
   }

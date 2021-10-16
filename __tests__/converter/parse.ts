@@ -142,7 +142,7 @@ test('SHOULD FAIL STRING', async (t) => {
   try {
     await parseInfo(str);
     t.fail();
-  } catch (err) {
+  } catch (err: any) {
     t.is(err.message, 'Unknown URL: ' + str);
   }
 });
@@ -152,7 +152,7 @@ test('SHOULD FAIL URL', async (t) => {
   try {
     await parseInfo(url);
     t.fail();
-  } catch (err) {
+  } catch (err: any) {
     t.is(err.message, 'Unknown URL: ' + url);
   }
 });

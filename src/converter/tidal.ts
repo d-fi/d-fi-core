@@ -97,7 +97,7 @@ const queue = new PQueue({concurrency: 25});
  * @example tidal.getTrack('64975224')
  */
 export const getTrack = async (id: string): Promise<tidalTrackType> => {
-  const {data} = await client(`tracks/${id}`);
+  const {data} = await client.get<tidalTrackType>(`tracks/${id}`);
   return data;
 };
 
@@ -116,7 +116,7 @@ export const track2deezer = async (id: string) => {
  * @example tidal.getAlbum('80216363')
  */
 export const getAlbum = async (id: string): Promise<tidalAlbumType> => {
-  const {data} = await client(`albums/${id}`);
+  const {data} = await client.get<tidalAlbumType>(`albums/${id}`);
   return data;
 };
 
@@ -135,7 +135,7 @@ export const album2deezer = async (id: string) => {
  * @example tidal.getAlbumTracks('80216363')
  */
 export const getAlbumTracks = async (id: string): Promise<tidalAlbumsTracksType> => {
-  const {data} = await client(`albums/${id}/tracks`);
+  const {data} = await client.get<tidalAlbumsTracksType>(`albums/${id}/tracks`);
   return data;
 };
 
@@ -145,7 +145,7 @@ export const getAlbumTracks = async (id: string): Promise<tidalAlbumsTracksType>
  * @example tidal.getArtistAlbums('3575680')
  */
 export const getArtistAlbums = async (id: string): Promise<tidalAlbumsTracksType> => {
-  const {data} = await client(`artists/${id}/albums`);
+  const {data} = await client.get<tidalAlbumsTracksType>(`artists/${id}/albums`);
   data.items = data.items.filter((item: any) => item.artist.id.toString() === id);
   return data;
 };
@@ -156,7 +156,7 @@ export const getArtistAlbums = async (id: string): Promise<tidalAlbumsTracksType
  * @example tidal.getArtistTopTracks('3575680')
  */
 export const getArtistTopTracks = async (id: string): Promise<tidalArtistTopTracksType> => {
-  const {data} = await client(`artists/${id}/toptracks`);
+  const {data} = await client.get<tidalArtistTopTracksType>(`artists/${id}/toptracks`);
   data.items = data.items.filter((item: any) => item.artist.id.toString() === id);
   return data;
 };
@@ -167,7 +167,7 @@ export const getArtistTopTracks = async (id: string): Promise<tidalArtistTopTrac
  * @example tidal.getPlaylist('1c5d01ed-4f05-40c4-bd28-0f73099e9648')
  */
 export const getPlaylist = async (uuid: string): Promise<tidalPlaylistType> => {
-  const {data} = await client(`playlists/${uuid}`);
+  const {data} = await client.get<tidalPlaylistType>(`playlists/${uuid}`);
   return data;
 };
 
@@ -177,7 +177,7 @@ export const getPlaylist = async (uuid: string): Promise<tidalPlaylistType> => {
  * @example tidal.getPlaylistTracks('1c5d01ed-4f05-40c4-bd28-0f73099e9648')
  */
 export const getPlaylistTracks = async (uuid: string): Promise<tidalPlaylistTracksType> => {
-  const {data} = await client(`playlists/${uuid}/tracks`);
+  const {data} = await client.get<tidalPlaylistTracksType>(`playlists/${uuid}/tracks`);
   return data;
 };
 
@@ -216,7 +216,7 @@ export const artist2Deezer = async (
           const track = await isrc2deezer(item.title, item.isrc);
           // console.log(signale.success(`Track #${index}: ${item.name}`));
           tracks.push(track);
-        } catch (err) {
+        } catch (err: any) {
           if (onError) {
             onError(item, index, err);
           }
@@ -249,7 +249,7 @@ export const playlist2Deezer = async (
           // console.log(signale.success(`Track #${index}: ${item.track.name}`));
           track.TRACK_POSITION = index + 1;
           tracks.push(track);
-        } catch (err) {
+        } catch (err: any) {
           if (onError) {
             onError(item, index, err);
           }

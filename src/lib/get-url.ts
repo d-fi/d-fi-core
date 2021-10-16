@@ -29,7 +29,7 @@ export class GeoBlocked extends Error {
 let user_data: userData | null = null;
 
 const dzAuthenticate = async (): Promise<userData> => {
-  const {data} = await instance.get('https://www.deezer.com/ajax/gw-light.php', {
+  const {data} = await instance.get<any>('https://www.deezer.com/ajax/gw-light.php', {
     params: {
       method: 'deezer.getUserData',
       api_version: '1.0',
@@ -51,7 +51,7 @@ const getTrackUrlFromServer = async (track_token: string, format: string): Promi
     throw new WrongLicense(format);
   }
 
-  const {data} = await instance.post('https://media.deezer.com/v1/get_url', {
+  const {data} = await instance.post<any>('https://media.deezer.com/v1/get_url', {
     license_token: user.license_token,
     media: [
       {
@@ -78,7 +78,10 @@ const getTrackUrlFromServer = async (track_token: string, format: string): Promi
  * @param track Track info json returned from `getTrackInfo`
  * @param quality 1 = 128kbps, 3 = 320kbps and 9 = flac (around 1411kbps)
  */
-export const getTrackDownloadUrl = async (track: trackType, quality: number): Promise<{trackUrl: string, isEncrypted: boolean, fileSize: number} | null> => {
+export const getTrackDownloadUrl = async (
+  track: trackType,
+  quality: number,
+): Promise<{trackUrl: string; isEncrypted: boolean; fileSize: number} | null> => {
   let wrongLicense: WrongLicense | null = null;
   let geoBlocked: GeoBlocked | null = null;
   let formatName: string;
@@ -141,8 +144,8 @@ export const getTrackDownloadUrl = async (track: trackType, quality: number): Pr
 
 const testUrl = async (url: string): Promise<number> => {
   try {
-    let response = await axios.head(url);
-    return Number(response.headers['content-length']);
+    const {headers} = await axios.head(url);
+    return Number(headers['content-length']);
   } catch (err) {
     return 0;
   }

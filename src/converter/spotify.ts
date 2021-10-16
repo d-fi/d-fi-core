@@ -77,9 +77,9 @@ export const playlist2Deezer = async (
   onError?: (item: SpotifyApi.PlaylistTrackObject, index: number, err: Error) => void,
 ): Promise<[playlistInfo, trackType[]]> => {
   const {body} = await spotifyApi.getPlaylist(id);
+  const tracks: trackType[] = [];
   let items = body.tracks.items;
   let offset = getOffset(body.tracks.next);
-  let tracks: trackType[] = [];
 
   while (offset !== 0) {
     const {body} = await spotifyApi.getPlaylistTracks(id, {limit: 100, offset: offset ? offset : 0});
@@ -96,7 +96,7 @@ export const playlist2Deezer = async (
             track.TRACK_POSITION = index + 1;
             tracks.push(track);
           }
-        } catch (err) {
+        } catch (err: any) {
           if (onError) {
             onError(item, index, err);
           }
@@ -149,7 +149,7 @@ export const artist2Deezer = async (
         try {
           const track = await isrc2deezer(item.name, item.external_ids.isrc);
           tracks.push(track);
-        } catch (err) {
+        } catch (err: any) {
           if (onError) {
             onError(item, index, err);
           }

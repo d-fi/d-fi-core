@@ -5,16 +5,16 @@ import {randomUseragent} from './useragents';
 const baseUrl = 'https://musixmatch.com';
 
 const getUrlMusixmatch = async (query: string) => {
-  const {data} = await axios.get(`${baseUrl}/search/${encodeURI(query)}/tracks`, {
+  const {data} = await axios.get<any>(`${baseUrl}/search/${encodeURI(query)}/tracks`, {
     headers: {
       'User-Agent': randomUseragent(),
       referer: 'https://l.facebook.com/',
     },
   });
 
-  // @ts-ignore
-  const url = parse(data).querySelector('h2').childNodes[0].attributes.href.replace('/add', '');
-  if (url.includes('/lyrics/')) {
+  const childNode = parse(data).querySelector('h2')?.childNodes.at(0);
+  const url: string | undefined = (childNode as any)?.attributes.href.replace('/add', '');
+  if (url && url.includes('/lyrics/')) {
     return url.startsWith('/lyrics/') ? baseUrl + url : url;
   }
 
@@ -23,7 +23,7 @@ const getUrlMusixmatch = async (query: string) => {
 
 export const getLyricsMusixmatch = async (query: string): Promise<string> => {
   const url = await getUrlMusixmatch(query);
-  const {data} = await axios.get(url, {
+  const {data} = await axios.get<any>(url, {
     headers: {
       'User-Agent': randomUseragent(),
       referer: baseUrl + '/',

@@ -3,7 +3,7 @@ import {parse} from 'node-html-parser';
 import {searchAlternative, searchMusic} from '../api';
 
 const getTrack = async (id: string) => {
-  const response = await axios.get(`https://www.youtube.com/watch?v=${id}&hl=en`);
+  const response = await axios.get<any>(`https://www.youtube.com/watch?v=${id}&hl=en`);
   const script = parse(response.data)
     .querySelectorAll('script')
     .find((script) => script.childNodes.find((node) => node.rawText.includes('responseText')));
