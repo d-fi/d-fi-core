@@ -17,10 +17,10 @@
   "author": "Sayem Chowdhury",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.23.0",
+    "axios": "^0.26.1",
     "browser-id3-writer": "^4.4.0",
     "delay": "^5.0.0",
-    "node-html-parser": "^5.0.0",
+    "node-html-parser": "^5.3.3",
     "p-queue": "^6.6.2",
     "spotify-uri": "^2.2.0",
     "spotify-web-api-node": "^5.0.2"
