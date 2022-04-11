@@ -1,4 +1,4 @@
-import {request, requestGet, requestPublicApi} from './request';
+import {request, requestLight, requestGet, requestPublicApi} from './request';
 import type {
   albumType,
   trackType,
@@ -113,7 +113,7 @@ type searchTypesProp = 'ALBUM' | 'ARTIST' | 'TRACK' | 'PLAYLIST' | 'RADIO' | 'SH
  * @param {Number} nb number of items to fetch
  */
 export const searchMusic = (query: string, types: searchTypesProp[] = ['TRACK'], nb = 15): Promise<searchType> =>
-  request({query, nb, types}, 'mobile_suggest');
+  requestLight({query, start: 0, nb, suggest: true, artist_suggest: true, top_tracks: true}, 'deezer.pageSearch');
 
 /**
  * Get details about current user

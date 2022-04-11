@@ -27,6 +27,32 @@ export const request = async (body: object, method: string) => {
 };
 
 /**
+ * Make POST requests to deezer api
+ * @param {Object} body post body
+ * @param {String} method request method
+ */
+export const requestLight = async (body: object, method: string) => {
+  const cacheKey = method + ':' + Object.entries(body).join(':');
+  const cache = lru.get(cacheKey);
+  if (cache) {
+    return cache;
+  }
+
+  const {
+    data: {error, results},
+  } = await axios.post<any>('https://www.deezer.com/ajax/gw-light.php', body, {
+    params: {method, api_version: '1.0'},
+  });
+  if (Object.keys(results).length > 0) {
+    lru.set(cacheKey, results);
+    return results;
+  }
+
+  const errorMessage = Object.entries(error).join(', ');
+  throw new Error(errorMessage);
+};
+
+/**
  * Make GET requests to deezer public api
  * @param {String} method request method
  * @param {Object} params request parameters

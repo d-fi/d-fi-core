@@ -28,6 +28,19 @@ const instance = axios.create({
   },
 });
 
+const getApiToken = async (): Promise<string> => {
+  const {data} = await instance.get<any>('https://www.deezer.com/ajax/gw-light.php', {
+    params: {
+      method: 'deezer.getUserData',
+      api_version: '1.0',
+      api_token: 'null',
+    },
+  });
+  instance.defaults.params.sid = data.results.SESSION_ID;
+  instance.defaults.params.api_token = data.results.checkForm;
+  return data.results.checkForm;
+};
+
 export const initDeezerApi = async (arl: string): Promise<string> => {
   if (arl.length !== 192) {
     throw new Error(`Invalid arl. Length should be 192 characters. You have provided ${arl.length} characters.`);
@@ -49,6 +62,9 @@ instance.interceptors.response.use(async (response: Record<string, any>) => {
       return await instance(response.config);
     } else if (response.data.error.code === 4) {
       await delay.range(1000, 1500);
+      return await instance(response.config);
+    } else if (response.data.error.GATEWAY_ERROR) {
+      getApiToken();
       return await instance(response.config);
     }
   }

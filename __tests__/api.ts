@@ -137,7 +137,7 @@ test('SEARCH TRACK, ALBUM & ARTIST', async (t) => {
   const QUERY = 'Eminem';
   const response = await api.searchMusic(QUERY, ['TRACK', 'ALBUM', 'ARTIST'], 1);
 
-  t.is(response.QUERY, QUERY.toLowerCase());
+  t.is(response.QUERY, QUERY);
   t.truthy(response.TRACK.count > 0);
   t.truthy(response.ALBUM.count > 0);
   t.truthy(response.ARTIST.count > 0);
