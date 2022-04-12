@@ -54,6 +54,8 @@ export const initDeezerApi = async (arl: string): Promise<string> => {
   return data.results.SESSION;
 };
 
+let token_retry = 0;
+
 // Add a request interceptor
 instance.interceptors.response.use(async (response: Record<string, any>) => {
   if (response.data.error && Object.keys(response.data.error).length > 0) {
@@ -63,8 +65,10 @@ instance.interceptors.response.use(async (response: Record<string, any>) => {
     } else if (response.data.error.code === 4) {
       await delay.range(1000, 1500);
       return await instance(response.config);
-    } else if (response.data.error.GATEWAY_ERROR) {
-      getApiToken();
+    } else if (response.data.error.GATEWAY_ERROR || (response.data.error.VALID_TOKEN_REQUIRED && token_retry < 15)) {
+      await getApiToken();
+      // Prevent dead loop
+      token_retry += 1;
       return await instance(response.config);
     }
   }
