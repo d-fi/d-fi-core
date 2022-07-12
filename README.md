@@ -37,7 +37,7 @@ const track = await api.getTrackInfo(song_id);
 const trackData = await api.getTrackDownloadUrl(track, 1);
 
 // Download track
-const {data} = await axios.get(trackdata.trackUrl, {responseType: 'arraybuffer'});
+const {data} = await axios.get(trackData.trackUrl, {responseType: 'arraybuffer'});
 
 // Decrypt track if needed
 const outFile = trackData.isEncrypted ? api.decryptDownload(data, track.SNG_ID) : data;
