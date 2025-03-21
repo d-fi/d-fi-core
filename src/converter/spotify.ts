@@ -1,6 +1,8 @@
 import axios from 'axios';
 import SpotifyWebApi from 'spotify-web-api-node';
 import PQueue from 'p-queue';
+import {TOTP} from 'otpauth';
+import {base32} from '@scure/base';
 import {isrc2deezer, upc2deezer} from './deezer';
 import type {playlistInfo, trackType} from '../types';
 
@@ -35,18 +37,59 @@ const queue = new PQueue({concurrency: 25});
 /**
  * Export core spotify module
  */
-export const spotifyApi = new SpotifyWebApi();
+export let spotifyApi = new SpotifyWebApi();
+
+/**
+ * Generate Spotify auth TOTP
+ */
+const generateTotp = async (): Promise<string> => {
+  const secretSauce = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  const secretCipherBytes = [12, 56, 76, 33, 88, 44, 88, 33, 78, 78, 11, 66, 22, 22, 55, 69, 54].map(
+    (e, t) => e ^ ((t % 33) + 9),
+  );
+
+  const secretBytes = new TextEncoder().encode(secretCipherBytes.join(''));
+
+  const secret = base32.encode(secretBytes);
+
+  const response = await axios.get('https://open.spotify.com/server-time');
+  const serverTimeSeconds = response.data.serverTime;
+
+  const totp = new TOTP({
+    algorithm: 'SHA1',
+    digits: 6,
+    period: 30,
+    secret: secret,
+  });
+
+  const otp = totp.generate(serverTimeSeconds);
+
+  return otp;
+};
 
 /**
  * Set spotify tokens anonymously. This is required to bypass api limits.
  * @returns {tokensType}
  */
 export const setSpotifyAnonymousToken = async () => {
-  const {data} = await axios.get<tokensType>(
-    'https://open.spotify.com/get_access_token?reason=transport&productType=embed',
-  );
-  spotifyApi.setAccessToken(data.accessToken);
-  return data;
+  const timestamp = Math.floor(Date.now() / 1000);
+  const totp = await generateTotp();
+
+  for (let i = 0; i <= 10; i++) {
+    const {data} = await axios.get<tokensType>(
+      `https://open.spotify.com/get_access_token?reason=transport&productType=web_player&totp=${totp}&totpVer=5&ts=${timestamp}`,
+    );
+
+    if (data.accessToken.includes('_') || data.accessToken.includes('-')) {
+      spotifyApi = new SpotifyWebApi({
+        clientId: data.clientId,
+      });
+
+      spotifyApi.setAccessToken(data.accessToken);
+      return data;
+    }
+  }
+  throw new Error('Unable to find a valid Spotify access token');
 };
 
 /**
