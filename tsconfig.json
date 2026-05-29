@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "module": "commonjs",
+    "rootDir": "src",
+    "module": "node16",
     "target": "es2021",
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "strict": true,
     "declaration": true,
     "esModuleInterop": true,
