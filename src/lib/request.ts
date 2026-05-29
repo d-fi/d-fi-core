@@ -1,5 +1,5 @@
 import axios, {type AxiosResponse} from 'axios';
-import {delayRange} from './util';
+import {delay} from './util';
 
 let user_arl = '';
 
@@ -65,7 +65,7 @@ instance.interceptors.response.use(async (response: AxiosResponse<any>) => {
       await initDeezerApi(user_arl);
       return await instance(response.config);
     } else if (response.data.error.code === 4) {
-      await delayRange(1000, 1500);
+      await delay([1000, 1500]);
       return await instance(response.config);
     } else if (response.data.error.GATEWAY_ERROR || (response.data.error.VALID_TOKEN_REQUIRED && token_retry < 15)) {
       await getApiToken();
