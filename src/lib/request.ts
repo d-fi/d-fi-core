@@ -1,8 +1,7 @@
 import axios, {type AxiosResponse} from 'axios';
 import delay from 'delay';
 
-let user_arl =
-  'c973964816688562722418b5200c1515dffaad15a42643ebf87cc72824a54612ec51c2ad42d566743f9e424c774e98ccae7737770acff59251328e6cd598c7bcac38ca269adf78bfb88ec5bbad6cd800db3c0b88b2af645bb22b99e71de26416';
+let user_arl = '';
 
 const instance = axios.create({
   baseURL: 'https://api.deezer.com/1.0',
@@ -60,6 +59,9 @@ let token_retry = 0;
 instance.interceptors.response.use(async (response: AxiosResponse<any>) => {
   if (response.data.error && Object.keys(response.data.error).length > 0) {
     if (response.data.error.NEED_API_AUTH_REQUIRED) {
+      if (!user_arl) {
+        return response;
+      }
       await initDeezerApi(user_arl);
       return await instance(response.config);
     } else if (response.data.error.code === 4) {
