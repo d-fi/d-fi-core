@@ -59,7 +59,12 @@ test('ConcurrencyQueue propagates task errors', async () => {
   const queue = new ConcurrencyQueue({concurrency: 1});
   const err = new Error('task failed');
 
-  await expect(queue.add(async () => Promise.reject(err))).rejects.toThrow('task failed');
+  try {
+    await queue.add(async () => Promise.reject(err));
+    expect.unreachable();
+  } catch (err: any) {
+    expect(err.message).toBe('task failed');
+  }
 });
 
 test('ConcurrencyQueue continues after a rejected task', async () => {
@@ -67,7 +72,12 @@ test('ConcurrencyQueue continues after a rejected task', async () => {
   const first = queue.add(async () => Promise.reject(new Error('task failed')));
   const second = queue.add(async () => 'next');
 
-  await expect(first).rejects.toThrow('task failed');
+  try {
+    await first;
+    expect.unreachable();
+  } catch (err: any) {
+    expect(err.message).toBe('task failed');
+  }
   expect(await second).toBe('next');
 });
 
