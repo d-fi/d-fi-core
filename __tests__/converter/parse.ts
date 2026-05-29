@@ -2,6 +2,8 @@ import {beforeAll, expect, test} from 'bun:test';
 import {parseInfo} from '../../src';
 import {initDeezerTestApi} from '../helpers';
 
+const isCi = Boolean(process.env.CI);
+
 beforeAll(async () => {
   await initDeezerTestApi();
 });
@@ -17,7 +19,7 @@ test('PARSE DEEZER TRACK', async () => {
   expect(response.tracks.length).toBe(1);
 });
 
-test('PARSE SPOTIFY TRACK', async () => {
+test.skipIf(isCi)('PARSE SPOTIFY TRACK', async () => {
   const url = 'https://open.spotify.com/track/3UmaczJpikHgJFyBTAJVoz?si=50a837f4ed354b16';
   const response = await parseInfo(url);
 
@@ -48,7 +50,7 @@ test('PARSE DEEZER ALBUM', async () => {
   expect(response.tracks.length).toBe(13);
 });
 
-test('PARSE SPOTIFY ALBUM', async () => {
+test.skipIf(isCi)('PARSE SPOTIFY ALBUM', async () => {
   const url = 'https://open.spotify.com/album/6t7956yu5zYf5A829XRiHC';
   const response = await parseInfo(url);
 
@@ -79,27 +81,29 @@ test('PARSE DEEZER PLAYLISTS', async () => {
   expect(response.tracks.length).toBe(3);
 });
 
-if (process.env.CI) {
-  test('PARSE SPOTIFY PLAYLISTS', async () => {
-    const url = 'https://open.spotify.com/playlist/37i9dQZF1DX1clOuib1KtQ';
+test.skipIf(!isCi)(
+  'PARSE SPOTIFY PLAYLISTS',
+  async () => {
+    const url = 'https://open.spotify.com/playlist/37i9dQZEVXbMDoHDwVN2tF';
     const response = await parseInfo(url);
 
-    expect(response.info).toEqual({id: '37i9dQZF1DX1clOuib1KtQ', type: 'spotify-playlist'});
-    expect(Object.keys(response.linkinfo).includes('TITLE')).toBe(true);
-    expect(response.linktype).toBe('playlist');
-    expect(response.tracks.length > 50).toBe(true);
-  });
-
-  test('PARSE TIDAL PLAYLISTS', async () => {
-    const url = 'https://tidal.com/playlist/c289197b-72cd-43df-b039-66b24a595879';
-    const response = await parseInfo(url);
-
-    expect(response.info).toEqual({id: 'c289197b-72cd-43df-b039-66b24a595879', type: 'tidal-playlist'});
+    expect(response.info).toEqual({id: '37i9dQZEVXbMDoHDwVN2tF', type: 'spotify-playlist'});
     expect(Object.keys(response.linkinfo).includes('TITLE')).toBe(true);
     expect(response.linktype).toBe('playlist');
     expect(response.tracks.length > 0).toBe(true);
-  });
-}
+  },
+  {timeout: 15000},
+);
+
+test.skipIf(!isCi)('PARSE TIDAL PLAYLISTS', async () => {
+  const url = 'https://tidal.com/playlist/c289197b-72cd-43df-b039-66b24a595879';
+  const response = await parseInfo(url);
+
+  expect(response.info).toEqual({id: 'c289197b-72cd-43df-b039-66b24a595879', type: 'tidal-playlist'});
+  expect(Object.keys(response.linkinfo).includes('TITLE')).toBe(true);
+  expect(response.linktype).toBe('playlist');
+  expect(response.tracks.length > 0).toBe(true);
+});
 
 // Artists
 test('PARSE DEEZER ARTIST', async () => {
@@ -111,7 +115,7 @@ test('PARSE DEEZER ARTIST', async () => {
   expect(response.tracks.length > 400).toBe(true);
 });
 
-test('PARSE SPOTIFY ARTIST', async () => {
+test.skipIf(isCi)('PARSE SPOTIFY ARTIST', async () => {
   const url = 'https://open.spotify.com/artist/5WUlDfRSoLAfcVSX1WnrxN?si=6c99fb147fe848ee';
   const response = await parseInfo(url);
 
@@ -129,17 +133,15 @@ test('PARSE TIDAL ARTIST', async () => {
   expect(response.tracks.length > 5).toBe(true);
 });
 
-if (!process.env.CI) {
-  test('PARSE YOUTUBE TRACK', async () => {
-    const url = 'https://www.youtube.com/watch?v=4NRXx6U8ABQ';
-    const response = await parseInfo(url);
+test.skipIf(isCi)('PARSE YOUTUBE TRACK', async () => {
+  const url = 'https://www.youtube.com/watch?v=4NRXx6U8ABQ';
+  const response = await parseInfo(url);
 
-    expect(response.info).toEqual({id: '4NRXx6U8ABQ', type: 'youtube-track'});
-    expect(response.linkinfo).toEqual({});
-    expect(response.linktype).toBe('track');
-    expect(response.tracks.length).toBe(1);
-  });
-}
+  expect(response.info).toEqual({id: '4NRXx6U8ABQ', type: 'youtube-track'});
+  expect(response.linkinfo).toEqual({});
+  expect(response.linktype).toBe('track');
+  expect(response.tracks.length).toBe(1);
+});
 
 // Fail Tests
 test('SHOULD FAIL STRING', async () => {

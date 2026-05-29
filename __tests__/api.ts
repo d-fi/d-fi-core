@@ -11,6 +11,7 @@ const SNG_ID = '3135556';
 
 // Discovery by Daft Punk
 const ALB_ID = '302127';
+const isCi = Boolean(process.env.CI);
 
 beforeAll(async () => {
   await initDeezerTestApi();
@@ -143,85 +144,83 @@ test('SEARCH TRACK, ALBUM & ARTIST', async () => {
   expect(response.ARTIST.count > 0).toBeTruthy();
 });
 
-if (process.env.CI) {
-  test('DOWNLOAD TRACK128 & ADD METADATA', async () => {
-    const track = await api.getTrackInfo(SNG_ID);
-    const trackData = await getTrackDownloadUrl(track, 1);
-    if (!trackData) throw new Error('Selected track+quality are unavailable');
-    const {data} = await axios.get<Buffer>(trackData.trackUrl, {responseType: 'arraybuffer'});
+test.skipIf(!isCi)('DOWNLOAD TRACK128 & ADD METADATA', async () => {
+  const track = await api.getTrackInfo(SNG_ID);
+  const trackData = await getTrackDownloadUrl(track, 1);
+  if (!trackData) throw new Error('Selected track+quality are unavailable');
+  const {data} = await axios.get<Buffer>(trackData.trackUrl, {responseType: 'arraybuffer'});
 
-    expect(data).toBeTruthy();
-    expect(Buffer.isBuffer(data)).toBe(true);
-    expect(data.length).toBe(3596119);
+  expect(data).toBeTruthy();
+  expect(Buffer.isBuffer(data)).toBe(true);
+  expect(data.length).toBe(3596119);
 
-    const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
-    expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
-    expect(decryptedTrack.length).toBe(3596119);
+  const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
+  expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
+  expect(decryptedTrack.length).toBe(3596119);
 
-    const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
-    expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
-    expect(trackWithMetadata.length).toBe(3629133);
-  });
+  const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
+  expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
+  expect(trackWithMetadata.length).toBe(3629133);
+});
 
-  // test('TRACK128 WITHOUT ALBUM INFO', async () => {
-  //   const track = await api.getTrackInfo('912254892');
-  //   const trackData = await getTrackDownloadUrl(track, 1);
-  //   if (!trackData) throw new Error("Selected track+quality are unavailable");
-  //   const {data} = await axios.get(trackData.trackUrl, {responseType: 'arraybuffer'});
+// test('TRACK128 WITHOUT ALBUM INFO', async () => {
+//   const track = await api.getTrackInfo('912254892');
+//   const trackData = await getTrackDownloadUrl(track, 1);
+//   if (!trackData) throw new Error("Selected track+quality are unavailable");
+//   const {data} = await axios.get(trackData.trackUrl, {responseType: 'arraybuffer'});
 
-  //   expect(data).toBeTruthy();
-  //   expect(Buffer.isBuffer(data)).toBe(true);
-  //   expect(data.length).toBe(3262170);
+//   expect(data).toBeTruthy();
+//   expect(Buffer.isBuffer(data)).toBe(true);
+//   expect(data.length).toBe(3262170);
 
-  //   const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
-  //   expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
-  //   expect(decryptedTrack.length).toBe(3262170);
+//   const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
+//   expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
+//   expect(decryptedTrack.length).toBe(3262170);
 
-  //   if (!process.env.CI) {
-  //     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
-  //     expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
-  //     expect(trackWithMetadata.length === 3326050).toBe(true);
-  //   }
-  // });
+//   if (!isCi) {
+//     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
+//     expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
+//     expect(trackWithMetadata.length === 3326050).toBe(true);
+//   }
+// });
 
-  test('DOWNLOAD TRACK320 & ADD METADATA', async () => {
-    const track = await api.getTrackInfo(SNG_ID);
-    const trackData = await getTrackDownloadUrl(track, 3);
-    if (!trackData) throw new Error('Selected track+quality are unavailable');
-    const {data} = await axios.get<Buffer>(trackData.trackUrl, {responseType: 'arraybuffer'});
+test.skipIf(!isCi)('DOWNLOAD TRACK320 & ADD METADATA', async () => {
+  const track = await api.getTrackInfo(SNG_ID);
+  const trackData = await getTrackDownloadUrl(track, 3);
+  if (!trackData) throw new Error('Selected track+quality are unavailable');
+  const {data} = await axios.get<Buffer>(trackData.trackUrl, {responseType: 'arraybuffer'});
 
-    expect(data).toBeTruthy();
-    expect(Buffer.isBuffer(data)).toBe(true);
-    expect(data.length).toBe(8990301);
+  expect(data).toBeTruthy();
+  expect(Buffer.isBuffer(data)).toBe(true);
+  expect(data.length).toBe(8990301);
 
-    const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
-    expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
-    expect(decryptedTrack.length).toBe(8990301);
+  const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
+  expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
+  expect(decryptedTrack.length).toBe(8990301);
 
-    const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
-    expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
-    expect(trackWithMetadata.length).toBe(9023315);
-  });
+  const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
+  expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
+  expect(trackWithMetadata.length).toBe(9023315);
+});
 
-  test('DOWNLOAD TRACK1411 & ADD METADATA', async () => {
-    const track = await api.getTrackInfo(SNG_ID);
-    const trackData = await getTrackDownloadUrl(track, 9);
-    if (!trackData) throw new Error('Selected track+quality are unavailable');
-    const {data} = await axios.get<Buffer>(trackData.trackUrl, {responseType: 'arraybuffer'});
+test.skipIf(!isCi)('DOWNLOAD TRACK1411 & ADD METADATA', async () => {
+  const track = await api.getTrackInfo(SNG_ID);
+  const trackData = await getTrackDownloadUrl(track, 9);
+  if (!trackData) throw new Error('Selected track+quality are unavailable');
+  const {data} = await axios.get<Buffer>(trackData.trackUrl, {responseType: 'arraybuffer'});
 
-    expect(data).toBeTruthy();
-    expect(Buffer.isBuffer(data)).toBe(true);
-    expect(data.length).toBe(25418289);
+  expect(data).toBeTruthy();
+  expect(Buffer.isBuffer(data)).toBe(true);
+  expect(data.length).toBe(25418289);
 
-    const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
-    expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
-    expect(data.length).toBe(25418289);
+  const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
+  expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
+  expect(data.length).toBe(25418289);
 
-    const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
-    expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
-    expect(trackWithMetadata.length).toBe(25453343);
-  });
-}
+  const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
+  expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
+  expect(trackWithMetadata.length).toBe(25453343);
+});
 
 test('GET SHOW LIST', async () => {
   const show = await api.getShowInfo('338532', 10);

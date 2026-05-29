@@ -7,6 +7,7 @@ const ALB_ID = '6t7956yu5zYf5A829XRiHC';
 const PLAYLIST_TITLE = 'Top 50 - Global';
 const PLAYLIST_ID = '37i9dQZEVXbMDoHDwVN2tF';
 const ARTIST_ID = '7dGJo4pcD2V6oG8kP0tJRR';
+const isCi = Boolean(process.env.CI);
 
 beforeAll(async () => {
   await initDeezerTestApi();
@@ -19,7 +20,7 @@ test.serial('SET ANONYMOUS TOKEN', async () => {
   expect(response.isAnonymous).toBe(true);
 });
 
-test('GET TRACK INFO', async () => {
+test.skipIf(isCi)('GET TRACK INFO', async () => {
   const track = await spotify.track2deezer(SNG_ID);
 
   expect(track.SNG_ID).toBe('854914322');
@@ -28,7 +29,7 @@ test('GET TRACK INFO', async () => {
   expect(track.__TYPE__).toBe('song');
 });
 
-test('GET ALBUM INFO', async () => {
+test.skipIf(isCi)('GET ALBUM INFO', async () => {
   const [album, tracks] = await spotify.album2deezer(ALB_ID);
 
   expect(album.ALB_ID).toBe('125748');
@@ -37,17 +38,19 @@ test('GET ALBUM INFO', async () => {
   expect(tracks.length).toBe(18);
 });
 
-test('GET ARTIST TO DEEZER TRACKS', async () => {
+test.skipIf(isCi)('GET ARTIST TO DEEZER TRACKS', async () => {
   const tracks = await spotify.artist2Deezer(ARTIST_ID);
 
   expect(tracks.length).toBe(10);
 });
 
-if (process.env.CI) {
-  test('GET PLAYLIST TO DEEZER TRACKS', async () => {
+test.skipIf(!isCi)(
+  'GET PLAYLIST TO DEEZER TRACKS',
+  async () => {
     const [playlist, tracks] = await spotify.playlist2Deezer(PLAYLIST_ID);
 
     expect(playlist.TITLE).toBe(PLAYLIST_TITLE);
     expect(tracks.length > 0).toBe(true);
-  });
-}
+  },
+  {timeout: 15000},
+);

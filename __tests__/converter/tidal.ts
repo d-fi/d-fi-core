@@ -18,6 +18,7 @@ const ART_ID = '10665';
 // Playlists
 const PLAYLIST_TITLE = 'Top 50 - Global';
 const PLAYLIST_ID = 'c289197b-72cd-43df-b039-66b24a595879';
+const isCi = Boolean(process.env.CI);
 
 beforeAll(async () => {
   await initDeezerTestApi();
@@ -92,17 +93,15 @@ test('GET PLAYLIST TRACKS', async () => {
   expect(response.items.length > 0).toBe(true);
 });
 
-if (process.env.CI) {
-  test('GET ARTISTS TO DEEZER TRACKS', async () => {
-    const response = await tidal.artist2Deezer(ART_ID);
+test.skipIf(!isCi)('GET ARTISTS TO DEEZER TRACKS', async () => {
+  const response = await tidal.artist2Deezer(ART_ID);
 
-    expect(response.length > 250).toBe(true);
-  });
+  expect(response.length > 250).toBe(true);
+});
 
-  test('GET PLAYLIST TO DEEZER TRACKS', async () => {
-    const response = await tidal.getPlaylistTracks(PLAYLIST_ID);
+test.skipIf(!isCi)('GET PLAYLIST TO DEEZER TRACKS', async () => {
+  const response = await tidal.getPlaylistTracks(PLAYLIST_ID);
 
-    expect(response.items.length).toBe(response.totalNumberOfItems);
-    expect(response.totalNumberOfItems > 0).toBe(true);
-  });
-}
+  expect(response.items.length).toBe(response.totalNumberOfItems);
+  expect(response.totalNumberOfItems > 0).toBe(true);
+});
