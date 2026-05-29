@@ -1,5 +1,5 @@
 import axios from 'axios';
-import PQueue from 'p-queue';
+import {ConcurrencyQueue} from '../lib/concurrency-queue';
 import {isrc2deezer, upc2deezer} from './deezer';
 import type {playlistInfo, trackType} from '../types';
 
@@ -89,7 +89,7 @@ const client = axios.create({
   params: {limit: 500, countryCode: 'US'},
 });
 
-const queue = new PQueue({concurrency: 25});
+const queue = new ConcurrencyQueue({concurrency: 25});
 
 /**
  * Get a track by its id

@@ -1,4 +1,4 @@
-import PQueue from 'p-queue';
+import {ConcurrencyQueue} from '../lib/concurrency-queue';
 import {searchMusic} from '../api';
 import {isrc2deezer} from './deezer';
 import type {trackType} from '../types';
@@ -29,7 +29,7 @@ type spotifyMatchScore = {
   conflict: boolean;
 };
 
-const searchQueue = new PQueue({concurrency: 25});
+const searchQueue = new ConcurrencyQueue({concurrency: 25});
 
 export const spotifyTrackToDeezerTrack = async (track: spotifyTrack): Promise<trackType> => {
   const isrc = track.external_ids?.isrc;

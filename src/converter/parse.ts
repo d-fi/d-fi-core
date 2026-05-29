@@ -12,7 +12,7 @@ import axios from 'axios';
 import * as spotify from './spotify';
 import * as tidal from './tidal';
 import * as youtube from './youtube';
-import PQueue from 'p-queue';
+import {ConcurrencyQueue} from '../lib/concurrency-queue';
 import type {albumType, artistInfoType, playlistInfo, trackType} from '../types';
 
 type linkType = 'track' | 'album' | 'artist' | 'playlist';
@@ -36,7 +36,7 @@ export type urlPartsType = {
     | 'youtube-track';
 };
 
-const queue = new PQueue({concurrency: 10});
+const queue = new ConcurrencyQueue({concurrency: 10});
 
 export const getUrlParts = async (url: string, setToken = false): Promise<urlPartsType> => {
   if (url.startsWith('spotify:')) {

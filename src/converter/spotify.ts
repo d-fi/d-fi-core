@@ -1,4 +1,4 @@
-import PQueue from 'p-queue';
+import {ConcurrencyQueue} from '../lib/concurrency-queue';
 import {upc2deezer} from './deezer';
 import {getSpotifyAnonymousTokenInfo, spotifyGet, spotifyGetPages} from './spotify-api';
 import {spotifyTrackToDeezerTrack} from './spotify-match';
@@ -16,7 +16,7 @@ import type {
 /**
  * Limit process concurrency
  */
-const queue = new PQueue({concurrency: 25});
+const queue = new ConcurrencyQueue({concurrency: 25});
 
 /**
  * Set spotify token anonymously from an embed page. This replaces Spotify's old
