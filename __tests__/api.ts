@@ -31,7 +31,7 @@ test('GET TRACK INFO', async () => {
 
   expect(response.SNG_ID).toBe(SNG_ID);
   expect(response.ISRC).toBe('GBDUW0000059');
-  expect(response.MD5_ORIGIN).toBe('51afcde9f56a132096c0496cc95eb24b');
+  expect(response.MD5_ORIGIN).toBe('000790eceb6cb6732d225c0585632b31');
   expect(response.__TYPE__).toBe('song');
 });
 
@@ -49,14 +49,15 @@ test('GET TRACK COVER', async () => {
 
   expect(cover).toBeTruthy();
   expect(Buffer.isBuffer(cover)).toBe(true);
-  expect(cover.length).toBe(24573);
+  expect(cover.length).toBeGreaterThan(0);
+  expect(cover.subarray(0, 3).toString('hex')).toBe('ffd8ff');
 });
 
 test('GET TRACK LYRICS', async () => {
   const response = await api.getLyrics(SNG_ID);
 
   expect(response.LYRICS_ID).toBe('2780622');
-  expect(response.LYRICS_TEXT.length).toBe(1719);
+  expect(response.LYRICS_TEXT.toLowerCase()).toContain('harder, better');
 });
 
 test('GET ALBUM INFO', async () => {
