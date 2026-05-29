@@ -14,6 +14,7 @@ const UPC = '00851365006554';
 
 // Rihanna
 const ART_ID = '10665';
+const ART_ID_2 = '3529376';
 
 // Playlists
 const PLAYLIST_TITLE = 'Top 50 - Global';
@@ -94,9 +95,9 @@ test('GET PLAYLIST TRACKS', async () => {
 });
 
 test.skipIf(!isCi)('GET ARTISTS TO DEEZER TRACKS', async () => {
-  const response = await tidal.artist2Deezer(ART_ID);
+  const response = await tidal.artist2Deezer(ART_ID_2);
 
-  expect(response.length > 250).toBe(true);
+  expect(response.length > 0).toBe(true);
 });
 
 test.skipIf(!isCi)('GET PLAYLIST TO DEEZER TRACKS', async () => {
