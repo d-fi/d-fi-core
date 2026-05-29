@@ -1,31 +1,17 @@
-import axios from 'axios';
 import SpotifyWebApi from 'spotify-web-api-node';
 import PQueue from 'p-queue';
-import {isrc2deezer, upc2deezer} from './deezer';
-import type {playlistInfo, trackType} from '../types';
-
-// type spotifyTypes = 'track' | 'episode' | 'album' | 'artist' | 'playlist' | 'show';
-
-type tokensType = {
-  clientId: string;
-  accessToken: string;
-  accessTokenExpirationTimestampMs: number;
-  isAnonymous: true;
-};
-
-/**
- * Parse offset number
- * @param {String} next next page url
- * @returns {Number}
- */
-const getOffset = (next: null | string): number => {
-  if (next) {
-    const o = next.split('&').find((p) => p.includes('offset='));
-    return o ? Number(o.split('=')[1]) : 0;
-  }
-
-  return 0;
-};
+import {upc2deezer} from './deezer';
+import {getSpotifyAnonymousToken, spotifyGet, spotifyGetPages} from './spotify-api';
+import {spotifyTrackToDeezerTrack} from './spotify-match';
+import type {albumType, playlistInfo, trackType} from '../types';
+import type {
+  spotifyAlbumRef,
+  spotifyPlaylist,
+  spotifyPlaylistTrackItem,
+  spotifyResourceType,
+  spotifyTrack,
+  tokensType,
+} from './spotify-types';
 
 /**
  * Limit process concurrency
@@ -33,20 +19,21 @@ const getOffset = (next: null | string): number => {
 const queue = new PQueue({concurrency: 25});
 
 /**
- * Export core spotify module
+ * Export core spotify module for compatibility with older consumers.
  */
 export const spotifyApi = new SpotifyWebApi();
 
 /**
- * Set spotify tokens anonymously. This is required to bypass api limits.
- * @returns {tokensType}
+ * Set spotify token anonymously from an embed page. This replaces Spotify's old
+ * get_access_token endpoint, which is now commonly blocked.
  */
-export const setSpotifyAnonymousToken = async () => {
-  const {data} = await axios.get<tokensType>(
-    'https://open.spotify.com/get_access_token?reason=transport&productType=embed',
-  );
-  spotifyApi.setAccessToken(data.accessToken);
-  return data;
+export const setSpotifyAnonymousToken = async (
+  resourceType: spotifyResourceType = 'track',
+  id = '7FIWs0pqAYbP91WWM0vlTQ',
+): Promise<tokensType> => {
+  const token = await getSpotifyAnonymousToken(resourceType, id);
+  spotifyApi.setAccessToken(token.accessToken);
+  return token;
 };
 
 /**
@@ -54,64 +41,72 @@ export const setSpotifyAnonymousToken = async () => {
  * @param {String} id Spotify track id
  * @returns {trackType}
  */
-export const track2deezer = async (id: string) => {
-  const {body} = await spotifyApi.getTrack(id);
-  return await isrc2deezer(body.name, body.external_ids.isrc);
+export const track2deezer = async (id: string): Promise<trackType> => {
+  const track = await spotifyGet<spotifyTrack>('tracks/' + id);
+  return await spotifyTrackToDeezerTrack(track);
 };
 
 /**
  * Convert spotify albums to deezer
- * @param {String} id Spotify track id
+ * @param {String} id Spotify album id
  */
-export const album2deezer = async (id: string) => {
-  const {body} = await spotifyApi.getAlbum(id);
-  return await upc2deezer(body.name, body.external_ids.upc);
+export const album2deezer = async (id: string): Promise<[albumType, trackType[]]> => {
+  const album = await spotifyGet<spotifyAlbumRef>('albums/' + id);
+  return await upc2deezer(album.name, album.external_ids?.upc);
 };
 
 /**
  * Convert playlist to deezer
- * @param {String} id Spotify track id
+ * @param {String} id Spotify playlist id
  */
 export const playlist2Deezer = async (
   id: string,
-  onError?: (item: SpotifyApi.PlaylistTrackObject, index: number, err: Error) => void,
+  onError?: (item: spotifyTrack, index: number, err: Error) => void,
 ): Promise<[playlistInfo, trackType[]]> => {
-  const {body} = await spotifyApi.getPlaylist(id);
-  const tracks: trackType[] = [];
-  let items = body.tracks.items;
-  let offset = getOffset(body.tracks.next);
+  const [body, page] = await Promise.all([
+    spotifyGet<spotifyPlaylist>(
+      'playlists/' + id + '?fields=id,name,description,public,collaborative,images,owner,tracks.total,type,uri',
+    ),
+    getSpotifyPlaylistTracks(id),
+  ]);
 
-  while (offset !== 0) {
-    const {body} = await spotifyApi.getPlaylistTracks(id, {limit: 100, offset: offset ? offset : 0});
-    offset = getOffset(body.next);
-    items = [...items, ...body.items];
-  }
+  const tracks = await spotifyPlaylistTracksToDeezer(page.items, onError);
+  return [spotifyPlaylistInfoToDeezer(body, page.total), tracks];
+};
 
-  await queue.addAll(
-    items.map((item, index) => {
-      return async () => {
-        try {
-          if (item.track) {
-            const track = await isrc2deezer(item.track.name, item.track.external_ids.isrc);
-            track.TRACK_POSITION = index + 1;
-            tracks.push(track);
-          }
-        } catch (err: any) {
-          if (onError) {
-            onError(item, index, err);
-          }
-        }
-      };
-    }),
-  );
+/**
+ * Convert artist songs to deezer. Maximum of 10 tracks.
+ * @param {String} id Spotify artist id
+ */
+export const artist2Deezer = async (
+  id: string,
+  onError?: (item: spotifyTrack, index: number, err: Error) => void,
+): Promise<trackType[]> => {
+  const {tracks: items} = await spotifyGet<{tracks: spotifyTrack[]}>('artists/' + id + '/top-tracks?market=US');
+  return await spotifyTracksToDeezer(items, onError);
+};
 
+const getSpotifyPlaylistTracks = async (id: string): Promise<{items: spotifyTrack[]; total: number}> => {
+  const path =
+    'playlists/' +
+    id +
+    '/tracks?limit=100&fields=total,next,items(track(id,name,duration_ms,explicit,external_ids,artists(id,name,type),album(id,name,album_type,release_date,images,artists(id,name,type)),type,uri))';
+  const page = await spotifyGetPages<spotifyPlaylistTrackItem>(path);
+  return {
+    total: page.total,
+    items: page.items.flatMap((item) => (item.track && item.track.id ? [item.track] : [])),
+  };
+};
+
+const spotifyPlaylistInfoToDeezer = (body: spotifyPlaylist, total: number): playlistInfo => {
   const dateCreated = new Date().toISOString();
-  const playlistInfoData: playlistInfo = {
+  return {
     PLAYLIST_ID: body.id,
-    PARENT_USERNAME: body.owner.id,
+    DESCRIPTION: body.description,
+    PARENT_USERNAME: body.owner.display_name || body.owner.id,
     PARENT_USER_ID: body.owner.id,
     PICTURE_TYPE: 'cover',
-    PLAYLIST_PICTURE: body.images[0].url,
+    PLAYLIST_PICTURE: body.images[0]?.url || '',
     TITLE: body.name,
     TYPE: '0',
     STATUS: '0',
@@ -119,36 +114,26 @@ export const playlist2Deezer = async (
     DATE_ADD: dateCreated,
     DATE_MOD: dateCreated,
     DATE_CREATE: dateCreated,
-    NB_SONG: body.tracks.total,
+    NB_SONG: total,
     NB_FAN: 0,
     CHECKSUM: body.id,
     HAS_ARTIST_LINKED: false,
     IS_SPONSORED: false,
     IS_EDITO: false,
     __TYPE__: 'playlist',
-  };
-
-  return [playlistInfoData, tracks];
+  } as playlistInfo;
 };
 
-/**
- * Convert artist songs to deezer. Maxium of 10 tracks.
- * @param {String} id Spotify track id
- */
-export const artist2Deezer = async (
-  id: string,
-  onError?: (item: SpotifyApi.TrackObjectFull, index: number, err: Error) => void,
+const spotifyTracksToDeezer = async (
+  items: spotifyTrack[],
+  onError?: (item: spotifyTrack, index: number, err: Error) => void,
 ): Promise<trackType[]> => {
-  // Artist tracks are limited to 10 items
-  const {body} = await spotifyApi.getArtistTopTracks(id, 'GB');
-  const tracks: trackType[] = [];
-
+  const tracks: Array<trackType | undefined> = [];
   await queue.addAll(
-    body.tracks.map((item, index) => {
+    items.map((item, index) => {
       return async () => {
         try {
-          const track = await isrc2deezer(item.name, item.external_ids.isrc);
-          tracks.push(track);
+          tracks[index] = await spotifyTrackToDeezerTrack(item);
         } catch (err: any) {
           if (onError) {
             onError(item, index, err);
@@ -157,6 +142,16 @@ export const artist2Deezer = async (
       };
     }),
   );
+  return tracks.filter((track): track is trackType => Boolean(track));
+};
 
+const spotifyPlaylistTracksToDeezer = async (
+  items: spotifyTrack[],
+  onError?: (item: spotifyTrack, index: number, err: Error) => void,
+): Promise<trackType[]> => {
+  const tracks = await spotifyTracksToDeezer(items, onError);
+  tracks.forEach((track, index) => {
+    track.TRACK_POSITION = index + 1;
+  });
   return tracks;
 };
