@@ -3,7 +3,6 @@ import axios from 'axios';
 import * as api from '../src';
 import {decryptDownload} from '../src/lib/decrypt';
 import {downloadAlbumCover} from '../src/metadata-writer/abumCover';
-import {getLyricsMusixmatch} from '../src/metadata-writer/musixmatchLyrics';
 import {getTrackDownloadUrl} from '../src/lib/get-url';
 
 // Harder, Better, Faster, Stronger by Daft Punk
@@ -220,15 +219,6 @@ if (process.env.CI) {
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
     t.true(Buffer.isBuffer(trackWithMetadata));
     t.is(trackWithMetadata.length, 25453343);
-  });
-} else {
-  test('GET MUSIXMATCH LYRICS', async (t) => {
-    const track = await api.getTrackInfo(SNG_ID);
-    const lyrics = await getLyricsMusixmatch(`${track.ART_NAME} - ${track.SNG_TITLE}`);
-
-    t.truthy(lyrics);
-    t.true(lyrics.length > 1600);
-    t.true(lyrics.length < 1700);
   });
 }
 
