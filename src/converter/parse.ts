@@ -51,7 +51,7 @@ export const getUrlParts = async (url: string, setToken = false): Promise<urlPar
 
   switch (site[0]) {
     case 'deezer':
-      if (url.includes('page.link')) {
+      if (isDeezerShortLink(url)) {
         const {request} = await axios.head(url);
         url = request.res.responseUrl;
       }
@@ -82,6 +82,10 @@ export const getUrlParts = async (url: string, setToken = false): Promise<urlPar
     default:
       throw new Error('Unable to parse URL: ' + url);
   }
+};
+
+const isDeezerShortLink = (url: string): boolean => {
+  return url.includes('page.link') || url.includes('link.deezer.com');
 };
 
 /**

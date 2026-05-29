@@ -1,5 +1,7 @@
-import {beforeAll, expect, test} from 'bun:test';
+import {beforeAll, expect, mock, test} from 'bun:test';
+import axios from 'axios';
 import {parseInfo} from '../../src';
+import {getUrlParts} from '../../src/converter/parse';
 import {initDeezerTestApi} from '../helpers';
 
 const isCi = Boolean(process.env.CI);
@@ -17,6 +19,24 @@ test('PARSE DEEZER TRACK', async () => {
   expect(response.linkinfo).toEqual({});
   expect(response.linktype).toBe('track');
   expect(response.tracks.length).toBe(1);
+});
+
+test.serial('PARSE DEEZER SHORT LINK', async () => {
+  const originalHead = axios.head;
+  axios.head = mock(async () => ({
+    request: {
+      res: {
+        responseUrl: 'https://www.deezer.com/us/track/3135556',
+      },
+    },
+  })) as any;
+
+  try {
+    const response = await getUrlParts('https://link.deezer.com/s/33mHLHCANAsGjpIDT5fji');
+    expect(response).toEqual({id: '3135556', type: 'track'});
+  } finally {
+    axios.head = originalHead;
+  }
 });
 
 test.skipIf(isCi)('PARSE SPOTIFY TRACK', async () => {
