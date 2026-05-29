@@ -1,5 +1,5 @@
 import axios from 'axios';
-import delay from 'delay';
+import {delay} from '../lib/util';
 import type {spotifyList, spotifyResourceType, tokensType} from './spotify-types';
 
 export const spotifyAPIBaseURL = 'https://api.spotify.com/v1/';
