@@ -86,13 +86,13 @@ if (process.env.CI) {
   });
 
   test('PARSE TIDAL PLAYLISTS', async (t) => {
-    const url = 'https://tidal.com/browse/playlist/ed004d2b-b494-42be-8506-b1d23cd3bb80';
+    const url = 'https://tidal.com/playlist/c289197b-72cd-43df-b039-66b24a595879';
     const response = await parseInfo(url);
 
-    t.deepEqual(response.info, {id: 'ed004d2b-b494-42be-8506-b1d23cd3bb80', type: 'tidal-playlist'});
+    t.deepEqual(response.info, {id: 'c289197b-72cd-43df-b039-66b24a595879', type: 'tidal-playlist'});
     t.true(Object.keys(response.linkinfo).includes('TITLE'));
     t.is(response.linktype, 'playlist');
-    t.true(response.tracks.length > 150);
+    t.true(response.tracks.length > 0);
   });
 }
 

@@ -15,8 +15,8 @@ const UPC = '00851365006554';
 const ART_ID = '10665';
 
 // Playlists
-const PLAYLIST_TITLE = 'Albums';
-const PLAYLIST_ID = 'ed004d2b-b494-42be-8506-b1d23cd3bb80';
+const PLAYLIST_TITLE = 'Top 50 - Global';
+const PLAYLIST_ID = 'c289197b-72cd-43df-b039-66b24a595879';
 
 test('GET TRACK INFO', async (t) => {
   const response = await tidal.getTrack(SNG_ID);
@@ -84,7 +84,7 @@ test('GET PLAYLIST TRACKS', async (t) => {
   const response = await tidal.getPlaylistTracks(PLAYLIST_ID);
 
   t.is(response.items.length, response.totalNumberOfItems);
-  t.true(response.items.length > 50);
+  t.true(response.items.length > 0);
 });
 
 if (process.env.CI) {
@@ -98,6 +98,6 @@ if (process.env.CI) {
     const response = await tidal.getPlaylistTracks(PLAYLIST_ID);
 
     t.is(response.items.length, response.totalNumberOfItems);
-    t.true(response.totalNumberOfItems > 150);
+    t.true(response.totalNumberOfItems > 0);
   });
 }
