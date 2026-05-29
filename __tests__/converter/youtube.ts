@@ -31,7 +31,7 @@ if (!process.env.CI) {
     }
   });
 } else {
-  test('SKIP YOUTUBE ON CI', async () => {
-    t.pass();
+  test.skip('SKIP YOUTUBE ON CI', () => {
+    expect.unreachable();
   });
 }

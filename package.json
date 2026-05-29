@@ -7,13 +7,13 @@
     "lint": "eslint .",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "prepare": "eslint . && tsc",
-    "prebuild": "eslint .",
+    "prepare": "bun run lint && tsc",
+    "prebuild": "bun run lint",
     "build": "tsc",
     "test": "bun test ./__tests__/api.ts ./__tests__/converter/*.ts"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18.18.0"
   },
   "repository": "https://github.com/d-fi/d-fi-core",
   "author": "Sayem Chowdhury",
@@ -29,7 +29,8 @@
     "@types/node": "^25.9.1",
     "@typescript-eslint/eslint-plugin": "^8.60.0",
     "@typescript-eslint/parser": "^8.60.0",
-    "eslint": "^8.57.1",
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "3.8.3",
     "typescript": "6.0.3"
