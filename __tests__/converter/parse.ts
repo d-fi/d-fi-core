@@ -121,10 +121,10 @@ test('PARSE SPOTIFY ARTIST', async () => {
 });
 
 test('PARSE TIDAL ARTIST', async () => {
-  const url = 'https://tidal.com/browse/artist/10665';
+  const url = 'https://tidal.com/browse/artist/3529376';
   const response = await parseInfo(url);
 
-  expect(response.info).toEqual({id: '10665', type: 'tidal-artist'});
+  expect(response.info).toEqual({id: '3529376', type: 'tidal-artist'});
   expect(response.linktype).toBe('artist');
   expect(response.tracks.length > 5).toBe(true);
 });
