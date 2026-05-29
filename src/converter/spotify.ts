@@ -1,8 +1,8 @@
-import SpotifyWebApi from 'spotify-web-api-node';
 import PQueue from 'p-queue';
 import {upc2deezer} from './deezer';
-import {getSpotifyAnonymousToken, spotifyGet, spotifyGetPages} from './spotify-api';
+import {getSpotifyAnonymousTokenInfo, spotifyGet, spotifyGetPages} from './spotify-api';
 import {spotifyTrackToDeezerTrack} from './spotify-match';
+import {getSpotifyPartnerPlaylist} from './spotify-partner';
 import type {albumType, playlistInfo, trackType} from '../types';
 import type {
   spotifyAlbumRef,
@@ -19,11 +19,6 @@ import type {
 const queue = new PQueue({concurrency: 25});
 
 /**
- * Export core spotify module for compatibility with older consumers.
- */
-export const spotifyApi = new SpotifyWebApi();
-
-/**
  * Set spotify token anonymously from an embed page. This replaces Spotify's old
  * get_access_token endpoint, which is now commonly blocked.
  */
@@ -31,9 +26,7 @@ export const setSpotifyAnonymousToken = async (
   resourceType: spotifyResourceType = 'track',
   id = '7FIWs0pqAYbP91WWM0vlTQ',
 ): Promise<tokensType> => {
-  const token = await getSpotifyAnonymousToken(resourceType, id);
-  spotifyApi.setAccessToken(token.accessToken);
-  return token;
+  return await getSpotifyAnonymousTokenInfo(resourceType, id);
 };
 
 /**
@@ -63,12 +56,38 @@ export const playlist2Deezer = async (
   id: string,
   onError?: (item: spotifyTrack, index: number, err: Error) => void,
 ): Promise<[playlistInfo, trackType[]]> => {
-  const [body, page] = await Promise.all([
-    spotifyGet<spotifyPlaylist>(
-      'playlists/' + id + '?fields=id,name,description,public,collaborative,images,owner,tracks.total,type,uri',
-    ),
-    getSpotifyPlaylistTracks(id),
-  ]);
+  let body: spotifyPlaylist | undefined;
+  let page: {items: spotifyTrack[]; total: number} | undefined;
+  let playlistErr: Error | undefined;
+  let trackErr: Error | undefined;
+
+  try {
+    body = await getSpotifyPlaylist(id);
+  } catch (err: any) {
+    playlistErr = err;
+  }
+
+  if (body) {
+    try {
+      page = await getSpotifyPlaylistTracks(id);
+    } catch (err: any) {
+      trackErr = err;
+    }
+  }
+
+  if (!body || !page) {
+    try {
+      const partner = await getSpotifyPartnerPlaylist(id);
+      const tracks = await spotifyPlaylistTracksToDeezer(partner.tracks, onError);
+      return [spotifyPlaylistInfoToDeezer(partner.playlist, partner.playlist.tracks.total), tracks];
+    } catch (partnerErr: any) {
+      const primaryErr = playlistErr || trackErr;
+      if (primaryErr) {
+        throw new Error(primaryErr.message + '; spotify partner fallback failed: ' + partnerErr.message);
+      }
+      throw partnerErr;
+    }
+  }
 
   const tracks = await spotifyPlaylistTracksToDeezer(page.items, onError);
   return [spotifyPlaylistInfoToDeezer(body, page.total), tracks];
@@ -96,6 +115,12 @@ const getSpotifyPlaylistTracks = async (id: string): Promise<{items: spotifyTrac
     total: page.total,
     items: page.items.flatMap((item) => (item.track && item.track.id ? [item.track] : [])),
   };
+};
+
+const getSpotifyPlaylist = async (id: string): Promise<spotifyPlaylist> => {
+  return await spotifyGet<spotifyPlaylist>(
+    'playlists/' + id + '?fields=id,name,description,public,collaborative,images,owner,tracks.total,type,uri',
+  );
 };
 
 const spotifyPlaylistInfoToDeezer = (body: spotifyPlaylist, total: number): playlistInfo => {

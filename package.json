@@ -22,12 +22,10 @@
     "delay": "^5.0.0",
     "node-html-parser": "^7.1.0",
     "p-queue": "^6.6.2",
-    "spotify-uri": "^4.1.0",
-    "spotify-web-api-node": "^5.0.2"
+    "spotify-uri": "^4.1.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
-    "@types/spotify-web-api-node": "^5.0.3",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
     "ava": "^4.1.0",

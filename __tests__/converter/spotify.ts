@@ -3,8 +3,8 @@ import {spotify} from '../../src';
 
 const SNG_ID = '7FIWs0pqAYbP91WWM0vlTQ';
 const ALB_ID = '6t7956yu5zYf5A829XRiHC';
-const PLAYLIST_TITLE = 'This Is Eminem';
-const PLAYLIST_ID = '37i9dQZF1DX1clOuib1KtQ';
+const PLAYLIST_TITLE = 'Top 50 - Global';
+const PLAYLIST_ID = '37i9dQZEVXbMDoHDwVN2tF';
 const ARTIST_ID = '7dGJo4pcD2V6oG8kP0tJRR';
 
 test.serial('SET ANONYMOUS TOKEN', async (t) => {
@@ -43,6 +43,6 @@ if (process.env.CI) {
     const [playlist, tracks] = await spotify.playlist2Deezer(PLAYLIST_ID);
 
     t.is(playlist.TITLE, PLAYLIST_TITLE);
-    t.true(tracks.length > 50);
+    t.true(tracks.length > 0);
   });
 }

@@ -2,13 +2,18 @@ import axios from 'axios';
 import delay from 'delay';
 import type {spotifyList, spotifyResourceType, tokensType} from './spotify-types';
 
-const spotifyAPIBaseURL = 'https://api.spotify.com/v1/';
-const spotifyBrowserUserAgent =
+export const spotifyAPIBaseURL = 'https://api.spotify.com/v1/';
+export const spotifyBrowserUserAgent =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36';
 
 let spotifyToken = '';
 let spotifyTokenKey = '';
 let spotifyTokenExpiry = 0;
+
+const fallbackTokenResource: {resourceType: spotifyResourceType; id: string} = {
+  resourceType: 'track',
+  id: '7FIWs0pqAYbP91WWM0vlTQ',
+};
 
 export const spotifyGet = async <T>(path: string): Promise<T> => {
   let lastErr: unknown;
@@ -54,17 +59,45 @@ export const spotifyGetPages = async <T>(path: string): Promise<{items: T[]; tot
   return {items, total};
 };
 
-export const getSpotifyAnonymousToken = async (resourceType: spotifyResourceType, id: string): Promise<tokensType> => {
+export const getSpotifyAnonymousToken = async (resourceType: spotifyResourceType, id: string): Promise<string> => {
   const key = resourceType + ':' + id;
   if (spotifyToken && spotifyTokenKey === key && Date.now() < spotifyTokenExpiry - 60_000) {
-    return {
-      clientId: '',
-      accessToken: spotifyToken,
-      accessTokenExpirationTimestampMs: spotifyTokenExpiry,
-      isAnonymous: true,
-    };
+    return spotifyToken;
   }
 
+  let token = await fetchSpotifyEmbedToken(resourceType, id);
+  if (!token.accessToken && (resourceType !== fallbackTokenResource.resourceType || id !== fallbackTokenResource.id)) {
+    token = await fetchSpotifyEmbedToken(fallbackTokenResource.resourceType, fallbackTokenResource.id);
+  }
+
+  if (!token.accessToken) {
+    throw new Error('spotify access token not found');
+  }
+
+  spotifyToken = token.accessToken;
+  spotifyTokenKey = key;
+  spotifyTokenExpiry = token.expiry;
+
+  return spotifyToken;
+};
+
+export const getSpotifyAnonymousTokenInfo = async (
+  resourceType: spotifyResourceType,
+  id: string,
+): Promise<tokensType> => {
+  const accessToken = await getSpotifyAnonymousToken(resourceType, id);
+  return {
+    clientId: '',
+    accessToken,
+    accessTokenExpirationTimestampMs: spotifyTokenExpiry,
+    isAnonymous: true,
+  };
+};
+
+const fetchSpotifyEmbedToken = async (
+  resourceType: spotifyResourceType,
+  id: string,
+): Promise<{accessToken: string; expiry: number}> => {
   const embedURL = `https://open.spotify.com/embed/${encodeURIComponent(resourceType)}/${encodeURIComponent(
     id,
   )}?utm_source=oembed`;
@@ -79,20 +112,17 @@ export const getSpotifyAnonymousToken = async (resourceType: spotifyResourceType
 
   const tokenMatch = data.match(/"accessToken":"([^"]+)"/);
   if (!tokenMatch) {
-    throw new Error('spotify access token not found');
+    return {
+      accessToken: '',
+      expiry: 0,
+    };
   }
   const expiryMatch = data.match(/"accessTokenExpirationTimestampMs":(\d+)/);
   const expiry = expiryMatch ? Number(expiryMatch[1]) : Date.now() + 30 * 60 * 1000;
 
-  spotifyToken = tokenMatch[1];
-  spotifyTokenKey = key;
-  spotifyTokenExpiry = expiry;
-
   return {
-    clientId: '',
-    accessToken: spotifyToken,
-    accessTokenExpirationTimestampMs: spotifyTokenExpiry,
-    isAnonymous: true,
+    accessToken: tokenMatch[1],
+    expiry,
   };
 };
 
@@ -103,7 +133,7 @@ const spotifyGetOnce = async <T>(path: string): Promise<T> => {
     timeout: 15000,
     headers: {
       Accept: 'application/json',
-      Authorization: 'Bearer ' + token.accessToken,
+      Authorization: 'Bearer ' + token,
       'User-Agent': spotifyBrowserUserAgent,
     },
   });
