@@ -2,10 +2,18 @@
 
 d-fi is a streaming music downloader. This core module is designed to be used on future version of d-fi.
 
+## Requirements
+
+Node.js `>=18.18.0`.
+
 ## Installation
 
 ```bash
-$ bun add d-fi-core
+npm install d-fi-core
+# or
+bun add d-fi-core
+# or
+pnpm add d-fi-core
 ```
 
 ## Usage
@@ -37,7 +45,7 @@ const track = await api.getTrackInfo(song_id);
 const trackData = await api.getTrackDownloadUrl(track, 1);
 
 // Download track
-const {data} = await axios.get(trackdata.trackUrl, {responseType: 'arraybuffer'});
+const {data} = await axios.get(trackData.trackUrl, {responseType: 'arraybuffer'});
 
 // Decrypt track if needed
 const outFile = trackData.isEncrypted ? api.decryptDownload(data, track.SNG_ID) : data;
@@ -50,6 +58,11 @@ fs.writeFileSync(track.SNG_TITLE + '.mp3', trackWithMetadata);
 ```
 
 ### [Read FAQ](https://github.com/d-fi/d-fi-core/blob/master/docs/faq.md)
+
+### Supported links
+
+`parseInfo(url)` supports Deezer, Spotify, Tidal, YouTube, and Deezer shared links from `link.deezer.com`.
+See [parse docs](https://github.com/d-fi/d-fi-core/blob/master/docs/parse.md) for usage.
 
 ## Methods
 
@@ -137,7 +150,7 @@ All method returns `Object` or throws `Error`. Make sure to catch error on your 
 
 | Parameters | Required |        Type |                        Description |
 | ---------- | :------: | ----------: | ---------------------------------: |
-| `track`    |   Yes    |    `string` |                       track object |
+| `track`    |   Yes    |    `object` |                       track object |
 | `quality`  |   Yes    | `1, 3 or 9` | 1 = 128kbps, 3 = 320kbps, 9 = flac |
 
 ### `.decryptDownload(data, song_id);`
@@ -152,7 +165,7 @@ All method returns `Object` or throws `Error`. Make sure to catch error on your 
 | Parameters  | Required |      Type |            Description |
 | ----------- | :------: | --------: | ---------------------: |
 | `data`      |   Yes    |  `buffer` | downloaded song buffer |
-| `track`     |   Yes    |  `string` |           track object |
+| `track`     |   Yes    |  `object` |           track object |
 | `coverSize` |    No    | `56-1800` |         cover art size |
 
 ### Donations

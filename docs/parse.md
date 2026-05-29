@@ -1,10 +1,17 @@
 ## Parse
 
-Parse Deezer, Spotify and Tidal URLs to downloadable data.
+Parse Deezer, Spotify, Tidal, and YouTube URLs to downloadable Deezer data.
+
+Supported links include:
+
+- Deezer track, album, artist, playlist, audiobook, and shared `link.deezer.com` URLs
+- Spotify track, album, artist, playlist URLs, and `spotify:` URIs
+- Tidal track, album, artist, and playlist URLs
+- YouTube watch and short URLs
 
 ## Usage
 
-`parseInfo` parses information as json data. Throws `Error`, make sure to catch error on your side.
+`parseInfo` parses information as JSON data. It throws `Error`; make sure to catch errors on your side.
 
 ```ts
 import {parseInfo} from 'd-fi-core';

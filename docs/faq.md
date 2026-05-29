@@ -2,6 +2,8 @@
 
 - How to get arl cookie?
 
+> You must use your own Deezer ARL cookie for authenticated Deezer endpoints.
+
 > Open Google Chrome in PC
 >
 > - Go to www.deezer.com and log into your account

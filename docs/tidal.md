@@ -1,10 +1,11 @@
 ## Tidal to Deezer
 
-`d-fi-core` exports Tidal api to easily convert tracks, albums, artists and playlist to deezer via matching ISRC and UPC code.
+`d-fi-core` exports Tidal helpers to convert tracks, albums, artists, and playlists to Deezer via matching ISRC and UPC
+code.
 
 ## Usage
 
-Here's a simple example. All method returns `Object` or throws `Error`. Make sure to catch error on your side.
+Here's a simple example. All methods return `Object` or throw `Error`. Make sure to catch errors on your side.
 
 ```ts
 import {tidal} from 'd-fi-core';
@@ -23,7 +24,7 @@ const [playlist, tracks] = await tidal.playlist2Deezer(playlist_id);
 console.log(playlist);
 console.log(tracks);
 
-// Convert artist tracks to deezer (limited to 10 tracks)
+// Convert artist top tracks to deezer
 const tracks = await tidal.artist2Deezer(artist_id);
 console.log(tracks);
 ```
