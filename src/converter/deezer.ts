@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {type AxiosResponse} from 'axios';
 import delay from 'delay';
 import {getAlbumInfo, getAlbumTracks, getTrackInfo} from '../api';
 import type {albumType, trackType} from '../types';
@@ -36,7 +36,7 @@ export const upc2deezer = async (name: string, upc?: string): Promise<[albumType
 };
 
 // Retry on rate limit error
-instance.interceptors.response.use(async (response: Record<string, any>) => {
+instance.interceptors.response.use(async (response: AxiosResponse<any>) => {
   if (response.data.error && Object.keys(response.data.error).length > 0) {
     if (response.data.error.code === 4) {
       await delay.range(1000, 1500);

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {type AxiosResponse} from 'axios';
 import delay from 'delay';
 
 let user_arl =
@@ -57,7 +57,7 @@ export const initDeezerApi = async (arl: string): Promise<string> => {
 let token_retry = 0;
 
 // Add a request interceptor
-instance.interceptors.response.use(async (response: Record<string, any>) => {
+instance.interceptors.response.use(async (response: AxiosResponse<any>) => {
   if (response.data.error && Object.keys(response.data.error).length > 0) {
     if (response.data.error.NEED_API_AUTH_REQUIRED) {
       await initDeezerApi(user_arl);

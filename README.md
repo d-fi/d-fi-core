@@ -5,7 +5,7 @@ d-fi is a streaming music downloader. This core module is designed to be used on
 ## Installation
 
 ```bash
-$ yarn add d-fi-core
+$ bun add d-fi-core
 ```
 
 ## Usage

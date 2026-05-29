@@ -7,7 +7,7 @@ import {
   getPlaylistTracks,
   getTrackInfo,
 } from '../';
-import spotifyUri from 'spotify-uri';
+import {parse as parseSpotifyUri} from 'spotify-uri';
 import axios from 'axios';
 import * as spotify from './spotify';
 import * as tidal from './tidal';
@@ -59,7 +59,7 @@ export const getUrlParts = async (url: string, setToken = false): Promise<urlPar
       return {type: deezerUrlParts[1] as any, id: deezerUrlParts[2]};
 
     case 'spotify':
-      const spotifyUrlParts = spotifyUri.parse(url);
+      const spotifyUrlParts = parseSpotifyUri(url);
       if (setToken) {
         await spotify.setSpotifyAnonymousToken();
       }

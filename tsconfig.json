@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "dist",
     "module": "commonjs",
-    "target": "es2019", // Node.js 12
+    "target": "es2021",
     "moduleResolution": "node",
     "strict": true,
     "declaration": true,
