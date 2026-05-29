@@ -4,6 +4,7 @@ import * as api from '../src';
 import {decryptDownload} from '../src/lib/decrypt';
 import {downloadAlbumCover} from '../src/metadata-writer/abumCover';
 import {getTrackDownloadUrl} from '../src/lib/get-url';
+import {initDeezerTestApi} from './helpers';
 
 // Harder, Better, Faster, Stronger by Daft Punk
 const SNG_ID = '3135556';
@@ -11,12 +12,11 @@ const SNG_ID = '3135556';
 // Discovery by Daft Punk
 const ALB_ID = '302127';
 
-test.serial('GET USER INFO', async (t) => {
-  // Init api with hifi account
-  if (process.env.HIFI_ARL) {
-    await api.initDeezerApi(process.env.HIFI_ARL as string);
-  }
+test.before(async () => {
+  await initDeezerTestApi();
+});
 
+test.serial('GET USER INFO', async (t) => {
   // Now get user info
   const response = await api.getUser();
 

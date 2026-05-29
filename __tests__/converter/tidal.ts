@@ -1,5 +1,6 @@
 import test from 'ava';
 import {tidal} from '../../src';
+import {initDeezerTestApi} from '../helpers';
 
 // Work (feat. Drake)
 const SNG_TITLE = 'Work';
@@ -17,6 +18,10 @@ const ART_ID = '10665';
 // Playlists
 const PLAYLIST_TITLE = 'Top 50 - Global';
 const PLAYLIST_ID = 'c289197b-72cd-43df-b039-66b24a595879';
+
+test.before(async () => {
+  await initDeezerTestApi();
+});
 
 test('GET TRACK INFO', async (t) => {
   const response = await tidal.getTrack(SNG_ID);

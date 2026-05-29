@@ -1,5 +1,10 @@
 import test from 'ava';
 import {parseInfo} from '../../src';
+import {initDeezerTestApi} from '../helpers';
+
+test.before(async () => {
+  await initDeezerTestApi();
+});
 
 // Tracks
 test('PARSE DEEZER TRACK', async (t) => {

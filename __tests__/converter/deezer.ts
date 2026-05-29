@@ -1,5 +1,6 @@
 import test from 'ava';
 import * as api from '../../src';
+import {initDeezerTestApi} from '../helpers';
 
 // Harder, Better, Faster, Stronger by Daft Punk
 const SNG_TITLE = 'Harder, Better, Faster, Stronger';
@@ -8,6 +9,10 @@ const ISRC = 'GBDUW0000059';
 // Discovery by Daft Punk
 const ALB_TITLE = 'Discovery';
 const UPC = '724384960650';
+
+test.before(async () => {
+  await initDeezerTestApi();
+});
 
 test.serial('GET TRACK ISRC', async (t) => {
   const response = await api.isrc2deezer(SNG_TITLE, ISRC);

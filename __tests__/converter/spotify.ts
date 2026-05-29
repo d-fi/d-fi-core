@@ -1,11 +1,16 @@
 import test from 'ava';
 import {spotify} from '../../src';
+import {initDeezerTestApi} from '../helpers';
 
 const SNG_ID = '7FIWs0pqAYbP91WWM0vlTQ';
 const ALB_ID = '6t7956yu5zYf5A829XRiHC';
 const PLAYLIST_TITLE = 'Top 50 - Global';
 const PLAYLIST_ID = '37i9dQZEVXbMDoHDwVN2tF';
 const ARTIST_ID = '7dGJo4pcD2V6oG8kP0tJRR';
+
+test.before(async () => {
+  await initDeezerTestApi();
+});
 
 test.serial('SET ANONYMOUS TOKEN', async (t) => {
   const response = await spotify.setSpotifyAnonymousToken();
