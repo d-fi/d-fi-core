@@ -238,7 +238,10 @@ test('GET CHANNEL LIST', async () => {
 
 test('GET PLAYLIST CHANNEL', async () => {
   const channel = await api.getPlaylistChannel('channels/dance');
-  expect(Object.keys(channel)).toEqual(['version', 'page_id', 'ga', 'title', 'persistent', 'sections', 'expire']);
+  expect(channel.version).toBeTruthy();
+  expect(channel.page_id).toBeTruthy();
   expect(channel.title).toBeTruthy();
   expect(Array.isArray(channel.sections)).toBe(true);
+  expect(channel.sections.length).toBeGreaterThan(0);
+  expect(channel.sections[0].items.length).toBeGreaterThan(0);
 });
