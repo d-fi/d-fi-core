@@ -1,4 +1,4 @@
-import test from 'ava';
+import {beforeAll, expect, test} from 'bun:test';
 import axios from 'axios';
 import * as api from '../src';
 import {decryptDownload} from '../src/lib/decrypt';
@@ -12,232 +12,232 @@ const SNG_ID = '3135556';
 // Discovery by Daft Punk
 const ALB_ID = '302127';
 
-test.before(async () => {
+beforeAll(async () => {
   await initDeezerTestApi();
 });
 
-test.serial('GET USER INFO', async (t) => {
+test.serial('GET USER INFO', async () => {
   // Now get user info
   const response = await api.getUser();
 
-  t.truthy(response.BLOG_NAME);
-  t.truthy(response.EMAIL);
-  t.truthy(response.USER_ID);
-  t.is(response.__TYPE__, 'user');
+  expect(response.BLOG_NAME).toBeTruthy();
+  expect(response.EMAIL).toBeTruthy();
+  expect(response.USER_ID).toBeTruthy();
+  expect(response.__TYPE__).toBe('user');
 });
 
-test('GET TRACK INFO', async (t) => {
+test('GET TRACK INFO', async () => {
   const response = await api.getTrackInfo(SNG_ID);
 
-  t.is(response.SNG_ID, SNG_ID);
-  t.is(response.ISRC, 'GBDUW0000059');
-  t.is(response.MD5_ORIGIN, '51afcde9f56a132096c0496cc95eb24b');
-  t.is(response.__TYPE__, 'song');
+  expect(response.SNG_ID).toBe(SNG_ID);
+  expect(response.ISRC).toBe('GBDUW0000059');
+  expect(response.MD5_ORIGIN).toBe('51afcde9f56a132096c0496cc95eb24b');
+  expect(response.__TYPE__).toBe('song');
 });
 
-test('GET TRACK INFO - PUBLIC API', async (t) => {
+test('GET TRACK INFO - PUBLIC API', async () => {
   const response = await api.getTrackInfoPublicApi(SNG_ID);
 
-  t.is(response.id, Number(SNG_ID));
-  t.is(response.isrc, 'GBDUW0000059');
-  t.is(response.type, 'track');
+  expect(response.id).toBe(Number(SNG_ID));
+  expect(response.isrc).toBe('GBDUW0000059');
+  expect(response.type).toBe('track');
 });
 
-test('GET TRACK COVER', async (t) => {
+test('GET TRACK COVER', async () => {
   const track = await api.getTrackInfo(SNG_ID);
   const cover = (await downloadAlbumCover(track, 500)) as Buffer;
 
-  t.truthy(cover);
-  t.true(Buffer.isBuffer(cover));
-  t.is(cover.length, 24573);
+  expect(cover).toBeTruthy();
+  expect(Buffer.isBuffer(cover)).toBe(true);
+  expect(cover.length).toBe(24573);
 });
 
-test('GET TRACK LYRICS', async (t) => {
+test('GET TRACK LYRICS', async () => {
   const response = await api.getLyrics(SNG_ID);
 
-  t.is(response.LYRICS_ID, '2780622');
-  t.is(response.LYRICS_TEXT.length, 1719);
+  expect(response.LYRICS_ID).toBe('2780622');
+  expect(response.LYRICS_TEXT.length).toBe(1719);
 });
 
-test('GET ALBUM INFO', async (t) => {
+test('GET ALBUM INFO', async () => {
   const response = await api.getAlbumInfo(ALB_ID);
 
-  t.is(response.ALB_ID, ALB_ID);
-  t.is(response.UPC, '724384960650');
-  t.is(response.__TYPE__, 'album');
+  expect(response.ALB_ID).toBe(ALB_ID);
+  expect(response.UPC).toBe('724384960650');
+  expect(response.__TYPE__).toBe('album');
 });
 
-test('GET ALBUM INFO - PUBLIC API', async (t) => {
+test('GET ALBUM INFO - PUBLIC API', async () => {
   const response = await api.getAlbumInfoPublicApi(ALB_ID);
 
-  t.is(response.id, Number(ALB_ID));
-  t.is(response.upc, '724384960650');
-  t.is(response.type, 'album');
+  expect(response.id).toBe(Number(ALB_ID));
+  expect(response.upc).toBe('724384960650');
+  expect(response.type).toBe('album');
 });
 
-test('GET ALBUM TRACKS', async (t) => {
+test('GET ALBUM TRACKS', async () => {
   const response = await api.getAlbumTracks(ALB_ID);
 
-  t.is(response.count, 14);
-  t.is(response.data.length, response.count);
+  expect(response.count).toBe(14);
+  expect(response.data.length).toBe(response.count);
 });
 
-test('GET PLAYLIST INFO', async (t) => {
+test('GET PLAYLIST INFO', async () => {
   const PLAYLIST_ID = '4523119944';
   const response = await api.getPlaylistInfo(PLAYLIST_ID);
 
-  t.truthy(response.NB_SONG > 0);
-  t.is(response.PARENT_USERNAME, 'sayem314');
-  t.is(response.__TYPE__, 'playlist');
+  expect(response.NB_SONG > 0).toBeTruthy();
+  expect(response.PARENT_USERNAME).toBe('sayem314');
+  expect(response.__TYPE__).toBe('playlist');
 });
 
-test('GET PLAYLIST TRACKS', async (t) => {
+test('GET PLAYLIST TRACKS', async () => {
   const PLAYLIST_ID = '4523119944';
   const response = await api.getPlaylistTracks(PLAYLIST_ID);
 
-  t.truthy(response.count > 0);
-  t.is(response.data.length, response.count);
+  expect(response.count > 0).toBeTruthy();
+  expect(response.data.length).toBe(response.count);
 });
 
-test('GET ARTIST INFO', async (t) => {
+test('GET ARTIST INFO', async () => {
   const ART_ID = '13';
   const response = await api.getArtistInfo(ART_ID);
 
-  t.is(response.ART_NAME, 'Eminem');
-  t.is(response.__TYPE__, 'artist');
+  expect(response.ART_NAME).toBe('Eminem');
+  expect(response.__TYPE__).toBe('artist');
 });
 
-test('GET ARTIST TRACKS', async (t) => {
+test('GET ARTIST TRACKS', async () => {
   const ART_ID = '13';
   const response = await api.getDiscography(ART_ID, 10);
 
-  t.is(response.count, 10);
-  t.is(response.data.length, response.count);
+  expect(response.count).toBe(10);
+  expect(response.data.length).toBe(response.count);
 });
 
-test('GET USER PROFILE', async (t) => {
+test('GET USER PROFILE', async () => {
   const USER_ID = '2064440442';
   const response = await api.getProfile(USER_ID);
 
-  t.is(response.USER.BLOG_NAME, 'sayem314');
-  t.is(response.USER.__TYPE__, 'user');
+  expect(response.USER.BLOG_NAME).toBe('sayem314');
+  expect(response.USER.__TYPE__).toBe('user');
 });
 
-test('GET TRACK ALTERNATIVE', async (t) => {
+test('GET TRACK ALTERNATIVE', async () => {
   const ARTIST = 'Eminem';
   const TRACK = 'The Real Slim Shady';
   const response = await api.searchAlternative(ARTIST, TRACK);
 
-  t.is(response.QUERY, `artist:'${ARTIST.toLowerCase()}' track:'${TRACK.toLowerCase()}'`);
-  t.is(response.TRACK.data.length, response.TRACK.count);
+  expect(response.QUERY).toBe(`artist:'${ARTIST.toLowerCase()}' track:'${TRACK.toLowerCase()}'`);
+  expect(response.TRACK.data.length).toBe(response.TRACK.count);
 });
 
-test('SEARCH TRACK, ALBUM & ARTIST', async (t) => {
+test('SEARCH TRACK, ALBUM & ARTIST', async () => {
   const QUERY = 'Eminem';
   const response = await api.searchMusic(QUERY, ['TRACK', 'ALBUM', 'ARTIST'], 1);
 
-  t.is(response.QUERY, QUERY);
-  t.truthy(response.TRACK.count > 0);
-  t.truthy(response.ALBUM.count > 0);
-  t.truthy(response.ARTIST.count > 0);
+  expect(response.QUERY).toBe(QUERY);
+  expect(response.TRACK.count > 0).toBeTruthy();
+  expect(response.ALBUM.count > 0).toBeTruthy();
+  expect(response.ARTIST.count > 0).toBeTruthy();
 });
 
 if (process.env.CI) {
-  test('DOWNLOAD TRACK128 & ADD METADATA', async (t) => {
+  test('DOWNLOAD TRACK128 & ADD METADATA', async () => {
     const track = await api.getTrackInfo(SNG_ID);
     const trackData = await getTrackDownloadUrl(track, 1);
     if (!trackData) throw new Error('Selected track+quality are unavailable');
     const {data} = await axios.get<Buffer>(trackData.trackUrl, {responseType: 'arraybuffer'});
 
-    t.truthy(data);
-    t.true(Buffer.isBuffer(data));
-    t.is(data.length, 3596119);
+    expect(data).toBeTruthy();
+    expect(Buffer.isBuffer(data)).toBe(true);
+    expect(data.length).toBe(3596119);
 
     const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
-    t.true(Buffer.isBuffer(decryptedTrack));
-    t.is(decryptedTrack.length, 3596119);
+    expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
+    expect(decryptedTrack.length).toBe(3596119);
 
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
-    t.true(Buffer.isBuffer(trackWithMetadata));
-    t.is(trackWithMetadata.length, 3629133);
+    expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
+    expect(trackWithMetadata.length).toBe(3629133);
   });
 
-  // test('TRACK128 WITHOUT ALBUM INFO', async (t) => {
+  // test('TRACK128 WITHOUT ALBUM INFO', async () => {
   //   const track = await api.getTrackInfo('912254892');
   //   const trackData = await getTrackDownloadUrl(track, 1);
   //   if (!trackData) throw new Error("Selected track+quality are unavailable");
   //   const {data} = await axios.get(trackData.trackUrl, {responseType: 'arraybuffer'});
 
-  //   t.truthy(data);
-  //   t.true(Buffer.isBuffer(data));
-  //   t.is(data.length, 3262170);
+  //   expect(data).toBeTruthy();
+  //   expect(Buffer.isBuffer(data)).toBe(true);
+  //   expect(data.length).toBe(3262170);
 
   //   const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
-  //   t.true(Buffer.isBuffer(decryptedTrack));
-  //   t.is(decryptedTrack.length, 3262170);
+  //   expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
+  //   expect(decryptedTrack.length).toBe(3262170);
 
   //   if (!process.env.CI) {
   //     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
-  //     t.true(Buffer.isBuffer(trackWithMetadata));
-  //     t.true(trackWithMetadata.length === 3326050);
+  //     expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
+  //     expect(trackWithMetadata.length === 3326050).toBe(true);
   //   }
   // });
 
-  test('DOWNLOAD TRACK320 & ADD METADATA', async (t) => {
+  test('DOWNLOAD TRACK320 & ADD METADATA', async () => {
     const track = await api.getTrackInfo(SNG_ID);
     const trackData = await getTrackDownloadUrl(track, 3);
     if (!trackData) throw new Error('Selected track+quality are unavailable');
     const {data} = await axios.get<Buffer>(trackData.trackUrl, {responseType: 'arraybuffer'});
 
-    t.truthy(data);
-    t.true(Buffer.isBuffer(data));
-    t.is(data.length, 8990301);
+    expect(data).toBeTruthy();
+    expect(Buffer.isBuffer(data)).toBe(true);
+    expect(data.length).toBe(8990301);
 
     const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
-    t.true(Buffer.isBuffer(decryptedTrack));
-    t.is(decryptedTrack.length, 8990301);
+    expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
+    expect(decryptedTrack.length).toBe(8990301);
 
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
-    t.true(Buffer.isBuffer(trackWithMetadata));
-    t.is(trackWithMetadata.length, 9023315);
+    expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
+    expect(trackWithMetadata.length).toBe(9023315);
   });
 
-  test('DOWNLOAD TRACK1411 & ADD METADATA', async (t) => {
+  test('DOWNLOAD TRACK1411 & ADD METADATA', async () => {
     const track = await api.getTrackInfo(SNG_ID);
     const trackData = await getTrackDownloadUrl(track, 9);
     if (!trackData) throw new Error('Selected track+quality are unavailable');
     const {data} = await axios.get<Buffer>(trackData.trackUrl, {responseType: 'arraybuffer'});
 
-    t.truthy(data);
-    t.true(Buffer.isBuffer(data));
-    t.is(data.length, 25418289);
+    expect(data).toBeTruthy();
+    expect(Buffer.isBuffer(data)).toBe(true);
+    expect(data.length).toBe(25418289);
 
     const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
-    t.true(Buffer.isBuffer(decryptedTrack));
-    t.is(data.length, 25418289);
+    expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
+    expect(data.length).toBe(25418289);
 
     const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
-    t.true(Buffer.isBuffer(trackWithMetadata));
-    t.is(trackWithMetadata.length, 25453343);
+    expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
+    expect(trackWithMetadata.length).toBe(25453343);
   });
 }
 
-test('GET SHOW LIST', async (t) => {
+test('GET SHOW LIST', async () => {
   const show = await api.getShowInfo('338532', 10);
-  t.is(show.DATA.LABEL_ID, '201952');
-  t.is(show.EPISODES.count, 10);
-  t.true(Array.isArray(show.EPISODES.data));
+  expect(show.DATA.LABEL_ID).toBe('201952');
+  expect(show.EPISODES.count).toBe(10);
+  expect(Array.isArray(show.EPISODES.data)).toBe(true);
 });
 
-test('GET CHANNEL LIST', async (t) => {
+test('GET CHANNEL LIST', async () => {
   const channel = await api.getChannelList();
-  t.is(channel.count, channel.data.length);
-  t.true(Array.isArray(channel.data));
+  expect(channel.count).toBe(channel.data.length);
+  expect(Array.isArray(channel.data)).toBe(true);
 });
 
-test('GET PLAYLIST CHANNEL', async (t) => {
+test('GET PLAYLIST CHANNEL', async () => {
   const channel = await api.getPlaylistChannel('channels/dance');
-  t.deepEqual(Object.keys(channel), ['version', 'page_id', 'ga', 'title', 'persistent', 'sections', 'expire']);
-  t.truthy(channel.title);
-  t.true(Array.isArray(channel.sections));
+  expect(Object.keys(channel)).toEqual(['version', 'page_id', 'ga', 'title', 'persistent', 'sections', 'expire']);
+  expect(channel.title).toBeTruthy();
+  expect(Array.isArray(channel.sections)).toBe(true);
 });

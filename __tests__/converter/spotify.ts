@@ -1,4 +1,4 @@
-import test from 'ava';
+import {beforeAll, expect, test} from 'bun:test';
 import {spotify} from '../../src';
 import {initDeezerTestApi} from '../helpers';
 
@@ -8,46 +8,46 @@ const PLAYLIST_TITLE = 'Top 50 - Global';
 const PLAYLIST_ID = '37i9dQZEVXbMDoHDwVN2tF';
 const ARTIST_ID = '7dGJo4pcD2V6oG8kP0tJRR';
 
-test.before(async () => {
+beforeAll(async () => {
   await initDeezerTestApi();
 });
 
-test.serial('SET ANONYMOUS TOKEN', async (t) => {
+test.serial('SET ANONYMOUS TOKEN', async () => {
   const response = await spotify.setSpotifyAnonymousToken();
 
-  t.truthy(response.accessToken, 'string');
-  t.true(response.isAnonymous);
+  expect(response.accessToken).toBeTruthy();
+  expect(response.isAnonymous).toBe(true);
 });
 
-test('GET TRACK INFO', async (t) => {
+test('GET TRACK INFO', async () => {
   const track = await spotify.track2deezer(SNG_ID);
 
-  t.is(track.SNG_ID, '854914322');
-  t.is(track.ISRC, 'USUM72000788');
-  t.is(track.MD5_ORIGIN, '6f542518431052368a1c48d14c10d37e');
-  t.is(track.__TYPE__, 'song');
+  expect(track.SNG_ID).toBe('854914322');
+  expect(track.ISRC).toBe('USUM72000788');
+  expect(track.MD5_ORIGIN).toBe('6f542518431052368a1c48d14c10d37e');
+  expect(track.__TYPE__).toBe('song');
 });
 
-test('GET ALBUM INFO', async (t) => {
+test('GET ALBUM INFO', async () => {
   const [album, tracks] = await spotify.album2deezer(ALB_ID);
 
-  t.is(album.ALB_ID, '125748');
-  t.is(album.UPC, '606949062927');
-  t.is(album.__TYPE__, 'album');
-  t.is(tracks.length, 18);
+  expect(album.ALB_ID).toBe('125748');
+  expect(album.UPC).toBe('606949062927');
+  expect(album.__TYPE__).toBe('album');
+  expect(tracks.length).toBe(18);
 });
 
-test('GET ARTIST TO DEEZER TRACKS', async (t) => {
+test('GET ARTIST TO DEEZER TRACKS', async () => {
   const tracks = await spotify.artist2Deezer(ARTIST_ID);
 
-  t.is(tracks.length, 10);
+  expect(tracks.length).toBe(10);
 });
 
 if (process.env.CI) {
-  test('GET PLAYLIST TO DEEZER TRACKS', async (t) => {
+  test('GET PLAYLIST TO DEEZER TRACKS', async () => {
     const [playlist, tracks] = await spotify.playlist2Deezer(PLAYLIST_ID);
 
-    t.is(playlist.TITLE, PLAYLIST_TITLE);
-    t.true(tracks.length > 0);
+    expect(playlist.TITLE).toBe(PLAYLIST_TITLE);
+    expect(tracks.length > 0).toBe(true);
   });
 }

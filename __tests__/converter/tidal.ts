@@ -1,4 +1,4 @@
-import test from 'ava';
+import {beforeAll, expect, test} from 'bun:test';
 import {tidal} from '../../src';
 import {initDeezerTestApi} from '../helpers';
 
@@ -19,90 +19,90 @@ const ART_ID = '10665';
 const PLAYLIST_TITLE = 'Top 50 - Global';
 const PLAYLIST_ID = 'c289197b-72cd-43df-b039-66b24a595879';
 
-test.before(async () => {
+beforeAll(async () => {
   await initDeezerTestApi();
 });
 
-test('GET TRACK INFO', async (t) => {
+test('GET TRACK INFO', async () => {
   const response = await tidal.getTrack(SNG_ID);
 
-  t.is(response.id.toString(), SNG_ID);
-  t.is(response.title, SNG_TITLE);
-  t.is(response.isrc, ISRC);
+  expect(response.id.toString()).toBe(SNG_ID);
+  expect(response.title).toBe(SNG_TITLE);
+  expect(response.isrc).toBe(ISRC);
 });
 
-test('GET TRACK --> DEEZER', async (t) => {
+test('GET TRACK --> DEEZER', async () => {
   const track = await tidal.track2deezer(SNG_ID);
 
-  t.is(track.SNG_ID, '118190298');
-  t.is(track.ISRC, ISRC);
-  t.is(track.MD5_ORIGIN, '28045ff090360486d41c4a1cc5929a96');
-  t.is(track.__TYPE__, 'song');
+  expect(track.SNG_ID).toBe('118190298');
+  expect(track.ISRC).toBe(ISRC);
+  expect(track.MD5_ORIGIN).toBe('28045ff090360486d41c4a1cc5929a96');
+  expect(track.__TYPE__).toBe('song');
 });
 
-test('GET ALBUM INFO', async (t) => {
+test('GET ALBUM INFO', async () => {
   const response = await tidal.getAlbum(ALB_ID);
 
-  t.is(response.id.toString(), ALB_ID);
-  t.is(response.title, ALB_TITLE);
-  t.is(response.upc, UPC);
+  expect(response.id.toString()).toBe(ALB_ID);
+  expect(response.title).toBe(ALB_TITLE);
+  expect(response.upc).toBe(UPC);
 });
 
-test('GET ALBUM --> DEEZER', async (t) => {
+test('GET ALBUM --> DEEZER', async () => {
   const [album, tracks] = await tidal.album2deezer(ALB_ID);
 
-  t.is(album.ALB_ID, '12279688');
-  t.is(album.UPC, UPC.slice(2));
-  t.is(album.__TYPE__, 'album');
-  t.is(tracks.length, 16);
+  expect(album.ALB_ID).toBe('12279688');
+  expect(album.UPC).toBe(UPC.slice(2));
+  expect(album.__TYPE__).toBe('album');
+  expect(tracks.length).toBe(16);
 });
 
-test('GET ALBUM TRACKS', async (t) => {
+test('GET ALBUM TRACKS', async () => {
   const response = await tidal.getAlbumTracks(ALB_ID);
 
-  t.is(response.items.length, response.totalNumberOfItems);
-  t.is(response.totalNumberOfItems, 16);
+  expect(response.items.length).toBe(response.totalNumberOfItems);
+  expect(response.totalNumberOfItems).toBe(16);
 });
 
-test('GET ARTIST ALBUMS', async (t) => {
+test('GET ARTIST ALBUMS', async () => {
   const response = await tidal.getArtistAlbums(ART_ID);
 
-  t.true(response.totalNumberOfItems >= response.items.length);
-  t.true(response.totalNumberOfItems > 30);
+  expect(response.totalNumberOfItems >= response.items.length).toBe(true);
+  expect(response.totalNumberOfItems > 30).toBe(true);
 });
 
-test('GET ARTIST TOP TRACKS', async (t) => {
+test('GET ARTIST TOP TRACKS', async () => {
   const response = await tidal.getArtistAlbums(ART_ID);
 
-  t.true(response.totalNumberOfItems >= response.items.length);
-  t.true(response.totalNumberOfItems > 30);
+  expect(response.totalNumberOfItems >= response.items.length).toBe(true);
+  expect(response.totalNumberOfItems > 30).toBe(true);
 });
 
-test('GET PLAYLIST INFO', async (t) => {
+test('GET PLAYLIST INFO', async () => {
   const response = await tidal.getPlaylist(PLAYLIST_ID);
 
-  t.is(response.title, PLAYLIST_TITLE);
-  t.is(response.type, 'USER');
+  expect(response.title).toBe(PLAYLIST_TITLE);
+  expect(response.type).toBe('USER');
 });
 
-test('GET PLAYLIST TRACKS', async (t) => {
+test('GET PLAYLIST TRACKS', async () => {
   const response = await tidal.getPlaylistTracks(PLAYLIST_ID);
 
-  t.is(response.items.length, response.totalNumberOfItems);
-  t.true(response.items.length > 0);
+  expect(response.items.length).toBe(response.totalNumberOfItems);
+  expect(response.items.length > 0).toBe(true);
 });
 
 if (process.env.CI) {
-  test('GET ARTISTS TO DEEZER TRACKS', async (t) => {
+  test('GET ARTISTS TO DEEZER TRACKS', async () => {
     const response = await tidal.artist2Deezer(ART_ID);
 
-    t.true(response.length > 250);
+    expect(response.length > 250).toBe(true);
   });
 
-  test('GET PLAYLIST TO DEEZER TRACKS', async (t) => {
+  test('GET PLAYLIST TO DEEZER TRACKS', async () => {
     const response = await tidal.getPlaylistTracks(PLAYLIST_ID);
 
-    t.is(response.items.length, response.totalNumberOfItems);
-    t.true(response.totalNumberOfItems > 0);
+    expect(response.items.length).toBe(response.totalNumberOfItems);
+    expect(response.totalNumberOfItems > 0).toBe(true);
   });
 }

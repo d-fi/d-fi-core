@@ -1,4 +1,4 @@
-import test from 'ava';
+import {beforeAll, expect, test} from 'bun:test';
 import * as api from '../../src';
 import {initDeezerTestApi} from '../helpers';
 
@@ -10,25 +10,25 @@ const ISRC = 'GBDUW0000059';
 const ALB_TITLE = 'Discovery';
 const UPC = '724384960650';
 
-test.before(async () => {
+beforeAll(async () => {
   await initDeezerTestApi();
 });
 
-test.serial('GET TRACK ISRC', async (t) => {
+test.serial('GET TRACK ISRC', async () => {
   const response = await api.isrc2deezer(SNG_TITLE, ISRC);
 
-  t.is(response.SNG_TITLE, SNG_TITLE);
-  t.is(response.ISRC, ISRC);
-  t.is(response.MD5_ORIGIN, '51afcde9f56a132096c0496cc95eb24b');
-  t.is(response.__TYPE__, 'song');
+  expect(response.SNG_TITLE).toBe(SNG_TITLE);
+  expect(response.ISRC).toBe(ISRC);
+  expect(response.MD5_ORIGIN).toBe('51afcde9f56a132096c0496cc95eb24b');
+  expect(response.__TYPE__).toBe('song');
 });
 
-test.serial('GET ALBUM UPC', async (t) => {
+test.serial('GET ALBUM UPC', async () => {
   const [album, tracks] = await api.upc2deezer(ALB_TITLE, UPC);
 
-  t.is(album.ALB_TITLE, ALB_TITLE);
-  t.is(album.UPC, UPC);
-  t.is(album.__TYPE__, 'album');
+  expect(album.ALB_TITLE).toBe(ALB_TITLE);
+  expect(album.UPC).toBe(UPC);
+  expect(album.__TYPE__).toBe('album');
 
-  t.is(Number(album.NUMBER_TRACK), tracks.length);
+  expect(Number(album.NUMBER_TRACK)).toBe(tracks.length);
 });
