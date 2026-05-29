@@ -6,7 +6,7 @@
       "name": "d-fi-core",
       "dependencies": {
         "axios": "^1.16.1",
-        "browser-id3-writer": "^4.4.0",
+        "browser-id3-writer": "5.0.0",
         "p-queue": "^6.6.2",
         "spotify-uri": "^4.1.0",
       },
@@ -100,7 +100,7 @@
 
     "brace-expansion": ["brace-expansion@1.1.15", "", { "dependencies": { "balanced-match": "^1.0.0", "concat-map": "0.0.1" } }, "sha512-EwOCDEex4quD37XhqM3omwtMoJjr//isUZz1JopUNWms+4Z2ViyM/k1YIRePpoVNnQhENnxtFjLaxNHrT7xIUg=="],
 
-    "browser-id3-writer": ["browser-id3-writer@4.4.0", "", {}, "sha512-8xce9wo4VoKNR4udEGOAf8vndYxhToqQS+1wyrjdYVPQKRc4Wm6xwGG6XrKYgax28y5AvrbCkqK6t1RplPN2Ew=="],
+    "browser-id3-writer": ["browser-id3-writer@5.0.0", "", {}, "sha512-klFXmPe8kQN1y0ZrW411qmrUjJsb1gqPZ+Gb9ZcPKOmFF/8mA9dOZHXP9rGYsNCM8NAodZUFIzoKdl3tMvWsAA=="],
 
     "bun-types": ["bun-types@1.3.14", "", { "dependencies": { "@types/node": "*" } }, "sha512-4N0ig0fEomHt5R0KCFWjovxow98rIoRwKolrYdCcknNwMekCXRnWEUvgu5soYV8QXtVsrUD8B95MBOZGPvr6KQ=="],
 

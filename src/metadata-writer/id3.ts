@@ -1,4 +1,4 @@
-// @ts-ignore browser-id3-writer 4.x does not publish TypeScript declarations.
+// @ts-ignore browser-id3-writer does not publish TypeScript declarations before 6.x.
 import id3Writer from 'browser-id3-writer';
 import type {albumTypePublicApi, trackType} from '../types';
 

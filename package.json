@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.16.1",
-    "browser-id3-writer": "^4.4.0",
+    "browser-id3-writer": "5.0.0",
     "p-queue": "^6.6.2",
     "spotify-uri": "^4.1.0"
   },
