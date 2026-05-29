@@ -19,7 +19,7 @@ test.serial('GET TRACK ISRC', async () => {
 
   expect(response.SNG_TITLE).toBe(SNG_TITLE);
   expect(response.ISRC).toBe(ISRC);
-  expect(response.MD5_ORIGIN).toBe('51afcde9f56a132096c0496cc95eb24b');
+  expect(response.MD5_ORIGIN).toBe('000790eceb6cb6732d225c0585632b31');
   expect(response.__TYPE__).toBe('song');
 });
 

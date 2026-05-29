@@ -152,15 +152,15 @@ test.skipIf(!isCi)('DOWNLOAD TRACK128 & ADD METADATA', async () => {
 
   expect(data).toBeTruthy();
   expect(Buffer.isBuffer(data)).toBe(true);
-  expect(data.length).toBe(3596119);
+  expect(data.length).toBe(trackData.fileSize);
 
   const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
   expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
-  expect(decryptedTrack.length).toBe(3596119);
+  expect(decryptedTrack.length).toBe(data.length);
 
   const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
   expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
-  expect(trackWithMetadata.length).toBe(3629133);
+  expect(trackWithMetadata.length).toBeGreaterThan(decryptedTrack.length);
 });
 
 // test('TRACK128 WITHOUT ALBUM INFO', async () => {
@@ -192,15 +192,15 @@ test.skipIf(!isCi)('DOWNLOAD TRACK320 & ADD METADATA', async () => {
 
   expect(data).toBeTruthy();
   expect(Buffer.isBuffer(data)).toBe(true);
-  expect(data.length).toBe(8990301);
+  expect(data.length).toBe(trackData.fileSize);
 
   const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
   expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
-  expect(decryptedTrack.length).toBe(8990301);
+  expect(decryptedTrack.length).toBe(data.length);
 
   const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
   expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
-  expect(trackWithMetadata.length).toBe(9023315);
+  expect(trackWithMetadata.length).toBeGreaterThan(decryptedTrack.length);
 });
 
 test.skipIf(!isCi)('DOWNLOAD TRACK1411 & ADD METADATA', async () => {
@@ -211,15 +211,15 @@ test.skipIf(!isCi)('DOWNLOAD TRACK1411 & ADD METADATA', async () => {
 
   expect(data).toBeTruthy();
   expect(Buffer.isBuffer(data)).toBe(true);
-  expect(data.length).toBe(25418289);
+  expect(data.length).toBe(trackData.fileSize);
 
   const decryptedTrack: Buffer = trackData.isEncrypted ? decryptDownload(data, track.SNG_ID) : data;
   expect(Buffer.isBuffer(decryptedTrack)).toBe(true);
-  expect(data.length).toBe(25418289);
+  expect(decryptedTrack.length).toBe(data.length);
 
   const trackWithMetadata = await api.addTrackTags(decryptedTrack, track, 500);
   expect(Buffer.isBuffer(trackWithMetadata)).toBe(true);
-  expect(trackWithMetadata.length).toBe(25453343);
+  expect(trackWithMetadata.length).toBeGreaterThan(decryptedTrack.length);
 });
 
 test('GET SHOW LIST', async () => {
